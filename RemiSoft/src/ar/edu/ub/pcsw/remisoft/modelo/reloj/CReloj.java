@@ -9,7 +9,6 @@ import java.util.Timer;
 public class CReloj {
 
     public JLabel time = new JLabel();
-    private SimpleDateFormat sdf;
     private int currentSecond;
     private Calendar calendar;
 
