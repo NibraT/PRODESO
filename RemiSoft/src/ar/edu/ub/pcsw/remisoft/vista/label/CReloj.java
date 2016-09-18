@@ -11,35 +11,30 @@ public class CReloj {
     public JLabel time = new JLabel();
     private int currentSecond;
 
-    private void reset(){
-        currentSecond = getFecha().get(Calendar.SECOND);
-    }
-
     public void start(){
         reset();
-        Timer timer = new java.util.Timer();
-        timer.scheduleAtFixedRate( new TimerTask(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask(){
             public void run(){
                 if(currentSecond == 60) {
                     reset();
                 }
-                time.setText(mostrarFechaYHora());
+                time.setText(getFechaYHora());
                 currentSecond++;
             }
         }, 0, 1000 );
     }
 
-    private Calendar getFecha() {
-        return Calendar.getInstance();
+    private void reset(){
+        currentSecond = Calendar.getInstance().get(Calendar.SECOND);
     }
 
-    private String mostrarFechaYHora() {
-        Date fecha = getFecha().getTime();
+    private String getFechaYHora() {
         DateFormatSymbols simbolos = new DateFormatSymbols(new Locale("es", "ES"));
         String[] diasEnMayuscula = {"", "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
         simbolos.setShortWeekdays(diasEnMayuscula);
         SimpleDateFormat sdf = new SimpleDateFormat("E d/MM/yyyy - hh:mm:ssa", simbolos);
-        return sdf.format(fecha);
+        return sdf.format(Calendar.getInstance().getTime());
     }
 
 }
