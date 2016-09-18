@@ -18,6 +18,9 @@ public class CCliente implements ITemporizable {
     private List<CCuenta> cuentasActivas;
     private List<CCuenta> cuentasBloqueadas;
 
+    /*
+    Constructor
+     */
     public CCliente(String nombreYApellidoORazonSocial, String identificacion, String domicilio, String telefono) {
         this.setNombreYApellidoORazonSocial(nombreYApellidoORazonSocial);
         this.setIdentificacion(identificacion);
@@ -26,11 +29,64 @@ public class CCliente implements ITemporizable {
         this.setFechaDeAlta(setFechaYHora());
         this.cuentasActivas = new LinkedList<>();
         this.cuentasBloqueadas = new LinkedList<>();
-        this.agregarCuenta(this.activarCuenta(), cuentasActivas);
+        this.agregarCuenta(this.activarCuenta());
     }
 
     public CCuenta activarCuenta() {
        return new CCuenta();
+    }
+
+    /*
+    Método que elimina una cuenta del listado de cuentas activas y
+      del listado de cuentas bloqueadas.
+     */
+    public void eliminarCuenta(String numero) {
+        if (! this.getCuentasActivas().isEmpty()) {
+            for (CCuenta cuenta : getCuentasActivas()) {
+                if (cuenta.getNumero().equals(numero)) {
+                    cuentasActivas.remove(cuenta);
+                }
+            }
+        }
+        if (! this.getCuentasActivas().isEmpty()) {
+            for (CCuenta cuenta : getCuentasBloqueadas()) {
+                if (cuenta.getNumero().equals(numero)) {
+                    cuentasBloqueadas.remove(cuenta);
+                }
+            }
+        }
+    }
+
+    /*
+    Método que traspasa una cuenta del listado de cuentas activas al
+      listado de cuentas bloqueadas si el saldo de la cuenta iguala o excede
+      el saldo máximo prefijado.
+     */
+    public void bloquearCuenta() {
+        if (! getCuentasActivas().isEmpty()) {
+            for (CCuenta cuenta : getCuentasActivas()) {
+                if (cuenta.getSaldo() >= CCuenta.getLimiteSaldo()) {
+                    cuentasActivas.remove(cuenta);
+                    agregarCuenta(cuenta, cuentasBloqueadas);
+                }
+            }
+        }
+    }
+
+    /*
+    Método que traspasa una cuenta del listado de cuentas bloqueadas al
+      listado de cuentas activas si el saldo de la cuenta es menor
+      al saldo máximo prefijado.
+     */
+    public void desbloquearCuenta() {
+        if (! getCuentasBloqueadas().isEmpty()) {
+            for (CCuenta cuenta : getCuentasBloqueadas()) {
+                if (cuenta.getSaldo() < CCuenta.getLimiteSaldo()) {
+                    cuentasBloqueadas.remove(cuenta);
+                    agregarCuenta(cuenta, cuentasActivas);
+                }
+            }
+        }
     }
 
     public void agregarCuenta(CCuenta cuenta) {
@@ -39,15 +95,6 @@ public class CCliente implements ITemporizable {
 
     public void agregarCuenta(CCuenta cuenta, List<CCuenta> cuentas) {
         cuentas.add(cuenta);
-    }
-
-    public void eliminarCuenta(String numero) {
-        for (CCuenta cuenta : this.getCuentasActivas()) {
-            if (cuenta.getNumero().equals(numero)) {
-                cuentasActivas.remove(cuenta);
-                cuentasBloqueadas.remove(cuenta);
-            }
-        }
     }
 
     public Calendar calcularTiempo() {
@@ -102,14 +149,6 @@ public class CCliente implements ITemporizable {
             this.fechaDeBaja = fechaDeBaja;
         }
 
-    /*public List<CCuenta> getCuenta() {
-            return this.cuentas;
-        }
-
-    public void setCuenta(List<CCuenta> cuentas) {
-            this.cuentas = cuentas;
-        }*/
-
     public List<CCuenta> getCuentasActivas() {
         return this.cuentasActivas;
     }
@@ -147,8 +186,8 @@ public class CCliente implements ITemporizable {
     public String toString() {
         return "Cliente: " + "\n Nombre: " + this.getNombreYApellidoORazonSocial() + "\n ID: " +
                 this.getIdentificacion() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
-                this.getTelefono() + "\n Alta: " + this.getFechaDeAlta() + "\n Ctas. Activas: " +
-                this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas: " + this.mostrarCuentasBloqueadas();
+                this.getTelefono() + "\n Alta: " + this.getFechaDeAlta() + "\n Ctas. Activas:\n      " +
+                this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas:\n       " + this.mostrarCuentasBloqueadas();
     }
 
 }

@@ -12,12 +12,12 @@ public class CCuenta implements ITemporizable {
     private String fechaDeAlta;
     private String fechaDeBaja;
     private double saldo;
-    private final static double LIMITE_SALDO = 1000.0;
+    private final static double SALDO_MAXIMO = 1000.0;
 
     public CCuenta() {
         this.setNumero(asignarNumeroDeCuenta());
         this.setFechaDeAlta(this.setFechaYHora());
-        this.setSaldo(LIMITE_SALDO);
+        this.setSaldo(SALDO_MAXIMO);
     }
 
     public CCuenta(String numero, String fechaDeAlta, float saldo) {
@@ -84,7 +84,7 @@ public class CCuenta implements ITemporizable {
         }
 
     public static double getLimiteSaldo() {
-        return LIMITE_SALDO;
+        return SALDO_MAXIMO;
     }
 
     public double getSaldo() {
