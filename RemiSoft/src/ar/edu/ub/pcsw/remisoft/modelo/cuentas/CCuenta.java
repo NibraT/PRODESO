@@ -1,76 +1,96 @@
 package ar.edu.ub.pcsw.remisoft.modelo.cuentas;
 
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
+import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
 import java.util.Calendar;
 
-public class CCuenta {
+public class CCuenta implements ITemporizable {
 
-        private int numero;
-        private CCliente cliente;
-        private Calendar fechaDeAlta;
-        private Calendar fechaDeBaja;
-        private float saldo;
+    private String numero;
+    private CCliente cliente;
+    private String fechaDeAlta;
+    private String fechaDeBaja;
+    private double saldo;
+    private final static double SALDO_MAXIMO = 1000.0;
 
-        public CCuenta(int numero, CCliente cliente, Calendar fechaDeAlta, Calendar fechaDeBaja, float saldo) {
-            this.setNumero(numero);
-            this.setCliente(cliente);
-            this.setFechaDeAlta(fechaDeAlta);
-            this.setFechaDeBaja(fechaDeBaja);
-            this.setSaldo(saldo);
-        }
+    /*
+    Constructor.
+     */
+    public CCuenta(CCliente cliente) {
+        this.setNumero(asignarNumeroDeCuenta());
+        this.setCliente(cliente);
+        this.setFechaDeAlta(this.setFechaYHora());
+    }
 
-        public float calcularSaldo() {
-            return 0;
-        }
+    /*
+    Método que asigna un número de cuenta al azar.
+     */
+    private String asignarNumeroDeCuenta() {
+        Integer numero = 0;
+        numero = (int)(Math.random() * 1000);
+        return numero.toString();
+    }
 
-        public void verSaldo() {
+    public double calcularSaldo() {
+        return 0;
+    }
 
-        }
+    public void verSaldo() {
+    }
 
-        public int getNumero() {
-            return this.numero;
-        }
+    public Calendar calcularTiempo() {
+        return null;
+    }
 
-        public void setNumero(int numero) {
-            this.numero = numero;
-        }
+    public String getNumero() {
+        return this.numero;
+    }
 
-        public CCliente getCliente() {
-            return this.cliente;
-        }
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
 
-        public void setCliente(CCliente cliente) {
-            this.cliente = cliente;
-        }
+    public CCliente getCliente() {
+        return this.cliente;
+    }
 
-        public Calendar getFechaDeAlta() {
-            return this.fechaDeAlta;
-        }
+    public void setCliente(CCliente cliente) {
+        this.cliente = cliente;
+    }
 
-        public void setFechaDeAlta(Calendar fechaDeAlta) {
-            this.fechaDeAlta = fechaDeAlta;
-        }
+    public String getFechaDeAlta() {
+        return this.fechaDeAlta;
+    }
 
-        public Calendar getFechaDeBaja() {
-            return this.fechaDeBaja;
-        }
+    public void setFechaDeAlta(String fechaDeAlta) {
+        this.fechaDeAlta = fechaDeAlta;
+    }
 
-        public void setFechaDeBaja(Calendar fechaDeBaja) {
-            this.fechaDeBaja = fechaDeBaja;
-        }
+    public String getFechaDeBaja() {
+        return this.fechaDeBaja;
+    }
 
-        public float getSaldo() {
-            return this.saldo;
-        }
+    public void setFechaDeBaja(String fechaDeBaja) {
+        this.fechaDeBaja = fechaDeBaja;
+    }
 
-        public void setSaldo(float saldo) {
-            this.saldo = saldo;
-        }
+    public static double getLimiteSaldo() {
+        return SALDO_MAXIMO;
+    }
 
-        public String toString() {
-            return null;
-        }
+    public double getSaldo() {
+        return this.saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public String toString() {
+            return " Nro.: " + this.getNumero() + "\n       Alta: " + this.getFechaDeAlta() +
+                    "\n       Saldo Actual: " + this.getSaldo() + "\n       Saldo Límite: " + CCuenta.getLimiteSaldo();
+    }
 
 }
 

@@ -11,7 +11,8 @@ public class CPanelReportes extends JPanel {
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         JButton reportesButton = new JButton("Reportes");
-        this.add(CDialogLogin.agregarLogin(reportesButton));
+        CDialogLogin.agregarLogin(reportesButton);
+        this.add(reportesButton);
     }
 
 }

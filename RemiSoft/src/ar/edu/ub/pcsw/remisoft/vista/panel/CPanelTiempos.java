@@ -1,6 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.modelo.reloj.CReloj;
+import ar.edu.ub.pcsw.remisoft.vista.label.CReloj;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonIcono;
 import ar.edu.ub.pcsw.remisoft.vista.iconos.EIcono;
 

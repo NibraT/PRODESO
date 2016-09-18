@@ -1,76 +1,194 @@
 package ar.edu.ub.pcsw.remisoft.modelo.clientes;
 
 import ar.edu.ub.pcsw.remisoft.modelo.cuentas.CCuenta;
+import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
-public class CCliente {
+public class CCliente implements ITemporizable {
 
-        private String domicilio;
-        private int telefono;
-        private Calendar fechaDeAlta;
-        private Calendar fechaDeBaja;
-        private List<CCuenta> cuentas;
+    private String domicilio;
+    private String identificacion;
+    private String nombreYApellidoORazonSocial;
+    private String telefono;
+    private String fechaDeAlta;
+    private String fechaDeBaja;
+    private List<CCuenta> cuentasActivas;
+    private List<CCuenta> cuentasBloqueadas;
 
-        public CCliente(String domicilio, int telefono, Calendar fechaDeAlta, Calendar fechaDeBaja, List<CCuenta> cuentas) {
-            this.setDomicilio(domicilio);
-            this.setTelefono(telefono);
-            this.setFechaDeAlta(fechaDeAlta);
-            this.setFechaDeBaja(fechaDeBaja);
-            this.setCuenta(cuentas);
+    /*
+    Constructor.
+     */
+    public CCliente(String nombreYApellidoORazonSocial, String identificacion, String domicilio, String telefono) {
+        this.setNombreYApellidoORazonSocial(nombreYApellidoORazonSocial);
+        this.setIdentificacion(identificacion);
+        this.setDomicilio(domicilio);
+        this.setTelefono(telefono);
+        this.setFechaDeAlta(setFechaYHora());
+        this.cuentasActivas = new LinkedList<>();
+        this.cuentasBloqueadas = new LinkedList<>();
+        this.agregarCuenta(this.abrirCuenta(), this.getCuentasActivas());
+    }
+
+    /*
+    Método que elimina un cliente.
+     */
+    public void eliminarCliente() {
+        if ((! getCuentasActivas().isEmpty()) && (getCuentasBloqueadas().isEmpty())) {
+            for (CCuenta cuenta : getCuentasActivas()) {
+                if (cuenta.getSaldo() == 0) {
+                    cuenta = null;
+                    CCliente cliente = this;
+                    cliente = null;
+                }
+            }
         }
+    }
 
-        public List<CCuenta> agregarCuenta(CCuenta cuenta) {
-            return null;
+    public CCuenta abrirCuenta() {
+       return new CCuenta(this);
+    }
+
+    public void agregarCuenta(CCuenta cuenta, List<CCuenta> cuentas) {
+        cuentas.add(cuenta);
+    }
+
+    /*
+    Método que traspasa una cuenta del listado de cuentas activas
+      al listado de cuentas bloqueadas si el saldo de la cuenta iguala o excede
+      el saldo máximo prefijado.
+     */
+    public void bloquearCuenta() {
+        if (! getCuentasActivas().isEmpty()) {
+            Iterator<CCuenta> itrCuentas = cuentasActivas.iterator();
+            while (itrCuentas.hasNext()) {
+                CCuenta cuenta = itrCuentas.next();
+                if (cuenta.getSaldo() >= CCuenta.getLimiteSaldo()) {
+                    itrCuentas.remove();
+                    agregarCuenta(cuenta, cuentasBloqueadas);
+                }
+            }
         }
+    }
 
-        public void quitarCuenta() {
-
+    /*
+    Método que traspasa una cuenta del listado de cuentas bloqueadas
+      al listado de cuentas activas si el saldo de la cuenta es menor
+      al saldo máximo prefijado.
+     */
+    public void desbloquearCuenta() {
+        if (! getCuentasBloqueadas().isEmpty()) {
+            Iterator<CCuenta> itrCuentas = cuentasBloqueadas.iterator();
+            while (itrCuentas.hasNext()) {
+                CCuenta cuenta = itrCuentas.next();
+                if (cuenta.getSaldo() < CCuenta.getLimiteSaldo()) {
+                    itrCuentas.remove();
+                    agregarCuenta(cuenta, cuentasActivas);
+                }
+            }
         }
+    }
 
-        public String getDomicilio() {
-            return this.domicilio;
-        }
+    public Calendar calcularTiempo() {
+        return null;
+    }
 
-        public void setDomicilio(String domicilio) {
-            this.domicilio = domicilio;
-        }
+    public String getDomicilio() {
+        return this.domicilio;
+    }
 
-        public int getTelefono() {
-            return this.telefono;
-        }
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
 
-        public void setTelefono(int telefono) {
-            this.telefono = telefono;
-        }
+    public String getIdentificacion() {
+        return this.identificacion;
+    }
 
-        public Calendar getFechaDeAlta() {
-            return this.fechaDeAlta;
-        }
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
+    }
 
-        public void setFechaDeAlta(Calendar fechaDeAlta) {
-            this.fechaDeAlta = fechaDeAlta;
-        }
+    public String getNombreYApellidoORazonSocial() {
+        return this.nombreYApellidoORazonSocial;
+    }
 
-        public Calendar getFechaDeBaja() {
-            return this.fechaDeBaja;
-        }
+    public void setNombreYApellidoORazonSocial(String nombreYApellidoORazonSocial) {
+        this.nombreYApellidoORazonSocial = nombreYApellidoORazonSocial;
+    }
 
-        public void setFechaDeBaja(Calendar fechaDeBaja) {
-            this.fechaDeBaja = fechaDeBaja;
-        }
+    public String getTelefono() {
+        return this.telefono;
+    }
 
-        public List<CCuenta> getCuenta() {
-            return this.cuentas;
-        }
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
 
-        public void setCuenta(List<CCuenta> cuentas) {
-            this.cuentas = cuentas;
-        }
+    public String getFechaDeAlta() {
+        return this.fechaDeAlta;
+    }
 
-        public String toString() {
-            return null;
+    public void setFechaDeAlta(String fechaDeAlta) {
+        this.fechaDeAlta = fechaDeAlta;
+    }
+
+    public String getFechaDeBaja() {
+        return this.fechaDeBaja;
+    }
+
+    public void setFechaDeBaja(String fechaDeBaja) {
+        this.fechaDeBaja = fechaDeBaja;
+    }
+
+    public List<CCuenta> getCuentasActivas() {
+        return this.cuentasActivas;
+    }
+
+    public void setCuentasActivas(List<CCuenta> cuentasActivas) {
+        this.cuentasActivas = cuentasActivas;
+    }
+
+    public List<CCuenta> getCuentasBloqueadas() {
+        return this.cuentasBloqueadas;
+    }
+
+    public void setCuentasBloqueadas(List<CCuenta> cuentasBloqueadas) {
+        this.cuentasBloqueadas = cuentasBloqueadas;
+    }
+
+    /*
+    Método que muestra el listado de cuentas activas.
+     */
+    public String mostrarCuentasActivas() {
+        String cuentas = "";
+        for (CCuenta cuenta : getCuentasActivas()) {
+            cuentas += "" + cuenta + "\n      ";
         }
+        cuentas = cuentas.isEmpty() ? "El cliente sólo tiene cuenta/s bloqueada/s.\n" : cuentas;
+        return cuentas;
+    }
+
+    /*
+    Método que muestra el listado de cuentas bloqueadas.
+     */
+    public String mostrarCuentasBloqueadas() {
+        String cuentas = "";
+        for (CCuenta cuenta : getCuentasBloqueadas()) {
+            cuentas += "" + cuenta + "\n      ";
+        }
+        cuentas = cuentas.isEmpty() ? "El cliente no tiene cuenta/s bloqueada/s.\n" : cuentas;
+        return cuentas;
+    }
+
+    public String toString() {
+        return "Cliente: " + "\n Nombre: " + this.getNombreYApellidoORazonSocial() + "\n ID: " +
+                this.getIdentificacion() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
+                this.getTelefono() + "\n Alta: " + this.getFechaDeAlta() + "\n Ctas. Activas:\n      " +
+                this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas:\n      " + this.mostrarCuentasBloqueadas();
+    }
 
 }
