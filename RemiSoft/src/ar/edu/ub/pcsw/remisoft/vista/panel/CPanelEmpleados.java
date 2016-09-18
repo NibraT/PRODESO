@@ -11,7 +11,8 @@ public class CPanelEmpleados extends JPanel {
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         JButton empleadosButton = new JButton("Empleados");
-        this.add(CDialogLogin.agregarLogin(empleadosButton));
+        CDialogLogin.agregarLogin (empleadosButton);
+        this.add(empleadosButton);
     }
 
 }

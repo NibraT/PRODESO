@@ -11,10 +11,10 @@ import java.net.URL;
 
 public class CButtonIcono extends JButton {
 
-    public CButtonIcono(ImageIcon icono, Color color, boolean bool, String texto, String urlString) {
+    public CButtonIcono(ImageIcon icono, Color color, boolean highlight, String texto, String urlString) {
         super(icono);
         this.setBackground(color);
-        this.setFocusPainted(bool);
+        this.setFocusPainted(highlight);
         this.setToolTipText(texto);
         this.addActionListener(new ActionListener() {
             @Override

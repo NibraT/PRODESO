@@ -6,15 +6,20 @@ import java.util.Calendar;
 
 public class CCuenta {
 
-        private int numero;
+        private String numero;
         private CCliente cliente;
         private Calendar fechaDeAlta;
         private Calendar fechaDeBaja;
         private float saldo;
 
-        public CCuenta(int numero, CCliente cliente, Calendar fechaDeAlta, Calendar fechaDeBaja, float saldo) {
+        public CCuenta(String numero, Calendar fechaDeAlta, float saldo) {
             this.setNumero(numero);
-            this.setCliente(cliente);
+            this.setFechaDeAlta(fechaDeAlta);
+            this.setSaldo(saldo);
+        }
+
+        public CCuenta(String numero, Calendar fechaDeAlta, Calendar fechaDeBaja, float saldo) {
+            this.setNumero(numero);
             this.setFechaDeAlta(fechaDeAlta);
             this.setFechaDeBaja(fechaDeBaja);
             this.setSaldo(saldo);
@@ -28,11 +33,11 @@ public class CCuenta {
 
         }
 
-        public int getNumero() {
+        public String getNumero() {
             return this.numero;
         }
 
-        public void setNumero(int numero) {
+        public void setNumero(String numero) {
             this.numero = numero;
         }
 

@@ -11,6 +11,7 @@ public class CPanelAutos extends JPanel {
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         JButton autosButton = new JButton("Autos");
-        this.add(CDialogLogin.agregarLogin(autosButton));
+        CDialogLogin.agregarLogin(autosButton);
+        this.add(autosButton);
     }
 }

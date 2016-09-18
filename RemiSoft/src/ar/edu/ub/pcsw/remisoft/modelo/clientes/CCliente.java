@@ -8,12 +8,17 @@ import java.util.List;
 public class CCliente {
 
         private String domicilio;
-        private int telefono;
+        private String telefono;
         private Calendar fechaDeAlta;
         private Calendar fechaDeBaja;
         private List<CCuenta> cuentas;
 
-        public CCliente(String domicilio, int telefono, Calendar fechaDeAlta, Calendar fechaDeBaja, List<CCuenta> cuentas) {
+        public CCliente(String domicilio, String telefono) {
+        this.setDomicilio(domicilio);
+        this.setTelefono(telefono);
+        }
+
+        public CCliente(String domicilio, String telefono, Calendar fechaDeAlta, Calendar fechaDeBaja, List<CCuenta> cuentas) {
             this.setDomicilio(domicilio);
             this.setTelefono(telefono);
             this.setFechaDeAlta(fechaDeAlta);
@@ -37,11 +42,11 @@ public class CCliente {
             this.domicilio = domicilio;
         }
 
-        public int getTelefono() {
+        public String getTelefono() {
             return this.telefono;
         }
 
-        public void setTelefono(int telefono) {
+        public void setTelefono(String telefono) {
             this.telefono = telefono;
         }
 

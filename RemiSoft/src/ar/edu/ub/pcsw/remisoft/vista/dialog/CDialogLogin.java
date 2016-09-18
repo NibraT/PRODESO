@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 
 public class CDialogLogin {
 
-    public static JButton agregarLogin(JButton jButton) {
+    public static void agregarLogin(JButton jButton) {
         jButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -19,7 +19,6 @@ public class CDialogLogin {
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             }
         });
-        return jButton;
     }
 
 }

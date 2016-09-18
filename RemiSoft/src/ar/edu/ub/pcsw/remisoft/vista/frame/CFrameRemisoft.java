@@ -14,10 +14,10 @@ public class CFrameRemisoft extends JFrame {
         super();
         this.setLocationRelativeTo(null);
         this.setLocation(5, 0);
-        this.setSize(1350, 1350);
+        this.setSize(1350, 1350); //chequear
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        this.setMaximizedBounds(env.getMaximumWindowBounds());
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment(); //chequear con placa de video
+        this.setMaximizedBounds(env.getMaximumWindowBounds()); //chequear
         this.setIconImage(new ImageIcon("src/data/software-icon.png").getImage());
         this.setTitle("RemiSoft 1.0");
         this.add(new CPanelSuperior(), BorderLayout.NORTH);

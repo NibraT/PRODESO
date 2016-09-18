@@ -1,4 +1,4 @@
-package ar.edu.ub.pcsw.remisoft.modelo.reloj;
+package ar.edu.ub.pcsw.remisoft.vista.label;
 
 import javax.swing.*;
 import java.text.DateFormatSymbols;
@@ -10,16 +10,14 @@ public class CReloj {
 
     public JLabel time = new JLabel();
     private int currentSecond;
-    private Calendar calendar;
 
     private void reset(){
-        calendar = Calendar.getInstance();
-        currentSecond = calendar.get(Calendar.SECOND);
+        currentSecond = getFecha().get(Calendar.SECOND);
     }
 
     public void start(){
         reset();
-        Timer timer = new Timer();
+        Timer timer = new java.util.Timer();
         timer.scheduleAtFixedRate( new TimerTask(){
             public void run(){
                 if(currentSecond == 60) {
@@ -32,8 +30,7 @@ public class CReloj {
     }
 
     private Calendar getFecha() {
-        Calendar fecha = Calendar.getInstance();
-        return fecha;
+        return Calendar.getInstance();
     }
 
     private String mostrarFechaYHora() {
@@ -46,3 +43,5 @@ public class CReloj {
     }
 
 }
+
+
