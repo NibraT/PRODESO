@@ -3,7 +3,6 @@ package ar.edu.ub.pcsw.remisoft.modelo.interfaces;
 import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public interface ITemporizable {

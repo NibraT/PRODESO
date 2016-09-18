@@ -4,6 +4,7 @@ import ar.edu.ub.pcsw.remisoft.modelo.cuentas.CCuenta;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class CCliente implements ITemporizable {
     private List<CCuenta> cuentasBloqueadas;
 
     /*
-    Constructor
+    Constructor.
      */
     public CCliente(String nombreYApellidoORazonSocial, String identificacion, String domicilio, String telefono) {
         this.setNombreYApellidoORazonSocial(nombreYApellidoORazonSocial);
@@ -29,44 +30,44 @@ public class CCliente implements ITemporizable {
         this.setFechaDeAlta(setFechaYHora());
         this.cuentasActivas = new LinkedList<>();
         this.cuentasBloqueadas = new LinkedList<>();
-        this.agregarCuenta(this.activarCuenta());
-    }
-
-    public CCuenta activarCuenta() {
-       return new CCuenta();
+        this.agregarCuenta(this.abrirCuenta(), this.getCuentasActivas());
     }
 
     /*
-    Método que elimina una cuenta del listado de cuentas activas y
-      del listado de cuentas bloqueadas.
+    Método que elimina un cliente.
      */
-    public void eliminarCuenta(String numero) {
-        if (! this.getCuentasActivas().isEmpty()) {
+    public void eliminarCliente() {
+        if ((! getCuentasActivas().isEmpty()) && (getCuentasBloqueadas().isEmpty())) {
             for (CCuenta cuenta : getCuentasActivas()) {
-                if (cuenta.getNumero().equals(numero)) {
-                    cuentasActivas.remove(cuenta);
-                }
-            }
-        }
-        if (! this.getCuentasActivas().isEmpty()) {
-            for (CCuenta cuenta : getCuentasBloqueadas()) {
-                if (cuenta.getNumero().equals(numero)) {
-                    cuentasBloqueadas.remove(cuenta);
+                if (cuenta.getSaldo() == 0) {
+                    cuenta = null;
+                    CCliente cliente = this;
+                    cliente = null;
                 }
             }
         }
     }
 
+    public CCuenta abrirCuenta() {
+       return new CCuenta(this);
+    }
+
+    public void agregarCuenta(CCuenta cuenta, List<CCuenta> cuentas) {
+        cuentas.add(cuenta);
+    }
+
     /*
-    Método que traspasa una cuenta del listado de cuentas activas al
-      listado de cuentas bloqueadas si el saldo de la cuenta iguala o excede
+    Método que traspasa una cuenta del listado de cuentas activas
+      al listado de cuentas bloqueadas si el saldo de la cuenta iguala o excede
       el saldo máximo prefijado.
      */
     public void bloquearCuenta() {
         if (! getCuentasActivas().isEmpty()) {
-            for (CCuenta cuenta : getCuentasActivas()) {
+            Iterator<CCuenta> itrCuentas = cuentasActivas.iterator();
+            while (itrCuentas.hasNext()) {
+                CCuenta cuenta = itrCuentas.next();
                 if (cuenta.getSaldo() >= CCuenta.getLimiteSaldo()) {
-                    cuentasActivas.remove(cuenta);
+                    itrCuentas.remove();
                     agregarCuenta(cuenta, cuentasBloqueadas);
                 }
             }
@@ -74,27 +75,21 @@ public class CCliente implements ITemporizable {
     }
 
     /*
-    Método que traspasa una cuenta del listado de cuentas bloqueadas al
-      listado de cuentas activas si el saldo de la cuenta es menor
+    Método que traspasa una cuenta del listado de cuentas bloqueadas
+      al listado de cuentas activas si el saldo de la cuenta es menor
       al saldo máximo prefijado.
      */
     public void desbloquearCuenta() {
         if (! getCuentasBloqueadas().isEmpty()) {
-            for (CCuenta cuenta : getCuentasBloqueadas()) {
+            Iterator<CCuenta> itrCuentas = cuentasBloqueadas.iterator();
+            while (itrCuentas.hasNext()) {
+                CCuenta cuenta = itrCuentas.next();
                 if (cuenta.getSaldo() < CCuenta.getLimiteSaldo()) {
-                    cuentasBloqueadas.remove(cuenta);
+                    itrCuentas.remove();
                     agregarCuenta(cuenta, cuentasActivas);
                 }
             }
         }
-    }
-
-    public void agregarCuenta(CCuenta cuenta) {
-        cuentasActivas.add(cuenta);
-    }
-
-    public void agregarCuenta(CCuenta cuenta, List<CCuenta> cuentas) {
-        cuentas.add(cuenta);
     }
 
     public Calendar calcularTiempo() {
@@ -102,15 +97,15 @@ public class CCliente implements ITemporizable {
     }
 
     public String getDomicilio() {
-            return this.domicilio;
-        }
+        return this.domicilio;
+    }
 
     public void setDomicilio(String domicilio) {
-            this.domicilio = domicilio;
-        }
+        this.domicilio = domicilio;
+    }
 
     public String getIdentificacion() {
-        return identificacion;
+        return this.identificacion;
     }
 
     public void setIdentificacion(String identificacion) {
@@ -126,28 +121,28 @@ public class CCliente implements ITemporizable {
     }
 
     public String getTelefono() {
-            return this.telefono;
-        }
+        return this.telefono;
+    }
 
     public void setTelefono(String telefono) {
-            this.telefono = telefono;
-        }
+        this.telefono = telefono;
+    }
 
     public String getFechaDeAlta() {
-            return this.fechaDeAlta;
-        }
+        return this.fechaDeAlta;
+    }
 
     public void setFechaDeAlta(String fechaDeAlta) {
-            this.fechaDeAlta = fechaDeAlta;
-        }
+        this.fechaDeAlta = fechaDeAlta;
+    }
 
     public String getFechaDeBaja() {
-            return this.fechaDeBaja;
-        }
+        return this.fechaDeBaja;
+    }
 
     public void setFechaDeBaja(String fechaDeBaja) {
-            this.fechaDeBaja = fechaDeBaja;
-        }
+        this.fechaDeBaja = fechaDeBaja;
+    }
 
     public List<CCuenta> getCuentasActivas() {
         return this.cuentasActivas;
@@ -158,28 +153,34 @@ public class CCliente implements ITemporizable {
     }
 
     public List<CCuenta> getCuentasBloqueadas() {
-        return cuentasBloqueadas;
+        return this.cuentasBloqueadas;
     }
 
     public void setCuentasBloqueadas(List<CCuenta> cuentasBloqueadas) {
         this.cuentasBloqueadas = cuentasBloqueadas;
     }
 
+    /*
+    Método que muestra el listado de cuentas activas.
+     */
     public String mostrarCuentasActivas() {
         String cuentas = "";
-        for (CCuenta cuenta : this.getCuentasActivas()) {
+        for (CCuenta cuenta : getCuentasActivas()) {
             cuentas += "" + cuenta + "\n      ";
         }
-        cuentas = cuentas.isEmpty() ? "El cliente sólo tiene cuenta/s bloqueada/s." : cuentas;
+        cuentas = cuentas.isEmpty() ? "El cliente sólo tiene cuenta/s bloqueada/s.\n" : cuentas;
         return cuentas;
     }
 
+    /*
+    Método que muestra el listado de cuentas bloqueadas.
+     */
     public String mostrarCuentasBloqueadas() {
         String cuentas = "";
-        for (CCuenta cuenta : this.getCuentasBloqueadas()) {
+        for (CCuenta cuenta : getCuentasBloqueadas()) {
             cuentas += "" + cuenta + "\n      ";
         }
-        cuentas = cuentas.isEmpty() ? "El cliente no tiene cuenta/s bloqueada/s." : cuentas;
+        cuentas = cuentas.isEmpty() ? "El cliente no tiene cuenta/s bloqueada/s.\n" : cuentas;
         return cuentas;
     }
 
@@ -187,7 +188,7 @@ public class CCliente implements ITemporizable {
         return "Cliente: " + "\n Nombre: " + this.getNombreYApellidoORazonSocial() + "\n ID: " +
                 this.getIdentificacion() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
                 this.getTelefono() + "\n Alta: " + this.getFechaDeAlta() + "\n Ctas. Activas:\n      " +
-                this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas:\n       " + this.mostrarCuentasBloqueadas();
+                this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas:\n      " + this.mostrarCuentasBloqueadas();
     }
 
 }
