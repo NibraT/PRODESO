@@ -2,6 +2,9 @@ package ar.edu.ub.pcsw.remisoft.vista.dialog;
 
 import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenuClientes;
+import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenuAutos;
+import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenuEmpleados;
+import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenuReportes;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,8 +24,22 @@ public class CDialogLogin {
                 int res = JOptionPane.showConfirmDialog(null, array, "Acceso Restringido",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (res == JOptionPane.OK_OPTION) {
-                    CPanelMenuClientes panelSecundarioClientes = new CPanelMenuClientes();
-                    new CFrameRemisoft().add(panelSecundarioClientes);
+                    if (jButton.getText().equals("Clientes")) {
+                        CPanelMenuClientes panelMenuClientes = new CPanelMenuClientes();
+                        new CFrameRemisoft().add(panelMenuClientes);
+                    }
+                    else if (jButton.getText().equals("Autos")) {
+                        CPanelMenuAutos panelMenuAutos = new CPanelMenuAutos();
+                        new CFrameRemisoft().add(panelMenuAutos);
+                    }
+                    else if (jButton.getText().equals("Empleados")) {
+                        CPanelMenuEmpleados panelMenuEmpleados = new CPanelMenuEmpleados();
+                        new CFrameRemisoft().add(panelMenuEmpleados);
+                    }
+                    else if (jButton.getText().equals("Reportes")) {
+                        CPanelMenuReportes panelMenuReportes = new CPanelMenuReportes();
+                        new CFrameRemisoft().add(panelMenuReportes);
+                    }
                 }
             }
         });
