@@ -1,5 +1,8 @@
 package ar.edu.ub.pcsw.remisoft.vista.dialog;
 
+import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenuClientes;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +20,10 @@ public class CDialogLogin {
                 Object[] array = {label_login, login, label_password, password};
                 int res = JOptionPane.showConfirmDialog(null, array, "Acceso Restringido",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (res == JOptionPane.OK_OPTION) {
+                    CPanelMenuClientes panelSecundarioClientes = new CPanelMenuClientes();
+                    new CFrameRemisoft().add(panelSecundarioClientes);
+                }
             }
         });
     }
