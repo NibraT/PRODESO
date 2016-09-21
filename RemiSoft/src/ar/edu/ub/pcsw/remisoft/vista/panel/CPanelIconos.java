@@ -11,6 +11,10 @@ import java.awt.*;
 public class CPanelIconos extends JPanel {
 
     public CPanelIconos() {
+        this.inicializar();
+    }
+
+    private void inicializar() {
         this.setBackground(Color.BLUE);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(5,5,5,5), new EtchedBorder()));
@@ -60,29 +64,21 @@ public class CPanelIconos extends JPanel {
         ImageIcon transito = CButtonIcono.procesarImagen(ubicacionTransito, reduccionTransito);
         CButtonIcono transitoButton = new CButtonIcono(transito, Color.BLUE, false, "Estado del Tránsito", urlTransito);
         this.add(mapasButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(transitoButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(guiaTelefonicaButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(correoElectronicoButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(auxilioMecanicoButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(emergenciaMedicaButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(policiaButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(bomberosButton);
-        this.add(Box.createHorizontalGlue());
-        this.add(Box.createHorizontalGlue());
+        this.add(Box.createHorizontalStrut(40));
         this.add(correoPostalButton);
     }
 

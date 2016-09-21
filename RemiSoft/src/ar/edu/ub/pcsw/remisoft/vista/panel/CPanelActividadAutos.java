@@ -3,9 +3,9 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import javax.swing.*;
 import java.awt.*;
 
-public class CPanelMenuAutos extends JPanel {
+public class CPanelActividadAutos extends JPanel {
 
-    public CPanelMenuAutos() {
+    public CPanelActividadAutos() {
         this.inicializar();
     }
 
@@ -13,8 +13,8 @@ public class CPanelMenuAutos extends JPanel {
         this.setBackground(Color.GREEN);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JButton altaVehiculoButton = new JButton("Alta Vehiculo");
-        JButton bajaVehiculoButton = new JButton("Baja Vehiculo");
+        JButton altaVehiculoButton = new JButton("A DEFINIR");
+        JButton bajaVehiculoButton = new JButton("A DEFINIR");
         altaVehiculoButton.setPreferredSize(new Dimension(100, 30));
         bajaVehiculoButton.setPreferredSize(new Dimension(100, 30));
         this.add(Box.createHorizontalStrut(35));

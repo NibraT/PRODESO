@@ -15,6 +15,7 @@ public class CButtonIcono extends JButton {
         super(icono);
         this.setBackground(color);
         this.setFocusPainted(highlight);
+        this.setBorder(BorderFactory.createEmptyBorder());
         this.setToolTipText(texto);
         this.addActionListener(new ActionListener() {
             @Override

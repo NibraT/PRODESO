@@ -3,9 +3,9 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import javax.swing.*;
 import java.awt.*;
 
-public class CPanelMenuEmpleados extends JPanel {
+public class CPanelActividadEmpleados extends JPanel {
 
-    public CPanelMenuEmpleados() {
+    public CPanelActividadEmpleados() {
         this.inicializar();
     }
 
@@ -13,8 +13,8 @@ public class CPanelMenuEmpleados extends JPanel {
         this.setBackground(Color.MAGENTA);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        JButton altaEmpleadoButton = new JButton("Alta Empleado");
-        JButton bajaEmpleadoButton = new JButton("Baja Empleado");
+        JButton altaEmpleadoButton = new JButton("A DEFINIR");
+        JButton bajaEmpleadoButton = new JButton("A DEFINIR");
         altaEmpleadoButton.setPreferredSize(new Dimension(100, 30));
         bajaEmpleadoButton.setPreferredSize(new Dimension(100, 30));
         this.add(Box.createHorizontalStrut(35));

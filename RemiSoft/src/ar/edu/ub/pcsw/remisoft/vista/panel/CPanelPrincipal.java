@@ -6,6 +6,10 @@ import java.awt.*;
 public class CPanelPrincipal extends JPanel {
 
     public CPanelPrincipal() {
+        this.inicializar();
+    }
+
+    private void inicializar() {
         this.setBackground(Color.DARK_GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
