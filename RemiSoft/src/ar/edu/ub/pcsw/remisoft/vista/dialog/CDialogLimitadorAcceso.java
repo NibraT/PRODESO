@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CDialogLogin {
+public class CDialogLimitadorAcceso {
 
     public static void agregarLogin(JButton jButton) {
         jButton.addActionListener(new ActionListener() {

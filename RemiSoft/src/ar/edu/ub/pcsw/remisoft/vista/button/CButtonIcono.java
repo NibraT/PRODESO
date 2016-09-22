@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.button;
 
+import ar.edu.ub.pcsw.remisoft.vista.iconos.EIcono;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +12,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 public class CButtonIcono extends JButton {
+
+    public CButtonIcono(EIcono icono) {
+        this(CButtonIcono.procesarImagen(icono), icono.getColor(), false, icono.getTexto(), icono.getUrl());
+    }
 
     public CButtonIcono(ImageIcon icono, Color color, boolean highlight, String texto, String urlString) {
         super(icono);
@@ -29,16 +35,17 @@ public class CButtonIcono extends JButton {
                 abrirPaginaWeb(paginaWeb);
             }
         });
-
     }
 
-    public static ImageIcon procesarImagen(String path, int reduc) {
-        ImageIcon icono = new ImageIcon(path);
-        Image imagen = icono.getImage();
+    public static ImageIcon procesarImagen(EIcono iconoTamañoOriginal) {
+        int reduc = iconoTamañoOriginal.getReduccion();
+        ImageIcon iconoTamañoDeseado = new ImageIcon(iconoTamañoOriginal.getUbicacion());
+        Image imagen = iconoTamañoDeseado.getImage();
         imagen = imagen.getScaledInstance(imagen.getWidth(null)/reduc, imagen.getHeight(null)/reduc, Image.SCALE_SMOOTH);
-        icono.setImage(imagen);
-        return icono;
+        iconoTamañoDeseado.setImage(imagen);
+        return iconoTamañoDeseado;
     }
+
 
     public static void abrirPaginaWeb(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;

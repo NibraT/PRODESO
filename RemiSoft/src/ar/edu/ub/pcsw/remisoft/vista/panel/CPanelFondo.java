@@ -13,6 +13,11 @@ public class CPanelFondo extends JPanel {
     private static final int IMG_HEIGHT = 583;
 
     public CPanelFondo() {
+        this.inicializar();
+    }
+
+    private void inicializar() {
+        this.setLayout(new BorderLayout());
         this.setBorder(BorderFactory.createEtchedBorder());
         BufferedImage imagenFondo = null;
         try {
@@ -22,16 +27,15 @@ public class CPanelFondo extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.setLayout(new BorderLayout());
         JLabel picLabel = new JLabel(new ImageIcon(imagenFondo));
         picLabel.setBorder(BorderFactory.createEtchedBorder());
         this.add(picLabel, BorderLayout.NORTH);
     }
 
-    private static BufferedImage resizeImage(BufferedImage originalImage, int type) {
-        BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, type);
+    private static BufferedImage resizeImage(BufferedImage imagenOriginal, int tipo) {
+        BufferedImage resizedImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, tipo);
         Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
+        g.drawImage(imagenOriginal, 0, 0, IMG_WIDTH, IMG_HEIGHT, null);
         g.dispose();
         return resizedImage;
     }
