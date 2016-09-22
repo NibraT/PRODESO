@@ -1,17 +1,19 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.vista.dialog.CDialogLogin;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class CPanelAutos extends JPanel {
 
     public CPanelAutos() {
-        this.setBackground(Color.GRAY);
+        this.inicializar();
+    }
+
+    private void inicializar() {
+        this.setBackground(Color.GREEN);
         this.setBorder(BorderFactory.createEtchedBorder());
         JButton autosButton = new JButton("Autos");
-        CDialogLogin.agregarLogin(autosButton);
+        autosButton.setPreferredSize(new Dimension(100, 30));
         this.add(autosButton);
     }
 }
