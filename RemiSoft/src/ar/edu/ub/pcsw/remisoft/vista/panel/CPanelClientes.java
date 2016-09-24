@@ -1,9 +1,17 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
+import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class CPanelClientes extends JPanel {
+public class CPanelClientes extends JPanel implements ActionListener{
+
+    private CButtonSelectorPanel clientesButton;
 
     public CPanelClientes() {
         this.inicializar();
@@ -12,9 +20,24 @@ public class CPanelClientes extends JPanel {
     private void inicializar() {
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
-        JButton clientesButton = new JButton("Clientes");
-        clientesButton.setPreferredSize(new Dimension(100, 30));
+        this.setClientesButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.CLIENTES.getTexto()));
+        clientesButton.addActionListener(this);
         this.add(clientesButton);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(getClientesButton())) {
+            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getClientesButton()));
+        }
+    }
+
+    public CButtonSelectorPanel getClientesButton() {
+        return this.clientesButton;
+    }
+
+    public void setClientesButton(CButtonSelectorPanel clientesButton) {
+        this.clientesButton = clientesButton;
     }
 
 }

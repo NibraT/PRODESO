@@ -12,6 +12,9 @@ import java.awt.event.WindowEvent;
 
 public class CFrameRemisoft extends JFrame {
 
+    private CPanelMenu panelMenu;
+    private CPanelActividad panelActividad;
+
     public CFrameRemisoft() {
         super();
         this.inicializar();
@@ -29,10 +32,11 @@ public class CFrameRemisoft extends JFrame {
         CPanelPrincipal panelPrincipal = new CPanelPrincipal();
         panelPrincipal.setPreferredSize(new Dimension(150, this.getHeight()));
         this.add(panelPrincipal, BorderLayout.WEST);
-        this.add(new CPanelMenu());
-        CPanelActividad panelActividad = new CPanelActividad();
+        this.panelMenu = new CPanelMenu();
+        this.add(this.getPanelMenu());
+        this.panelActividad = new CPanelActividad();
         panelActividad.setPreferredSize(new Dimension(1065, this.getHeight()));
-        this.add(panelActividad, BorderLayout.EAST);
+        this.add(this.getPanelActividad(), BorderLayout.EAST);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             @Override
@@ -48,6 +52,23 @@ public class CFrameRemisoft extends JFrame {
         this.setVisible(true);
     }
 
+    public CPanelMenu getPanelMenu() {
+        return this.panelMenu;
+    }
+
+    public void setPanelMenu(JPanel panelMenu) {
+        this.getPanelMenu().cambiarPanel(panelMenu);
+    }
+
+    public CPanelActividad getPanelActividad() {
+        return this.panelActividad;
+    }
+
+    public void setPanelActividad(JPanel panelActividad) {
+        this.getPanelActividad().cambiarPanel(panelActividad);
+    }
+
 }
+
 
 
