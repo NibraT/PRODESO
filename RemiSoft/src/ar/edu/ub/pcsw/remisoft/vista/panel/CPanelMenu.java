@@ -3,7 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import javax.swing.*;
 import java.awt.*;
 
-public class CPanelMenu extends JPanel {
+public class CPanelMenu extends CPanelCambiante {
 
     public CPanelMenu() {
         this.inicializar();
@@ -13,8 +13,8 @@ public class CPanelMenu extends JPanel {
         this.setBackground(Color.DARK_GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.add(new CPanelCambiante(new CPanelMenuViajes(), new CPanelMenuClientes(), new CPanelMenuAutos(),
-                new CPanelMenuEmpleados(), new CPanelMenuReportes()), BorderLayout.CENTER);
+        CPanelFondo panelFondo = new CPanelFondo("src/data/mapaZonaGarin.jpg", 200, 587);
+        this.add(panelFondo, BorderLayout.CENTER);
     }
 
 }
