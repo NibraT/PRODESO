@@ -11,10 +11,12 @@ public enum ETextoButton {
     BAJAEMPLEADO("Baja Empleado"),
     CLIENTES("Clientes"),
     EMPLEADOS("Empleados"),
+    GUARDAR("Guardar"),
     RENDIRVIAJE("Rendir Viaje"),
     REPORTECAJA("Reporte Caja"),
     REPORTEGESTION("Reporte Gestión"),
     REPORTES("Reportes"),
+    SALIR("Salir"),
     TOMARVIAJE("Tomar Viaje"),
     VIAJES("Viajes");
 
