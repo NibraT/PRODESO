@@ -20,6 +20,13 @@ public class CCliente implements ITemporizable {
     private List<CCuenta> cuentasBloqueadas;
 
     /*
+    Constructor
+     */
+    public CCliente() {
+        this(null, null, null, null);
+    }
+
+    /*
     Constructor.
      */
     public CCliente(String nombreYApellidoORazonSocial, String identificacion, String domicilio, String telefono) {
