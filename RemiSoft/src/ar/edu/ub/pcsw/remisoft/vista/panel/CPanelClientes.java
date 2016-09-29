@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelClientes extends JPanel implements ActionListener{
+public class CPanelClientes extends JPanel implements ActionListener {
 
     private CButtonSelectorPanel clientesButton;
 
@@ -21,8 +21,8 @@ public class CPanelClientes extends JPanel implements ActionListener{
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setClientesButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.CLIENTES.getTexto()));
-        clientesButton.addActionListener(this);
-        this.add(clientesButton);
+        this.getClientesButton().addActionListener(this);
+        this.add(getClientesButton());
     }
 
     @Override

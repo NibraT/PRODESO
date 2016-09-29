@@ -1,19 +1,23 @@
 package ar.edu.ub.pcsw.remisoft.modelo.rendiciones;
 
-import ar.edu.ub.pcsw.remisoft.modelo.empleados.CAdministrativo;
+import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 
 import java.util.Calendar;
 
 public class CRendicion {
 
-    private int numero;
     private Calendar fecha;
-    private CAdministrativo recepcionista;
+    private CEmpleado recepcionista;
     private CViaje viaje;
-    private float precioTestigo;
+    private String numero;
+    private String precioTestigo;
 
-    public CRendicion(int numero, Calendar fecha, CAdministrativo recepcionista, CViaje viaje, float precioTestigo) {
+    public CRendicion() {
+        this(null, null, null, null, null);
+    }
+
+    public CRendicion(String numero, Calendar fecha, CEmpleado recepcionista, CViaje viaje, String precioTestigo) {
         this.setNumero(numero);
         this.setFecha(fecha);
         this.setRecepcionista(recepcionista);
@@ -21,11 +25,11 @@ public class CRendicion {
         this.setPrecioTestigo(precioTestigo);
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return this.numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 
@@ -37,11 +41,11 @@ public class CRendicion {
         this.fecha = fecha;
     }
 
-    public CAdministrativo getRecepcionista() {
+    public CEmpleado getRecepcionista() {
         return this.recepcionista;
     }
 
-    public void setRecepcionista(CAdministrativo recepcionista) {
+    public void setRecepcionista(CEmpleado recepcionista) {
         this.recepcionista = recepcionista;
     }
 
@@ -53,11 +57,11 @@ public class CRendicion {
         this.viaje = viaje;
     }
 
-    public float getPrecioTestigo() {
+    public String getPrecioTestigo() {
         return this.precioTestigo;
     }
 
-    public void setPrecioTestigo(float precioTestigo) {
+    public void setPrecioTestigo(String precioTestigo) {
         this.precioTestigo = precioTestigo;
     }
 

@@ -23,13 +23,13 @@ public class CPanelMenuEmpleados extends JPanel implements ActionListener {
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setAltaEmpleadoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.ALTAEMPLEADO.getTexto()));
-        altaEmpleadoButton.addActionListener(this);
+        this.getAltaEmpleadoButton().addActionListener(this);
         this.setBajaEmpleadoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.BAJAEMPLEADO.getTexto()));
-        bajaEmpleadoButton.addActionListener(this);
-        this.add(Box.createHorizontalStrut(35));
-        this.add(altaEmpleadoButton);
+        this.getBajaEmpleadoButton().addActionListener(this);
+        this.add(Box.createHorizontalStrut(25));
+        this.add(getAltaEmpleadoButton());
         this.add(Box.createVerticalStrut(150));
-        this.add(bajaEmpleadoButton);
+        this.add(getBajaEmpleadoButton());
         this.add(Box.createVerticalStrut(200));
     }
 

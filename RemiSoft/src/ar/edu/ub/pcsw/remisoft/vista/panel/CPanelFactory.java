@@ -56,6 +56,7 @@ public class CPanelFactory implements IPanelFactory {
         }
         else if (jButton.getText().equals(ETextoButton.SALIR.getTexto())) {
             return new CPanelFondo("src/data/mapaGarin.jpg", 1100, 587);
+            //return new CPanelMenu();
         }
         return null;
     }

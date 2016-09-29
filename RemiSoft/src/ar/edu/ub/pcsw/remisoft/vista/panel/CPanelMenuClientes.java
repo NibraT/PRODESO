@@ -26,7 +26,7 @@ public class CPanelMenuClientes extends JPanel implements ActionListener {
         altaClienteButton.addActionListener(this);
         this.setBajaClienteButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.BAJACLIENTE.getTexto()));
         bajaClienteButton.addActionListener(this);
-        this.add(Box.createHorizontalStrut(35));
+        this.add(Box.createHorizontalStrut(40));
         this.add(altaClienteButton);
         this.add(Box.createVerticalStrut(150));
         this.add(bajaClienteButton);

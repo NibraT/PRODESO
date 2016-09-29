@@ -1,24 +1,36 @@
 package ar.edu.ub.pcsw.remisoft.modelo.empleados;
 
-import java.util.Calendar;
+public class CEmpleado {
 
-public abstract class CEmpleado {
-
-    private String nombre;
     private String apellido;
-    private int dni;
+    private String dni;
     private String domicilio;
-    private Calendar fechaDeAlta;
-    private Calendar fechaDeBaja;
+    private String fechaDeAlta;
+    private String fechaDeBaja;
+    private String nombre;
+    private String telefono;
 
-    public CEmpleado(String nombre, String apellido, int dni, String domicilio, Calendar fechaDeAlta,
-                     Calendar fechaDeBaja) {
+    public CEmpleado() {
+        this(null, null, null, null, null, null, null);
+    }
+
+    public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String fechaDeAlta,
+                     String fechaDeBaja) {
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
         this.setDomicilio(domicilio);
+        this.setTelefono(telefono);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
+    }
+
+    /*
+    Método que elimina un empleado.
+     */
+    public void eliminarEmpleado() {
+        CEmpleado empleado = this;
+        empleado = null;
     }
 
     public String getNombre() {
@@ -37,11 +49,11 @@ public abstract class CEmpleado {
         this.apellido = apellido;
     }
 
-    public int getDni() {
+    public String getDni() {
         return this.dni;
     }
 
-    public void setDni(int dni) {
+    public void setDni(String dni) {
         this.dni = dni;
     }
 
@@ -53,19 +65,23 @@ public abstract class CEmpleado {
         this.domicilio = domicilio;
     }
 
-    public Calendar getFechaDeAlta() {
+    public String getTelefono() { return this.telefono; }
+
+    public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getFechaDeAlta() {
         return this.fechaDeAlta;
     }
 
-    public void setFechaDeAlta(Calendar fechaDeAlta) {
+    public void setFechaDeAlta(String fechaDeAlta) {
         this.fechaDeAlta = fechaDeAlta;
     }
 
-    public Calendar getFechaDeBaja() {
+    public String getFechaDeBaja() {
         return this.fechaDeBaja;
     }
 
-    public void setFechaDeBaja(Calendar fechaDeBaja) {
+    public void setFechaDeBaja(String fechaDeBaja) {
         this.fechaDeBaja = fechaDeBaja;
     }
 
