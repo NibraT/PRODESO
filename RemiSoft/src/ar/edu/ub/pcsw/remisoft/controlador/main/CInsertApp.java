@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by Pulpo1 on 9/24/16.
  */
-public class InsertApp extends DataBase{
+public class CInsertApp extends CDataBase {
 
     public void insert (int dni, String name, String direccion, String telefono, int disponible, int idComision) {
         String sql = "INSERT INTO Chofer(DNI, NombreCompletoChofer, DireccionChofer, TelefonoChofer, DisponibleChofer, IdComision) VALUES(?,?,?,?,?,?)";
@@ -28,7 +28,7 @@ public class InsertApp extends DataBase{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        InsertApp db = new InsertApp();
+        CInsertApp db = new CInsertApp();
         db.insert(34999999, "Prueba", "Paraguay 500, Garin, BsAs", "15487654321", 1, 1);
     }
 }

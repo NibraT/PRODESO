@@ -5,7 +5,7 @@ import java.sql.*;
 /**
  * Created by Pulpo1 on 9/16/16.
  */
-public class DataBase {
+public class CDataBase {
     Connection connect() {
         String url = "jdbc:sqlite:/Users/Pulpo1/Documents/UB/Programacion/UB/ProyectoSoftware/PRODESO/RemiSoftDB";
         Connection conn = null;
