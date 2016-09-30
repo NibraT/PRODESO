@@ -15,6 +15,7 @@ public enum ETextoButton {
     REPORTECAJA("Reporte Caja"),
     REPORTEGESTION("Reporte Gestión"),
     REPORTES("Reportes"),
+    SALIR("Salir"),
     TOMARVIAJE("Tomar Viaje"),
     VIAJES("Viajes");
 

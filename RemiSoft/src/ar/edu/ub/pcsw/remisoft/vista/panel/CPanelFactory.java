@@ -1,8 +1,8 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 
@@ -53,6 +53,10 @@ public class CPanelFactory implements IPanelFactory {
         }
         else if (jButton.getText().equals(ETextoButton.REPORTECAJA.getTexto())) {
             return new CPanelActividadReporteCaja();
+        }
+        else if (jButton.getText().equals(ETextoButton.SALIR.getTexto())) {
+            return new CPanelFondo("src/data/mapaGarin.jpg", 1100, 587);
+            //return new CPanelMenu();
         }
         return null;
     }

@@ -4,13 +4,18 @@ import java.util.Calendar;
 
 public class CChoferSinVehiculo extends CChofer {
 
-    public CChoferSinVehiculo(String nombre, String apellido, int dni, String domicilio, Calendar fechaDeAlta,
-                              Calendar fechaDeBaja, String turno) {
-        super(nombre, apellido, dni, domicilio, fechaDeAlta, fechaDeBaja, turno);
+    public CChoferSinVehiculo() {
+        this(null, null, null, null, null, null, null, null);
+    }
+
+    public CChoferSinVehiculo(String nombre, String apellido, String dni, String domicilio, String telefono, String fechaDeAlta,
+                              String fechaDeBaja, String turno) {
+        super(nombre, apellido, dni, domicilio, telefono, fechaDeAlta, fechaDeBaja, turno);
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
         this.setDomicilio(domicilio);
+        this.setTelefono(telefono);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
         this.setTurno(turno);

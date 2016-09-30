@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CDialogLimitadorAcceso {
+public class CDialogLimitadorAcceso implements ActionListener {
 
     public static void agregarLogin(JButton jButton) {
         jButton.addActionListener(new ActionListener() {
@@ -18,28 +18,14 @@ public class CDialogLimitadorAcceso {
                 int res = JOptionPane.showConfirmDialog(null, array, "ACCESO RESTRINGIDO",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (res == JOptionPane.OK_OPTION) {
-                    /*if (jButton.getText().equals("Clientes")) {
-                        CPanelMenuClientes panelMenuClientes = new CPanelMenuClientes();
-                        CFrameRemisoft frameRemisoft = new CFrameRemisoft();
-                        frameRemisoft.add(panelMenuClientes);
-                    }
-                    else if (jButton.getText().equals("Autos")) {
-                        CPanelMenuAutos panelMenuAutos = new CPanelMenuAutos();
-                    }*/
-                    /*if (jButton.getText().equals("Empleados")) {
-                        CPanelMenuEmpleados panelMenuEmpleados = new CPanelMenuEmpleados();
-                        CFrameRemisoft frameRemisoft = CFrameRemisoft.getRemiSoftFrame();
-                        CPanelFondo panelMapa = CPanelFondo.getPanelMapa();
-                        frameRemisoft.getContentPane().remove(panelMapa);
-                        frameRemisoft.getContentPane().add(panelMenuEmpleados);
-                    }*/
-                    /*else if (jButton.getText().equals("Reportes")) {
-                        CPanelMenuReportes panelMenuReportes = new CPanelMenuReportes();
-                        new CFrameRemisoft().add(panelMenuReportes);
-                    }*/
+
                 }
             }
         });
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
 }

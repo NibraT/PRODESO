@@ -1,24 +1,42 @@
 package ar.edu.ub.pcsw.remisoft.modelo.vehiculos;
 
-import java.util.Calendar;
-
 public class CVehiculo {
 
+    private String fechaDeAlta;
+    private String fechaDeBaja;
     private String marca;
-    private int modelo;
+    private String modelo;
     private String patente;
     private String propietario;
-    private Calendar fechaDeAlta;
-    private Calendar fechaDeBaja;
 
-    public CVehiculo(String marca, int modelo, String patente, String propietario, Calendar fechaDeAlta,
-                     Calendar fechaDeBaja) {
+    /*
+    Constructor
+     */
+    public CVehiculo() {
+        this(null, null, null, null, null, null);
+    }
+
+    /*
+    Constructor
+     */
+
+    public CVehiculo(String marca, String modelo, String patente, String propietario, String fechaDeAlta,
+                     String fechaDeBaja) {
+
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setPatente(patente);
         this.setPropietario(propietario);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
+    }
+
+    /*
+    Método que elimina un vehículo.
+     */
+    public void eliminarVehiculo() {
+        CVehiculo vehiculo = this;
+        vehiculo = null;
     }
 
     public String getMarca() {
@@ -29,11 +47,11 @@ public class CVehiculo {
         this.marca = marca;
     }
 
-    public int getModelo() {
+    public String getModelo() {
         return this.modelo;
     }
 
-    public void setModelo(int modelo) {
+    public void setModelo(String modelo) {
         this.modelo = modelo;
     }
 
@@ -53,24 +71,25 @@ public class CVehiculo {
         this.propietario = propietario;
     }
 
-    public Calendar getFechaDeAlta() {
+    public String getFechaDeAlta() {
         return this.fechaDeAlta;
     }
 
-    public void setFechaDeAlta(Calendar fechaDeAlta) {
+    public void setFechaDeAlta(String fechaDeAlta) {
         this.fechaDeAlta = fechaDeAlta;
     }
 
-    public Calendar getFechaDeBaja() {
+    public String getFechaDeBaja() {
         return this.fechaDeBaja;
     }
 
-    public void setFechaDeBaja(Calendar fechaDeBaja) {
+    public void setFechaDeBaja(String fechaDeBaja) {
         this.fechaDeBaja = fechaDeBaja;
     }
 
     public String toString() {
-        return null;
+        return "Marca: " + this.getMarca() + "\nModelo: " + this.getModelo() +
+                "\nPatente: " + this.getPatente() + "\nPropietario: " + this.getPropietario();
     }
 
 }

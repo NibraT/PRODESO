@@ -20,7 +20,7 @@ public class CButtonSelectorPanel extends JButton {
         this.setPreferredSize(new Dimension(ancho, alto));
     }
 
-    public void botonSelector (IPanelFactory panelSeleccionado) {
+    public void botonSelector(IPanelFactory panelSeleccionado) {
         this.setFactory(panelSeleccionado);
     }
 

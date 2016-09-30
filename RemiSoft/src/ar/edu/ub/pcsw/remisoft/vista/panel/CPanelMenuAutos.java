@@ -23,13 +23,13 @@ public class CPanelMenuAutos extends JPanel implements ActionListener {
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setAltaAutoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.ALTAAUTO.getTexto()));
-        altaAutoButton.addActionListener(this);
+        this.getAltaAutoButton().addActionListener(this);
         this.setBajaAutoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.BAJAAUTO.getTexto()));
-        bajaAutoButton.addActionListener(this);
-        this.add(Box.createHorizontalStrut(35));
-        this.add(altaAutoButton);
+        this.getBajaAutoButton().addActionListener(this);
+        this.add(Box.createHorizontalStrut(45));
+        this.add(getAltaAutoButton());
         this.add(Box.createVerticalStrut(150));
-        this.add(bajaAutoButton);
+        this.add(getBajaAutoButton());
         this.add(Box.createVerticalStrut(200));
     }
 
