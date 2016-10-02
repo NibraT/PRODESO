@@ -13,8 +13,8 @@ public class CPanelMenu extends CPanelCambiante {
         this.setBackground(Color.DARK_GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        CPanelFondo panelFondo = new CPanelFondo("src/data/mapaZonaGarin.jpg", 200, 587);
-        this.add(panelFondo, BorderLayout.CENTER);
+        this.add(new CPanelFondo(EFondoPanel.MAPAZONAGARIN.getTexto(), EFondoPanel.MAPAZONAGARIN.getAncho(),
+                EFondoPanel.MAPAZONAGARIN.getAlto()), BorderLayout.CENTER);
     }
 
 }

@@ -2,14 +2,15 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelMenuClientes extends JPanel implements ActionListener {
+public class CPanelMenuClientes extends JPanel implements ActionListener, IFrameRemisoft {
 
     private CButtonSelectorPanel altaClienteButton;
     private CButtonSelectorPanel bajaClienteButton;
@@ -22,24 +23,31 @@ public class CPanelMenuClientes extends JPanel implements ActionListener {
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setAltaClienteButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.ALTACLIENTE.getTexto()));
-        altaClienteButton.addActionListener(this);
-        this.setBajaClienteButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.BAJACLIENTE.getTexto()));
-        bajaClienteButton.addActionListener(this);
+        this.setAltaClienteButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelActividadAltaCliente();
+            }
+        }, ETextoButton.ALTACLIENTE.getTexto(), "Habilita Actividad Alta Cliente"));
+        this.getAltaClienteButton().addActionListener(this);
+        this.setBajaClienteButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelActividadBajaCliente();
+            }
+        }, ETextoButton.BAJACLIENTE.getTexto(), "Habilita Actividad Baja Cliente"));
+        this.getBajaClienteButton().addActionListener(this);
         this.add(Box.createHorizontalStrut(40));
-        this.add(altaClienteButton);
+        this.add(this.getAltaClienteButton());
         this.add(Box.createVerticalStrut(150));
-        this.add(bajaClienteButton);
+        this.add(this.getBajaClienteButton());
         this.add(Box.createVerticalStrut(200));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getAltaClienteButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getAltaClienteButton()));
-        }
-        else if (e.getSource().equals(getBajaClienteButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getBajaClienteButton()));
+        if ((e.getSource().equals(getAltaClienteButton())) || (e.getSource().equals(getBajaClienteButton()))) {
+            getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 
