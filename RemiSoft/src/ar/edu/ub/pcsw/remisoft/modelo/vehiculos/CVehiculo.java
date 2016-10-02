@@ -31,14 +31,6 @@ public class CVehiculo {
         this.setFechaDeBaja(fechaDeBaja);
     }
 
-    /*
-    Método que elimina un vehículo.
-     */
-    public void eliminarVehiculo() {
-        CVehiculo vehiculo = this;
-        vehiculo = null;
-    }
-
     public String getMarca() {
         return this.marca;
     }

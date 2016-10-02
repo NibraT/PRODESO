@@ -25,13 +25,13 @@ public class CViaje implements ITemporizable {
     private Calendar horaDeFin;
     private CCliente cliente;
     private CCuenta cuenta;
-    private CEmpleado recepcionista;
+    private CEmpleado recepcionista;    private String motivoCancelacion;
 
     /*
     Constructor
      */
     public CViaje() {
-        this(0, null, null, null, null, 0, 0, null, 0, 0, null, null, null, null, null, null);
+        this(0, null, null, null, null, 0, 0, null, 0, 0, null, null, null, null, null, null, null);
     }
 
     /*
@@ -39,7 +39,7 @@ public class CViaje implements ITemporizable {
      */
     public CViaje(int numero, CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia, int tramos,
                   Calendar duracion, float precio, float costo, Calendar fecha, Calendar horaDeInicio, Calendar horaDeFin,
-                  CCliente cliente, CCuenta cuenta, CEmpleado recepcionista) {
+                  CCliente cliente, CCuenta cuenta, CEmpleado recepcionista, String motivoCancelacion) {
         this.setNumero(numero);
         this.setChofer(chofer);
         this.setAuto(auto);
@@ -56,6 +56,7 @@ public class CViaje implements ITemporizable {
         this.setCliente(cliente);
         this.setCuenta(cuenta);
         this.setRecepcionista(recepcionista);
+        this.setMotivoCancelacion(motivoCancelacion);
     }
 
     public int getNumero() {
@@ -183,6 +184,10 @@ public class CViaje implements ITemporizable {
     public void setAuto(CVehiculo auto) {
         this.auto = auto;
     }
+
+    public String getMotivoCancelacion() { return this.motivoCancelacion; }
+
+    public void setMotivoCancelacion(String motivoCancelacion) { this.motivoCancelacion = motivoCancelacion; }
 
     public String toString() {
         //String fecha = this.setFechaString(this.getFecha());

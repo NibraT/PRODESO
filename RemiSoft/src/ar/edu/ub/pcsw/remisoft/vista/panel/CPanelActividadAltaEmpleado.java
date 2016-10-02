@@ -3,8 +3,10 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,19 +15,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldFactory, ActionListener,
-        KeyListener {
+public class CPanelActividadAltaEmpleado extends JPanel  implements IJButtonSalir, IJComboBoxFactory,
+        IJTextFieldFactory, ActionListener, KeyListener {
 
     private CButtonSelectorPanel salirButton;
     private JButton guardarButton;
-    private JLabel altaEmpleadoLabel;
-    private JLabel apellidoLabel;
-    private JLabel dniLabel;
-    private JLabel domicilioLabel;
-    private JLabel nombreLabel;
-    private JLabel referenciasLabel;
-    private JLabel surLabel;
-    private JLabel telefonoLabel;
+    private JComboBox<String> turnosLista;
     private JTextField apellidoTextField;
     private JTextField dniTextField;
     private JTextField domicilioTextField;
@@ -36,6 +31,7 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
     private String domicilio;
     private String nombre;
     private String telefono;
+    private String[] turnos = new String[] {" ", "6-15", "15-24"};
 
     public CPanelActividadAltaEmpleado() {
         this.inicializar();
@@ -45,52 +41,62 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
         this.setBackground(Color.MAGENTA);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.setAltaEmpleadoLabel(new JLabel("ALTA EMPLEADO", SwingConstants.CENTER));
-        this.getAltaEmpleadoLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.getAltaEmpleadoLabel().setFont(new Font("Arial", Font.BOLD, 25));
-        this.getAltaEmpleadoLabel().setForeground(Color.WHITE);
-        this.add(this.getAltaEmpleadoLabel(), BorderLayout.NORTH);
-        this.setSurLabel(new JLabel());
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.add(this.getSurLabel(), BorderLayout.SOUTH);
+        JLabel altaEmpleadoLabel = new JLabel("ALTA EMPLEADO", SwingConstants.CENTER);
+        altaEmpleadoLabel.setPreferredSize(new Dimension(this.getWidth(), 75));
+        altaEmpleadoLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        altaEmpleadoLabel.setForeground(Color.WHITE);
+        this.add(altaEmpleadoLabel, BorderLayout.NORTH);
+        JLabel surLabel = new JLabel();
+        surLabel.setPreferredSize(new Dimension(this.getWidth(), 75));
+        this.add(surLabel, BorderLayout.SOUTH);
         JPanel panelInput = new JPanel();
         panelInput.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.insets = new Insets(15, 0, 15, 0);
-        this.setReferenciasLabel(new JLabel("(*) indica campo obligatorio"));
-        this.getReferenciasLabel().setFont(new Font("Arial", Font.ITALIC, 10));
-        this.setNombreLabel(new JLabel("Nombre(s) (*)"));
-        this.getNombreLabel().setPreferredSize(new Dimension(165, 15));
-        this.setApellidoLabel(new JLabel("Apellido (*)"));
-        this.setDniLabel(new JLabel("DNI (*)"));
-        this.setDomicilioLabel(new JLabel("Domicilio (*)"));
-        this.setTelefonoLabel(new JLabel("Teléfono (*)"));
+        JLabel referenciasLabel = new JLabel("(*) indica campo obligatorio");
+        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+        JLabel nombreLabel = new JLabel("Nombre(s) (*)");
+        nombreLabel.setPreferredSize(new Dimension(165, 15));
+        JLabel apellidoLabel = new JLabel("Apellido (*)");
+        JLabel dniLabel = new JLabel("DNI (*)");
+        JLabel domicilioLabel = new JLabel("Domicilio (*)");
+        JLabel telefonoLabel = new JLabel("Teléfono (*)");
+        JLabel turnoLabel = new JLabel("Turno (*)");
         int ancho = 30;
         this.setNombreTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setApellidoTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setDniTextField(this.setTextField(ancho, "Ingrese sólo números", this));
         this.setDomicilioTextField(this.setTextField(ancho, "Ingrese sólo letras, números y espacios en blanco", this));
         this.setTelefonoTextField(this.setTextField(ancho, "Ingrese sólo números", this));
+        this.setTurnosLista((this.crearComboBox(this.getTurnos(), 333, 20, Color.WHITE, "Seleccione turno", this)));
         this.setGuardarButton(new JButton("Guardar"));
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.SALIR.getTexto()));
+        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelFondo(EFondoPanel.MAPAGARIN.getTexto(), EFondoPanel.MAPAGARIN.getAncho(),
+                        EFondoPanel.MAPAGARIN.getAlto());
+            }
+        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelInput.add(this.getReferenciasLabel(), gbc);
+        panelInput.add(referenciasLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getNombreLabel(), gbc);
+        panelInput.add(nombreLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getApellidoLabel(), gbc);
+        panelInput.add(apellidoLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getDniLabel(), gbc);
+        panelInput.add(dniLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getDomicilioLabel(), gbc);
+        panelInput.add(domicilioLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getTelefonoLabel(), gbc);
+        panelInput.add(telefonoLabel, gbc);
+        gbc.gridy++;
+        panelInput.add(turnoLabel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         panelInput.add(this.getNombreTextField(), gbc);
@@ -102,6 +108,8 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
         panelInput.add(this.getDomicilioTextField(), gbc);
         gbc.gridy++;
         panelInput.add(this.getTelefonoTextField(), gbc);
+        gbc.gridy++;
+        panelInput.add(this.getTurnosLista(), gbc);
         gbc.gridx = 1;
         gbc.gridy = 10;
         panelInput.add(this.getGuardarButton(), gbc);
@@ -145,7 +153,6 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
         else if (e.getSource().equals(getTelefonoTextField())) {
             if ((getTelefonoTextField().getText() != null) || (! getTelefonoTextField().getText().isEmpty())) {
                 setTelefono(getTelefonoTextField().getText());
-                getGuardarButton().setEnabled(true);
             }
         }
     }
@@ -153,15 +160,25 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
     @Override
     public void actionPerformed(ActionEvent e) {
         CEmpleado empleado = new CEmpleado();
-        if (e.getSource().equals(getGuardarButton())) {
+        if (e.getSource().equals(getTurnosLista())) {
+            getGuardarButton().setEnabled(true);
+        }
+        else if (e.getSource().equals(getTurnosLista().getSelectedItem())) {
+            if ((getTurnosLista().getSelectedItem().toString() != null) ||
+                    (! getTurnosLista().getSelectedItem().toString().isEmpty())) {
+                empleado.setTurno((getTurnosLista().getSelectedItem().toString()));
+            }
+        }
+        else if (e.getSource().equals(getGuardarButton())) {
             empleado.setNombre(this.getNombre());
             empleado.setApellido(this.getApellido());
             empleado.setDni(this.getDni());
             empleado.setDomicilio(this.getDomicilio());
             empleado.setTelefono(this.getTelefono());
+            empleado.setTurno((getTurnosLista().getSelectedItem().toString()));
         }
         else if (e.getSource().equals(getSalirButton())) {
-            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel) e.getSource()).getFactory().crearPanel(getSalirButton()));
+            accionarSalirButton(e); // método default de IJButtonSalir
         }
     }
 
@@ -173,37 +190,9 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
 
     public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
 
-    public JLabel getAltaEmpleadoLabel() { return this.altaEmpleadoLabel; }
+    public JComboBox<String> getTurnosLista() { return this.turnosLista; }
 
-    public void setAltaEmpleadoLabel(JLabel altaEmpleadoLabel) { this.altaEmpleadoLabel = altaEmpleadoLabel; }
-
-    public JLabel getNombreLabel() { return this.nombreLabel; }
-
-    public void setNombreLabel(JLabel nombreLabel) { this.nombreLabel = nombreLabel; }
-
-    public JLabel getApellidoLabel() { return this.apellidoLabel; }
-
-    public void setApellidoLabel(JLabel apellidoLabel) { this.apellidoLabel = apellidoLabel; }
-
-    public JLabel getDniLabel() { return this.dniLabel; }
-
-    public void setDniLabel(JLabel dniLabel) { this.dniLabel = dniLabel; }
-
-    public JLabel getDomicilioLabel() { return this.domicilioLabel; }
-
-    public void setDomicilioLabel(JLabel domicilioLabel) { this.domicilioLabel = domicilioLabel; }
-
-    public JLabel getTelefonoLabel() { return this.telefonoLabel; }
-
-    public void setTelefonoLabel(JLabel telefonoLabel) { this.telefonoLabel = telefonoLabel; }
-
-    public JLabel getReferenciasLabel() { return this.referenciasLabel; }
-
-    public void setReferenciasLabel(JLabel referenciasLabel) { this.referenciasLabel = referenciasLabel; }
-
-    public JLabel getSurLabel() { return this.surLabel; }
-
-    public void setSurLabel(JLabel surLabel) { this.surLabel = surLabel; }
+    public void setTurnosLista(JComboBox<String> turnosLista) { this.turnosLista = turnosLista; }
 
     public JTextField getNombreTextField() { return this.nombreTextField; }
 
@@ -244,5 +233,9 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJTextFieldF
     public String getTelefono() { return this.telefono; }
 
     public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String[] getTurnos() { return this.turnos; }
+
+    public void setTurnos(String[] turnos) { this.turnos = turnos; }
 
 }

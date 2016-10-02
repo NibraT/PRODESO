@@ -3,7 +3,8 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.dialog.CDialogLimitadorAcceso;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class CPanelEmpleados extends JPanel implements ActionListener, MouseListener {
+public class CPanelEmpleados extends JPanel implements ActionListener, IFrameRemisoft, MouseListener {
 
     private CButtonSelectorPanel empleadosButton;
 
@@ -23,7 +24,12 @@ public class CPanelEmpleados extends JPanel implements ActionListener, MouseList
     private void inicializar() {
         this.setBackground(Color.MAGENTA);
         this.setBorder(BorderFactory.createEtchedBorder());
-        this.setEmpleadosButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.EMPLEADOS.getTexto()));
+        this.setEmpleadosButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelMenuEmpleados();
+            }
+        }, ETextoButton.EMPLEADOS.getTexto(), "Habilita Menú Empleados"));
         this.getEmpleadosButton().setEnabled(false);
         this.getEmpleadosButton().addActionListener(this);
         this.add(getEmpleadosButton());
@@ -33,7 +39,7 @@ public class CPanelEmpleados extends JPanel implements ActionListener, MouseList
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getEmpleadosButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getEmpleadosButton()));
+            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

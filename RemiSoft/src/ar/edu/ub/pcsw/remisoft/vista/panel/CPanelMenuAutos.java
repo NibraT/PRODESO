@@ -2,14 +2,15 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelMenuAutos extends JPanel implements ActionListener {
+public class CPanelMenuAutos extends JPanel implements ActionListener, IFrameRemisoft {
 
     private CButtonSelectorPanel altaAutoButton;
     private CButtonSelectorPanel bajaAutoButton;
@@ -22,9 +23,19 @@ public class CPanelMenuAutos extends JPanel implements ActionListener {
         this.setBackground(Color.GREEN);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setAltaAutoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.ALTAAUTO.getTexto()));
+        this.setAltaAutoButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelActividadAltaAuto();
+            }
+        }, ETextoButton.ALTAAUTO.getTexto(), "Habilita Actividad Alta Auto"));
         this.getAltaAutoButton().addActionListener(this);
-        this.setBajaAutoButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.BAJAAUTO.getTexto()));
+        this.setBajaAutoButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelActividadBajaAuto();
+            }
+        }, ETextoButton.BAJAAUTO.getTexto(), "Habilita Actividad Baja Auto"));
         this.getBajaAutoButton().addActionListener(this);
         this.add(Box.createHorizontalStrut(45));
         this.add(getAltaAutoButton());
@@ -35,11 +46,8 @@ public class CPanelMenuAutos extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getAltaAutoButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getAltaAutoButton()));
-        }
-        else if (e.getSource().equals(getBajaAutoButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getBajaAutoButton()));
+        if ((e.getSource().equals(getAltaAutoButton())) || (e.getSource().equals(getBajaAutoButton()))) {
+            getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

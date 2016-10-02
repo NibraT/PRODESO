@@ -9,28 +9,22 @@ public class CEmpleado {
     private String fechaDeBaja;
     private String nombre;
     private String telefono;
+    private String turno;
 
     public CEmpleado() {
-        this(null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null);
     }
 
-    public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String fechaDeAlta,
-                     String fechaDeBaja) {
+    public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String turno,
+                     String fechaDeAlta, String fechaDeBaja) {
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
         this.setDomicilio(domicilio);
         this.setTelefono(telefono);
+        this.setTurno(turno);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
-    }
-
-    /*
-    Método que elimina un empleado.
-     */
-    public void eliminarEmpleado() {
-        CEmpleado empleado = this;
-        empleado = null;
     }
 
     public String getNombre() {
@@ -68,6 +62,14 @@ public class CEmpleado {
     public String getTelefono() { return this.telefono; }
 
     public void setTelefono(String telefono) { this.telefono = telefono; }
+
+    public String getTurno() {
+        return this.turno;
+    }
+
+    public void setTurno(String turno) {
+        this.turno = turno;
+    }
 
     public String getFechaDeAlta() {
         return this.fechaDeAlta;

@@ -13,7 +13,8 @@ public class CPanelActividad extends CPanelCambiante {
         this.setBackground(Color.DARK_GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        CPanelFondo panelFondo = new CPanelFondo("src/data/mapaGarin.jpg", 1100, 587);
+        CPanelFondo panelFondo = new CPanelFondo(EFondoPanel.MAPAGARIN.getTexto(), EFondoPanel.MAPAGARIN.getAncho(),
+                EFondoPanel.MAPAGARIN.getAlto());
         panelFondo.add(new CPanelActividadTomarViaje());
         panelFondo.add(new CPanelActividadRendirViaje());
         panelFondo.add(new CPanelActividadAltaCliente());
