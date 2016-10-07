@@ -3,6 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelMenuReportes extends JPanel implements ActionListener {
+public class CPanelMenuReportes extends JPanel implements ActionListener, IFrameRemisoft {
 
     private CButtonSelectorPanel reporteGestionButton;
     private CButtonSelectorPanel reporteCajaButton;
@@ -46,11 +47,8 @@ public class CPanelMenuReportes extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getReporteGestionButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
-        }
-        else if (e.getSource().equals(getReporteCajaButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+        if ((e.getSource().equals(getReporteGestionButton())) || (e.getSource().equals(getReporteCajaButton()))) {
+            getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

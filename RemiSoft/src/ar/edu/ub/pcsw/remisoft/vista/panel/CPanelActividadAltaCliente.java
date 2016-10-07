@@ -67,11 +67,7 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
         this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
-            @Override
-            public JPanel crearPanel() {
-                return new CPanelFondo(EFondoPanel.MAPAGARIN.getTexto(), EFondoPanel.MAPAGARIN.getAncho(),
-                        EFondoPanel.MAPAGARIN.getAlto());
-            }
+            JPanel panel = crearPanel();
         }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
