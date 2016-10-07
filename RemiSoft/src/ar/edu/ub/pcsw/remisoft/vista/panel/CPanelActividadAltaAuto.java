@@ -151,6 +151,7 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
             auto.setPropietario((getPropietariosLista().getSelectedItem().toString()));
         }
         else if (e.getSource().equals(getSalirButton())) {
+            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelMenu(null);
             ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel) e.getSource()).getFactory().crearPanel(getSalirButton()));
         }
     }

@@ -4,6 +4,7 @@ import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.dialog.CDialogLimitadorAcceso;
 import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +24,12 @@ public class CPanelAutos extends JPanel implements ActionListener, MouseListener
     private void inicializar() {
         this.setBackground(Color.GREEN);
         this.setBorder(BorderFactory.createEtchedBorder());
-        this.setAutosButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.AUTOS.getTexto()));
+        this.setAutosButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel(CButtonSelectorPanel jButton) {
+                return new CPanelMenuAutos();
+            }
+        }, ETextoButton.AUTOS.getTexto()));
         this.getAutosButton().setEnabled(false);
         this.getAutosButton().addActionListener(this);
         this.add(getAutosButton());
