@@ -3,27 +3,21 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFactory, IJTextFieldFactory,
+public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
         ActionListener, FocusListener, KeyListener {
 
     private CButtonSelectorPanel salirButton;
     private JButton guardarButton;
     private JComboBox<String> causasLista;
-    private JLabel bajaClienteLabel;
-    private JLabel causaBaja;
-    private JLabel fechaLabel;
-    private JLabel identificacionLabel;
-    private JLabel nombreYApellidoORazonSocialLabel;
-    private JLabel referenciasLabel;
-    private JLabel surLabel;
     private JTextField fechaTextField;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
@@ -40,26 +34,26 @@ public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFact
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.setBajaClienteLabel(new JLabel("BAJA CLIENTE", SwingConstants.CENTER));
-        this.getBajaClienteLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.getBajaClienteLabel().setFont(new Font("Arial", Font.BOLD, 25));
-        this.getBajaClienteLabel().setForeground(Color.WHITE);
-        this.add(this.getBajaClienteLabel(), BorderLayout.NORTH);
-        this.setSurLabel(new JLabel());
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.add(this.getSurLabel(), BorderLayout.SOUTH);
+        JLabel bajaClienteLabel = new JLabel("BAJA CLIENTE", SwingConstants.CENTER);
+        bajaClienteLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
+        bajaClienteLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        bajaClienteLabel.setForeground(Color.WHITE);
+        this.add(bajaClienteLabel, BorderLayout.NORTH);
+        JLabel surLabel = new JLabel();
+        surLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(surLabel, BorderLayout.SOUTH);
         JPanel panelInput = new JPanel();
         panelInput.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.insets = new Insets(15, 0, 15, 0);
-        this.setReferenciasLabel(new JLabel("(/) indica alternativa; (*) indica campo obligatorio"));
-        this.getReferenciasLabel().setFont(new Font("Arial", Font.ITALIC, 10));
-        this.setNombreYApellidoORazonSocialLabel(new JLabel("Nombre(s) y Apellido / Razón Social (*)"));
-        this.getNombreYApellidoORazonSocialLabel().setPreferredSize(new Dimension(260, 15));
-        this.setIdentificacionLabel(new JLabel("DNI / CUIL / CUIT (*)"));
-        this.setCausaBaja(new JLabel("Causa de la baja (*)"));
-        this.setFechaLabel(new JLabel("Fecha de la baja"));
+        JLabel referenciasLabel = new JLabel("(/) indica alternativa; (*) indica campo obligatorio");
+        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+        JLabel nombreYApellidoORazonSocialLabel = new JLabel("Nombre(s) y Apellido / Razón Social (*)");
+        nombreYApellidoORazonSocialLabel.setPreferredSize(new Dimension(260, 15));
+        JLabel identificacionLabel = new JLabel("DNI / CUIL / CUIT (*)");
+        JLabel causaBajaLabel = new JLabel("Causa de la baja (*)");
+        JLabel fechaLabel = new JLabel("Fecha de la baja");
         int ancho = 30;
         this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setIdentificacionTextField(this.setTextField(ancho, "Ingrese sólo números", this));
@@ -69,19 +63,21 @@ public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFact
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.SALIR.getTexto()));
+        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
+            JPanel panel = crearPanel();
+        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelInput.add(this.getReferenciasLabel(), gbc);
+        panelInput.add(referenciasLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getNombreYApellidoORazonSocialLabel(), gbc);
+        panelInput.add(nombreYApellidoORazonSocialLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getIdentificacionLabel(), gbc);
+        panelInput.add(identificacionLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getCausaBaja(), gbc);
+        panelInput.add(causaBajaLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getFechaLabel(), gbc);
+        panelInput.add(fechaLabel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         panelInput.add(this.getNombreYApellidoORazonSocialTextField(), gbc);
@@ -112,7 +108,8 @@ public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFact
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getSource().equals(getNombreYApellidoORazonSocialTextField())) {
-            if ((getNombreYApellidoORazonSocialTextField().getText() != null) || (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
+            if ((getNombreYApellidoORazonSocialTextField().getText() != null) ||
+                    (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
                 setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
             }
         }
@@ -156,10 +153,9 @@ public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFact
             cliente.setNombreYApellidoORazonSocial(this.getNombreYApellidoORazonSocial());
             cliente.setIdentificacion(this.getIdentificacion());
             cliente.setFechaDeBaja(this.getFecha());
-            cliente.eliminarCliente();
         }
         else if (e.getSource().equals(getSalirButton())) {
-            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel) e.getSource()).getFactory().crearPanel(getSalirButton()));
+            accionarSalirButton(e); // método default de IJButtonSalir
         }
     }
 
@@ -174,36 +170,6 @@ public class CPanelActividadBajaCliente extends JPanel implements IJComboBoxFact
     public JComboBox<String> getCausasLista() { return this.causasLista; }
 
     public void setCausasLista(JComboBox<String> causasLista) { this.causasLista = causasLista; }
-
-    public JLabel getBajaClienteLabel() { return this.bajaClienteLabel; }
-
-    public void setBajaClienteLabel(JLabel bajaClienteLabel) { this.bajaClienteLabel = bajaClienteLabel; }
-
-    public JLabel getCausaBaja() { return this.causaBaja; }
-
-    public void setCausaBaja(JLabel causaBaja) { this.causaBaja = causaBaja; }
-
-    public JLabel getFechaLabel() { return this.fechaLabel; }
-
-    public void setFechaLabel(JLabel fechaLabel) { this.fechaLabel = fechaLabel; }
-
-    public JLabel getIdentificacionLabel() { return this.identificacionLabel; }
-
-    public void setIdentificacionLabel(JLabel identificacionLabel) { this.identificacionLabel = identificacionLabel; }
-
-    public JLabel getNombreYApellidoORazonSocialLabel() { return this.nombreYApellidoORazonSocialLabel; }
-
-    public void setNombreYApellidoORazonSocialLabel(JLabel nombreYApellidoORazonSocialLabel) {
-        this.nombreYApellidoORazonSocialLabel = nombreYApellidoORazonSocialLabel;
-    }
-
-    public JLabel getReferenciasLabel() { return this.referenciasLabel; }
-
-    public void setReferenciasLabel(JLabel referenciasLabel) { this.referenciasLabel = referenciasLabel; }
-
-    public JLabel getSurLabel() { return this.surLabel; }
-
-    public void setSurLabel(JLabel surLabel) { this.surLabel = surLabel; }
 
     public JTextField getFechaTextField() { return this.fechaTextField; }
 

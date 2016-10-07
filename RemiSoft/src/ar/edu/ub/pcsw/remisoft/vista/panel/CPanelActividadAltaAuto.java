@@ -4,8 +4,10 @@ import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,23 +16,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory, IJTextFieldFactory, ActionListener,
-        KeyListener {
+public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
+        ActionListener, KeyListener {
 
     private CButtonSelectorPanel salirButton;
     private JButton guardarButton;
     private JComboBox<String> propietariosLista;
-    private JLabel altaAutoLabel;
-    private JLabel marcaLabel;
-    private JLabel modeloLabel;
-    private JLabel patenteLabel;
-    private JLabel propietarioLabel;
-    private JLabel referenciasLabel;
-    private JLabel surLabel;
     private JTextField marcaTextField;
     private JTextField modeloTextField;
     private JTextField patenteTextField;
-    private JTextField propietarioTextField;
     private String marca;
     private String modelo;
     private String patente;
@@ -44,26 +38,26 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
         this.setBackground(Color.GREEN);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.setAltaAutoLabel(new JLabel("ALTA AUTO", SwingConstants.CENTER));
-        this.getAltaAutoLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.getAltaAutoLabel().setFont(new Font("Arial", Font.BOLD, 25));
-        this.getAltaAutoLabel().setForeground(Color.WHITE);
-        this.add(this.getAltaAutoLabel(), BorderLayout.NORTH);
-        this.setSurLabel(new JLabel());
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.add(this.getSurLabel(), BorderLayout.SOUTH);
+        JLabel altaAutoLabel = new JLabel("ALTA AUTO", SwingConstants.CENTER);
+        altaAutoLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
+        altaAutoLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        altaAutoLabel.setForeground(Color.WHITE);
+        this.add(altaAutoLabel, BorderLayout.NORTH);
+        JLabel surLabel = new JLabel();
+        surLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(surLabel, BorderLayout.SOUTH);
         JPanel panelInput = new JPanel();
         panelInput.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.insets = new Insets(15, 0, 15, 0);
-        this.setReferenciasLabel(new JLabel("(*) indica campo obligatorio"));
-        this.getReferenciasLabel().setFont(new Font("Arial", Font.ITALIC, 10));
-        this.setMarcaLabel(new JLabel("Marca (*)"));
-        this.getMarcaLabel().setPreferredSize(new Dimension(165, 15));
-        this.setModeloLabel(new JLabel("Modelo (*)"));
-        this.setPatenteLabel(new JLabel("Patente (*)"));
-        this.setPropietarioLabel(new JLabel("Propietario (*)"));
+        JLabel referenciasLabel = new JLabel("(*) indica campo obligatorio");
+        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+        JLabel marcaLabel = new JLabel("Marca (*)");
+        marcaLabel.setPreferredSize(new Dimension(165, 15));
+        JLabel modeloLabel = new JLabel("Modelo (*)");
+        JLabel patenteLabel = new JLabel("Patente (*)");
+        JLabel propietarioLabel = new JLabel("Propietario (*)");
         int ancho = 30;
         this.setMarcaTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setModeloTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
@@ -73,19 +67,21 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.SALIR.getTexto()));
+        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
+            JPanel panel = crearPanel();
+        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelInput.add(this.getReferenciasLabel(), gbc);
+        panelInput.add(referenciasLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getMarcaLabel(), gbc);
+        panelInput.add(marcaLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getModeloLabel(), gbc);
+        panelInput.add(modeloLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getPatenteLabel(), gbc);
+        panelInput.add(patenteLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getPropietarioLabel(), gbc);
+        panelInput.add(propietarioLabel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         panelInput.add(this.getMarcaTextField(), gbc);
@@ -151,8 +147,7 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
             auto.setPropietario((getPropietariosLista().getSelectedItem().toString()));
         }
         else if (e.getSource().equals(getSalirButton())) {
-            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelMenu(null);
-            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel) e.getSource()).getFactory().crearPanel(getSalirButton()));
+            accionarSalirButton(e); // método default de IJButtonSalir
         }
     }
 
@@ -163,34 +158,6 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
     public JButton getGuardarButton() { return this.guardarButton; }
 
     public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
-
-    public JLabel getAltaAutoLabel() { return this.altaAutoLabel; }
-
-    public void setAltaAutoLabel(JLabel altaAutoLabel) { this.altaAutoLabel = altaAutoLabel; }
-
-    public JLabel getReferenciasLabel() { return this.referenciasLabel; }
-
-    public void setReferenciasLabel(JLabel referenciasLabel) { this.referenciasLabel = referenciasLabel; }
-
-    public JLabel getSurLabel() { return this.surLabel; }
-
-    public void setSurLabel(JLabel surLabel) { this.surLabel = surLabel; }
-
-    public JLabel getMarcaLabel() { return this.marcaLabel; }
-
-    public void setMarcaLabel(JLabel marcaLabel) { this.marcaLabel = marcaLabel; }
-
-    public JLabel getModeloLabel() { return this.modeloLabel; }
-
-    public void setModeloLabel(JLabel modeloLabel) { this.modeloLabel = modeloLabel; }
-
-    public JLabel getPatenteLabel() { return this.patenteLabel; }
-
-    public void setPatenteLabel(JLabel patenteLabel) { this.patenteLabel = patenteLabel; }
-
-    public JLabel getPropietarioLabel() { return this.propietarioLabel; }
-
-    public void setPropietarioLabel(JLabel propietarioLabel) { this.propietarioLabel = propietarioLabel; }
 
     public JTextField getMarcaTextField() { return this.marcaTextField; }
 
@@ -203,10 +170,6 @@ public class CPanelActividadAltaAuto extends JPanel implements IJComboBoxFactory
     public JTextField getPatenteTextField() { return this.patenteTextField; }
 
     public void setPatenteTextField(JTextField patenteTextField) { this.patenteTextField = patenteTextField; }
-
-    public JTextField getPropietarioTextField() { return this.propietarioTextField; }
-
-    public void setPropietarioTextField(JTextField propietarioTextField) { this.propietarioTextField = propietarioTextField; }
 
     public String[] getPropietarios() { return this.propietarios; }
 

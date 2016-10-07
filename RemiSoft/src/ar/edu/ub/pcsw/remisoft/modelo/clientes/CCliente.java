@@ -40,21 +40,6 @@ public class CCliente implements ITemporizable {
         this.agregarCuenta(this.abrirCuenta(), this.getCuentasActivas());
     }
 
-    /*
-    Método que elimina un cliente.
-     */
-    public void eliminarCliente() {
-        if ((! getCuentasActivas().isEmpty()) && (getCuentasBloqueadas().isEmpty())) {
-            for (CCuenta cuenta : getCuentasActivas()) {
-                if (cuenta.getSaldo() == 0) {
-                    cuenta = null;
-                    CCliente cliente = this;
-                    cliente = null;
-                }
-            }
-        }
-    }
-
     public CCuenta abrirCuenta() {
        return new CCuenta(this);
     }

@@ -5,26 +5,20 @@ import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFactory, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFactory, IJButtonSalir, ActionListener,
+        FocusListener, KeyListener {
 
     private CButtonSelectorPanel salirButton;
     private int numeroCuentaAdicional;
     private JButton guardarButton;
-    private JLabel altaClienteLabel;
-    private JLabel cuentaAdicionalLabel;
-    private JLabel domicilioLabel;
-    private JLabel identificacionLabel;
-    private JLabel nombreYApellidoORazonSocialLabel;
-    private JLabel referenciasLabel;
-    private JLabel surLabel;
-    private JLabel telefonoLabel;
     private JTextField cuentaAdicionalTextField;
     private JTextField domicilioTextField;
     private JTextField identificacionTextField;
@@ -43,27 +37,27 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         this.setBackground(Color.GRAY);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.setAltaClienteLabel(new JLabel("ALTA CLIENTE", SwingConstants.CENTER));
-        this.getAltaClienteLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.getAltaClienteLabel().setFont(new Font("Arial", Font.BOLD, 25));
-        this.getAltaClienteLabel().setForeground(Color.WHITE);
-        this.add(this.getAltaClienteLabel(), BorderLayout.NORTH);
-        this.setSurLabel(new JLabel());
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.add(this.getSurLabel(), BorderLayout.SOUTH);
+        JLabel altaClienteLabel = new JLabel("ALTA CLIENTE", SwingConstants.CENTER);
+        altaClienteLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
+        altaClienteLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        altaClienteLabel.setForeground(Color.WHITE);
+        this.add(altaClienteLabel, BorderLayout.NORTH);
+        JLabel surLabel = new JLabel();
+        surLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
+        this.add(surLabel, BorderLayout.SOUTH);
         JPanel panelInput = new JPanel();
         panelInput.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.insets = new Insets(15, 0, 15, 0);
-        this.setReferenciasLabel(new JLabel("(/) indica alternativa; (*) indica campo obligatorio"));
-        this.getReferenciasLabel().setFont(new Font("Arial", Font.ITALIC, 10));
-        this.setNombreYApellidoORazonSocialLabel(new JLabel("Nombre(s) y Apellido / Razón Social (*)"));
-        this.getNombreYApellidoORazonSocialLabel().setPreferredSize(new Dimension(260, 15));
-        this.setIdentificacionLabel(new JLabel("DNI / CUIL / CUIT (*)"));
-        this.setDomicilioLabel(new JLabel("Domicilio (*)"));
-        this.setTelefonoLabel(new JLabel("Teléfono (*)"));
-        this.setCuentaAdicionalLabel(new JLabel("Cuenta(s) Adicional(es)"));
+        JLabel referenciasLabel = new JLabel("(/) indica alternativa; (*) indica campo obligatorio");
+        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+        JLabel nombreYApellidoORazonSocialLabel = new JLabel("Nombre(s) y Apellido / Razón Social (*)");
+        nombreYApellidoORazonSocialLabel.setPreferredSize(new Dimension(260, 15));
+        JLabel identificacionLabel = new JLabel("DNI / CUIL / CUIT (*)");
+        JLabel domicilioLabel = new JLabel("Domicilio (*)");
+        JLabel telefonoLabel = new JLabel("Teléfono (*)");
+        JLabel cuentaAdicionalLabel = new JLabel("Cuenta(s) Adicional(es)");
         int ancho = 30;
         this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setIdentificacionTextField(this.setTextField(ancho, "Ingrese sólo números sin espacios en blanco", this));
@@ -74,21 +68,23 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.SALIR.getTexto()));
+        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
+            JPanel panel = crearPanel();
+        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelInput.add(this.getReferenciasLabel(), gbc);
+        panelInput.add(referenciasLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getNombreYApellidoORazonSocialLabel(), gbc);
+        panelInput.add(nombreYApellidoORazonSocialLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getIdentificacionLabel(), gbc);
+        panelInput.add(identificacionLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getDomicilioLabel(), gbc);
+        panelInput.add(domicilioLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getTelefonoLabel(), gbc);
+        panelInput.add(telefonoLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getCuentaAdicionalLabel(), gbc);
+        panelInput.add(cuentaAdicionalLabel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         panelInput.add(this.getNombreYApellidoORazonSocialTextField(), gbc);
@@ -178,8 +174,7 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
             db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(), cliente.getDomicilio(), cliente.getTelefono());
         }
         else if (e.getSource().equals(getSalirButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getSalirButton()));
-            //((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getSalirButton()));
+            accionarSalirButton(e); // método default de IJButtonSalir
         }
     }
 
@@ -189,9 +184,7 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
 
     public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
 
-    public CButtonSelectorPanel getSalirButton() {
-        return this.salirButton;
-    }
+    public CButtonSelectorPanel getSalirButton() { return this.salirButton;     }
 
     public int getNumeroCuentaAdicional() {
         return this.numeroCuentaAdicional;
@@ -272,39 +265,5 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-
-    public JLabel getAltaClienteLabel() { return this.altaClienteLabel; }
-
-    public void setAltaClienteLabel(JLabel altaClienteLabel) { this.altaClienteLabel = altaClienteLabel; }
-
-    public JLabel getSurLabel() { return this.surLabel; }
-
-    public void setSurLabel(JLabel surLabel) { this.surLabel = surLabel; }
-
-    public JLabel getReferenciasLabel() { return this.referenciasLabel; }
-
-    public void setReferenciasLabel(JLabel referenciasLabel) { this.referenciasLabel = referenciasLabel; }
-
-    public JLabel getNombreYApellidoORazonSocialLabel() { return this.nombreYApellidoORazonSocialLabel; }
-
-    public void setNombreYApellidoORazonSocialLabel(JLabel nombreYApellidoORazonSocialLabel) {
-        this.nombreYApellidoORazonSocialLabel = nombreYApellidoORazonSocialLabel;
-    }
-
-    public JLabel getIdentificacionLabel() { return this.identificacionLabel; }
-
-    public void setIdentificacionLabel(JLabel identificacionLabel) { this.identificacionLabel = identificacionLabel; }
-
-    public JLabel getDomicilioLabel() { return this.domicilioLabel; }
-
-    public void setDomicilioLabel(JLabel domicilioLabel) { this.domicilioLabel = domicilioLabel; }
-
-    public JLabel getTelefonoLabel() { return this.telefonoLabel; }
-
-    public void setTelefonoLabel(JLabel telefonoLabel) { this.telefonoLabel = telefonoLabel; }
-
-    public JLabel getCuentaAdicionalLabel() { return this.cuentaAdicionalLabel; }
-
-    public void setCuentaAdicionalLabel(JLabel cuentaAdicionalLabel) { this.cuentaAdicionalLabel = cuentaAdicionalLabel; }
 
 }

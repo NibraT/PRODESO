@@ -3,7 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.dialog.CDialogLimitadorAcceso;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class CPanelAutos extends JPanel implements ActionListener, MouseListener {
+public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisoft, MouseListener {
 
     private CButtonSelectorPanel autosButton;
 
@@ -26,10 +26,10 @@ public class CPanelAutos extends JPanel implements ActionListener, MouseListener
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setAutosButton(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
-            public JPanel crearPanel(CButtonSelectorPanel jButton) {
+            public JPanel crearPanel() {
                 return new CPanelMenuAutos();
             }
-        }, ETextoButton.AUTOS.getTexto()));
+        }, ETextoButton.AUTOS.getTexto(), "Habilita Menú Autos"));
         this.getAutosButton().setEnabled(false);
         this.getAutosButton().addActionListener(this);
         this.add(getAutosButton());
@@ -39,7 +39,7 @@ public class CPanelAutos extends JPanel implements ActionListener, MouseListener
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getAutosButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getAutosButton()));
+            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

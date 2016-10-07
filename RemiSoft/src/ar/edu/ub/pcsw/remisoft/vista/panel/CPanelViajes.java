@@ -2,14 +2,15 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelViajes extends JPanel implements ActionListener {
+public class CPanelViajes extends JPanel implements ActionListener, IFrameRemisoft {
 
     private CButtonSelectorPanel viajesButton;
 
@@ -20,15 +21,20 @@ public class CPanelViajes extends JPanel implements ActionListener {
     private void inicializar() {
         this.setBackground(Color.ORANGE);
         this.setBorder(BorderFactory.createEtchedBorder());
-        this.setViajesButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.VIAJES.getTexto()));
-        viajesButton.addActionListener(this);
-        this.add(viajesButton);
+        this.setViajesButton(new CButtonSelectorPanel(new IPanelFactory() {
+            @Override
+            public JPanel crearPanel() {
+                return new CPanelMenuViajes();
+            }
+        }, ETextoButton.VIAJES.getTexto(), "Habilita Menú Viajes"));
+        this.getViajesButton().addActionListener(this);
+        this.add(this.getViajesButton());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getViajesButton())) {
-            ((CFrameRemisoft)getParent().getParent().getParent().getParent().getParent()).setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel(getViajesButton()));
+            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

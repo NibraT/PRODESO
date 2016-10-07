@@ -9,19 +9,20 @@ public class CButtonSelectorPanel extends JButton {
 
     private IPanelFactory factory;
 
-    public CButtonSelectorPanel(IPanelFactory iPanelFactory, String texto) {
+    public CButtonSelectorPanel(IPanelFactory iPanelFactory) {
         this.setFactory(iPanelFactory);
-        this.setText(texto);
+    }
+
+    public CButtonSelectorPanel(IPanelFactory iPanelFactory, String texto1, String texto2) {
+        this(iPanelFactory);
+        this.setText(texto1);
         this.setPreferredSize(new Dimension(100, 30));
+        this.setToolTipText(texto2);
     }
 
-    public CButtonSelectorPanel(IPanelFactory iPanelFactory, String texto, int ancho, int alto) {
-        this(iPanelFactory, texto);
+    public CButtonSelectorPanel(IPanelFactory iPanelFactory, String texto1, String texto2, int ancho, int alto) {
+        this(iPanelFactory, texto1, texto2);
         this.setPreferredSize(new Dimension(ancho, alto));
-    }
-
-    public void botonSelector(IPanelFactory panelSeleccionado) {
-        this.setFactory(panelSeleccionado);
     }
 
     public IPanelFactory getFactory() {

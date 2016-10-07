@@ -3,28 +3,21 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.frame.CFrameRemisoft;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class CPanelActividadBajaEmpleado extends JPanel implements IJComboBoxFactory, IJTextFieldFactory,
+public class CPanelActividadBajaEmpleado extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
         ActionListener, FocusListener, KeyListener {
 
     private CButtonSelectorPanel salirButton;
     private JButton guardarButton;
     private JComboBox<String> causasLista;
-    private JLabel apellidoLabel;
-    private JLabel bajaEmpleadoLabel;
-    private JLabel causaBajaLabel;
-    private JLabel fechaLabel;
-    private JLabel identificacionLabel;
-    private JLabel nombreLabel;
-    private JLabel referenciasLabel;
-    private JLabel surLabel;
     private JTextField apellidoTextField;
     private JTextField fechaTextField;
     private JTextField identificacionTextField;
@@ -43,27 +36,27 @@ public class CPanelActividadBajaEmpleado extends JPanel implements IJComboBoxFac
         this.setBackground(Color.MAGENTA);
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setLayout(new BorderLayout());
-        this.setBajaEmpleadoLabel(new JLabel("BAJA EMPLEADO", SwingConstants.CENTER));
-        this.getBajaEmpleadoLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.getBajaEmpleadoLabel().setFont(new Font("Arial", Font.BOLD, 25));
-        this.getBajaEmpleadoLabel().setForeground(Color.WHITE);
-        this.add(this.getBajaEmpleadoLabel(), BorderLayout.NORTH);
-        this.setSurLabel(new JLabel());
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.add(this.getSurLabel(), BorderLayout.SOUTH);
+        JLabel bajaEmpleadoLabel = new JLabel("BAJA EMPLEADO", SwingConstants.CENTER);
+        bajaEmpleadoLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
+        bajaEmpleadoLabel.setFont(new Font("Arial", Font.BOLD, 25));
+        bajaEmpleadoLabel.setForeground(Color.WHITE);
+        this.add(bajaEmpleadoLabel, BorderLayout.NORTH);
+        JLabel surLabel = new JLabel();
+        surLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
+        this.add(surLabel, BorderLayout.SOUTH);
         JPanel panelInput = new JPanel();
         panelInput.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.insets = new Insets(15, 0, 15, 0);
-        this.setReferenciasLabel(new JLabel("(*) indica campo obligatorio"));
-        this.getReferenciasLabel().setFont(new Font("Arial", Font.ITALIC, 10));
-        this.setNombreLabel(new JLabel("Nombre(s) (*)"));
-        this.getNombreLabel().setPreferredSize(new Dimension(165, 15));
-        this.setApellidoLabel(new JLabel("Apellido (*)"));
-        this.setIdentificacionLabel(new JLabel("DNI (*)"));
-        this.setCausaBajaLabel(new JLabel("Causa de la baja (*)"));
-        this.setFechaLabel(new JLabel("Fecha de la baja"));
+        JLabel referenciasLabel = new JLabel("(*) indica campo obligatorio");
+        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
+        JLabel nombreLabel = new JLabel("Nombre(s) (*)");
+        nombreLabel.setPreferredSize(new Dimension(165, 15));
+        JLabel apellidoLabel = new JLabel("Apellido (*)");
+        JLabel identificacionLabel = new JLabel("DNI (*)");
+        JLabel causaBajaLabel = new JLabel("Causa de la baja (*)");
+        JLabel fechaLabel = new JLabel("Fecha de la baja");
         int ancho = 30;
         this.setNombreTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
         this.setApellidoTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
@@ -74,21 +67,23 @@ public class CPanelActividadBajaEmpleado extends JPanel implements IJComboBoxFac
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setEnabled(false);
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new CPanelFactory(), ETextoButton.SALIR.getTexto()));
+        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
+            JPanel panel = crearPanel();
+        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panelInput.add(this.getReferenciasLabel(), gbc);
+        panelInput.add(referenciasLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getNombreLabel(), gbc);
+        panelInput.add(nombreLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getApellidoLabel(), gbc);
+        panelInput.add(apellidoLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getIdentificacionLabel(), gbc);
+        panelInput.add(identificacionLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getCausaBajaLabel(), gbc);
+        panelInput.add(causaBajaLabel, gbc);
         gbc.gridy++;
-        panelInput.add(this.getFechaLabel(), gbc);
+        panelInput.add(fechaLabel, gbc);
         gbc.gridx = 1;
         gbc.gridy = 1;
         panelInput.add(this.getNombreTextField(), gbc);
@@ -171,10 +166,9 @@ public class CPanelActividadBajaEmpleado extends JPanel implements IJComboBoxFac
             empleado.setApellido((this.getApellido()));
             empleado.setDni(this.getIdentificacion());
             empleado.setFechaDeBaja(this.getFecha());
-            empleado.eliminarEmpleado();
         }
         else if (e.getSource().equals(getSalirButton())) {
-            ((CFrameRemisoft) getParent().getParent().getParent().getParent().getParent()).setPanelActividad(((CButtonSelectorPanel) e.getSource()).getFactory().crearPanel(getSalirButton()));
+            accionarSalirButton(e); // método default de IJButtonSalir
         }
     }
 
@@ -189,40 +183,6 @@ public class CPanelActividadBajaEmpleado extends JPanel implements IJComboBoxFac
     public JComboBox<String> getCausasLista() { return this.causasLista; }
 
     public void setCausasLista(JComboBox<String> causasLista) { this.causasLista = causasLista; }
-
-    public JLabel getApellidoLabel() { return this.apellidoLabel; }
-
-    public void setApellidoLabel(JLabel apellidoLabel) { this.apellidoLabel = apellidoLabel; }
-
-    public JLabel getBajaEmpleadoLabel() { return this.bajaEmpleadoLabel; }
-
-    public void setBajaEmpleadoLabel(JLabel bajaEmpleadoLabel) { this.bajaEmpleadoLabel = bajaEmpleadoLabel; }
-
-    public JLabel getCausaBajaLabel() { return this.causaBajaLabel; }
-
-    public void setCausaBajaLabel(JLabel causaBajaLabel) { this.causaBajaLabel = causaBajaLabel; }
-
-    public JLabel getFechaLabel() { return this.fechaLabel; }
-
-    public void setFechaLabel(JLabel fechaLabel) { this.fechaLabel = fechaLabel; }
-
-    public JLabel getIdentificacionLabel() { return this.identificacionLabel; }
-
-    public void setIdentificacionLabel(JLabel identificacionLabel) {
-        this.identificacionLabel = identificacionLabel;
-    }
-
-    public JLabel getNombreLabel() { return this.nombreLabel; }
-
-    public void setNombreLabel(JLabel nombreLabel) { this.nombreLabel = nombreLabel; }
-
-    public JLabel getReferenciasLabel() { return this.referenciasLabel; }
-
-    public void setReferenciasLabel(JLabel referenciasLabel) { this.referenciasLabel = referenciasLabel; }
-
-    public JLabel getSurLabel() { return this.surLabel; }
-
-    public void setSurLabel(JLabel surLabel) { this.surLabel = surLabel; }
 
     public JTextField getApellidoTextField() { return this.apellidoTextField; }
 

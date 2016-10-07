@@ -9,6 +9,7 @@ public enum ETextoButton {
     BAJAAUTO("Baja Auto"),
     BAJACLIENTE("Baja Cliente"),
     BAJAEMPLEADO("Baja Empleado"),
+    CANCELARVIAJE("Cancelar Viaje"),
     CLIENTES("Clientes"),
     EMPLEADOS("Empleados"),
     RENDIRVIAJE("Rendir Viaje"),
