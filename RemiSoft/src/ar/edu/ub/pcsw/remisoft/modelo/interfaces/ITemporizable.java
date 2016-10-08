@@ -44,7 +44,7 @@ public interface ITemporizable {
     }
 
     default String setFechaString(Calendar fecha) {
-        SimpleDateFormat sdf = new SimpleDateFormat("d/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(fecha.getTime());
     }
 

@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -172,6 +174,8 @@ public class CPanelActividadAltaEmpleado extends JPanel  implements IJButtonSali
             empleado.setDomicilio(this.getDomicilio());
             empleado.setTelefono(this.getTelefono());
             empleado.setTurno((getTurnosLista().getSelectedItem().toString()));
+            CInsertApp db = new CInsertApp();
+            db.insertarEmpleado(dni, apellido, nombre, domicilio, telefono, empleado.getTurno());
         }
         else if (e.getSource().equals(getSalirButton())) {
             accionarSalirButton(e); // método default de IJButtonSalir
