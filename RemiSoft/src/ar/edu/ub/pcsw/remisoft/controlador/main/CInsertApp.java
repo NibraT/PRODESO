@@ -38,7 +38,126 @@ public class CInsertApp extends CDataBase implements ITemporizable{
             pstmt.setString(2, name);
             pstmt.setString(3, domicilio);
             pstmt.setString(4, telefono);
-            pstmt.setString(5, "20160930");
+            pstmt.setString(5, setFechaString(Calendar.getInstance()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarArregloAuto (String descripcion, int monto, String patente) {
+        String sql = "INSERT INTO ArregloAuto(descripcion, monto, patente) VALUES(?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, descripcion);
+            pstmt.setInt(2, monto);
+            pstmt.setString(3, patente);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarCuenta (String tipoCuenta, int saldo) {
+        String sql = "INSERT INTO Cuenta(tipoCuenta, fechaAlta, saldo) VALUES(?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, tipoCuenta);
+            pstmt.setString(2, setFechaString(Calendar.getInstance()));
+            pstmt.setInt(3, saldo);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarFactura (int monto, int idTipoFactura) {
+        String sql = "INSERT INTO Factura(fecha, monto, idTipoFactura) VALUES(?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, setFechaString(Calendar.getInstance()));
+            pstmt.setInt(2, monto);
+            pstmt.setInt(3, idTipoFactura);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarSucursal (String domicilio) {
+        String sql = "INSERT INTO Sucursal(domicilio, fechaAlta) VALUES(?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, domicilio);
+            pstmt.setString(2, setFechaString(Calendar.getInstance()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarTipoFactura (String descripcion) {
+        String sql = "INSERT INTO TipoFactura(descripcion) VALUES(?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, descripcion);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarUsuario (String nombre, String password) {
+        String sql = "INSERT INTO Usuario(NombreUsuario, password) VALUES(?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nombre);
+            pstmt.setString(2, password);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarVehiculo (String patente, String marca, String modelo, int consumo, int kilometraje) {
+        String sql = "INSERT INTO Vehiculo(Patente, marca, modelo, fechaAlta, disponible, consumo, kilometraje) VALUES(?,?,?,?,?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, patente);
+            pstmt.setString(2, marca);
+            pstmt.setString(3, modelo);
+            pstmt.setString(4, setFechaString(Calendar.getInstance()));
+            pstmt.setInt(5, 1);
+            pstmt.setInt(6, consumo);
+            pstmt.setInt(7, kilometraje);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void insertarViaje (String origen, String destino, int distancia,int precio, String horaInicio, String identificacion, String dni, String patente, int idSucursal) {
+        String sql = "INSERT INTO Viaje(origen, destino, distancia, precio, fecha, horaInicio, identificacion, dni, patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, origen);
+            pstmt.setString(2, destino);
+            pstmt.setInt(3, distancia);
+            pstmt.setInt(4, precio);
+            pstmt.setString(5, setFechaString(Calendar.getInstance()));
+            pstmt.setString(6, horaInicio);
+            pstmt.setString(7, identificacion);
+            pstmt.setString(8, dni);
+            pstmt.setString(9, patente);
+            pstmt.setInt(10, idSucursal);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -50,7 +169,15 @@ public class CInsertApp extends CDataBase implements ITemporizable{
      */
     public static void main(String[] args) {
         CInsertApp db = new CInsertApp();
-        db.insertarCliente("Didier Renard", "11222333", "Paraguay 100, Garin, BsAs", "15487654321");
+        //db.insertarCliente("Didier Renard", "11222333", "Paraguay 100, Garin, BsAs", "15487654321");
+        //db.insertarArregloAuto("Arreglo tren delantero", 10000, "AAA000");
+        //db.insertarCuenta("Personal", 1000);
+        //db.insertarFactura(200, 1);
+        //db.insertarSucursal("Las cuartetas 100");
+        //db.insertarTipoFactura("C");
+        //db.insertarUsuario("Diego", "1234");
+        //db.insertarVehiculo("AAA000", "Ford", "Mustang", 7, 5000);
+        //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
     }
 
     @Override
