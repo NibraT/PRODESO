@@ -59,14 +59,13 @@ public class CInsertApp extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarCuenta (String tipoCuenta, int saldo) {
-        String sql = "INSERT INTO Cuenta(tipoCuenta, fechaAlta, saldo) VALUES(?,?,?)";
+    public void insertarCuenta (String tipoCuenta) {
+        String sql = "INSERT INTO Cuenta(tipoCuenta, fechaAlta) VALUES(?,?)";
 
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, tipoCuenta);
             pstmt.setString(2, setFechaString(Calendar.getInstance()));
-            pstmt.setInt(3, saldo);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -164,12 +163,25 @@ public class CInsertApp extends CDataBase implements ITemporizable{
         }
     }
 
+    public void insertarClienteCuenta (String identificacion, int idCuenta) {
+        String sql = "INSERT INTO ClienteCuenta(Identificacion, IdCuenta) VALUES(?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, identificacion);
+            pstmt.setInt(2, idCuenta);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         CInsertApp db = new CInsertApp();
-        //db.insertarCliente("Didier Renard", "11222333", "Paraguay 100, Garin, BsAs", "15487654321");
+        //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
         //db.insertarArregloAuto("Arreglo tren delantero", 10000, "AAA000");
         //db.insertarCuenta("Personal", 1000);
         //db.insertarFactura(200, 1);
@@ -178,6 +190,7 @@ public class CInsertApp extends CDataBase implements ITemporizable{
         //db.insertarUsuario("Diego", "1234");
         //db.insertarVehiculo("AAA000", "Ford", "Mustang", 7, 5000);
         //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
+        //db.insertarClienteCuenta("11222333", 1);
     }
 
     @Override
