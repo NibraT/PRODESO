@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -168,6 +170,8 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
                     cliente.agregarCuenta(cliente.abrirCuenta(), cliente.getCuentasActivas());
                 }
             }
+            CInsertApp db = new CInsertApp();
+            db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(), cliente.getDomicilio(), cliente.getTelefono());
         }
         else if (e.getSource().equals(getSalirButton())) {
             accionarSalirButton(e); // método default de IJButtonSalir
