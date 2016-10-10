@@ -4,6 +4,7 @@ import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
@@ -167,6 +168,84 @@ public class CUpdateApp extends CDataBase implements ITemporizable{
         }
     }
 
+    public void updatePasswordUsuario (String password, String nombreUsuario) {
+        String sql = "UPDATE Usuario SET password = ? WHERE NombreUsuario = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, password);
+            pstmt.setString(2, nombreUsuario);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateFechaBajaVehiculo (String patente) {
+        String sql = "UPDATE Vehiculo SET fechaBaja = ? WHERE Patente = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, setFechaString(Calendar.getInstance()));
+            pstmt.setString(2, patente);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateDisponibleVehiculo (int disponible, String patente) {
+        String sql = "UPDATE Vehiculo SET disponible = ? WHERE Patente = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, disponible);
+            pstmt.setString(2, patente);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateKilometrajeVehiculo (int kilometros, String patente) {
+        String sql = "UPDATE Vehiculo SET kilometraje = ? WHERE Patente = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, kilometros);
+            pstmt.setString(2, patente);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateCostoViaje (int costo, int numeroViaje){
+        String sql = "UPDATE Viaje SET costo = ? WHERE Numero = ?";
+
+        try (Connection conn = super.connect();
+              PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, costo);
+            pstmt.setInt(2, numeroViaje);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateHoraFinViaje (String hora, int numeroViaje){
+        String sql = "UPDATE Viaje SET horaFin = ? WHERE Numero = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, hora);
+            pstmt.setInt(2, numeroViaje);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
         CUpdateApp db = new CUpdateApp();
         //db.updateFechaBajaCuenta(1);
@@ -177,7 +256,11 @@ public class CUpdateApp extends CDataBase implements ITemporizable{
         //db.updateSaldoClienteCuenta(1000, "11222333");
         //db.updateDomicilioEmpleado("Lanus Este", "doaho");
         //db.updateDisponibleEmpleado(0, "doaho");
-        db.updateTurnoEmpleado("13-24", "doaho");
+        //db.updateTurnoEmpleado("13-24", "doaho");
+        //db.updatePasswordUsuario("Vega", "Diego");
+        //db.updateKilometrajeVehiculo(10000, "AAA000");
+        //db.updateCostoViaje(70, 1);
+        //db.updateHoraFinViaje("10:00", 1);
     }
 
     @Override
