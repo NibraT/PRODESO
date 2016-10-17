@@ -1,21 +1,34 @@
 package ar.edu.ub.pcsw.remisoft.vista.iconos;
 
+import ar.edu.ub.pcsw.remisoft.vista.panel.EToolTipTextTexto;
+
 import java.awt.Color;
 
 public enum EIcono {
 
     //enums se declaran según el orden con el cual se desea mostrarlos
-    MAPAS("src/data/googlemaps-icon2.png", 4, "https://www.google.com.ar/maps", "Mapas", Color.BLUE),
-    TRANSITO("src/data/trafficjam-icon.png", 17, "http://servicios.lanacion.com.ar/transito", "Estado del Tránsito", Color.BLUE),
-    GUIATELEFONICA("src/data/phonebook-icon.png", 17, "http://guias.telecom.com.ar/", "Guía Telefónica", Color.BLUE),
-    CORREOELECTRONICO("src/data/email-icon.png", 17, "https://www.google.com.ar", "Email", Color.BLUE),
-    AUXILIOMECANICO("src/data/acaLogo.jpg", 20, "http://www.aca.org.ar/", "Auxilio Mecánico", Color.BLUE),
-    EMERGENCIAMEDICA("src/data/emergenciasMedicasLogo.jpg", 5, "http://www.emergencias.com.ar/", "Emergencia Médica", Color.BLUE),
-    POLICIA("src/data/policiaPBALogo.jpg", 5, "http://www.pol.gba.gov.ar/", "Policía", Color.BLUE),
-    BOMBEROS("src/data/bomberosLogo.jpg", 7, "http://www.bomberosra.org.ar/ta-provincias/buenos-aires/page/4", "Bomberos", Color.BLUE),
-    CORREOPOSTAL("src/data/correoargentino-icon.jpg", 5, "http://www.correoargentino.com.ar/", "Correo", Color.BLUE),
-    CALENDARIO("src/data/calendar-icon.png", 9, "http://www.cuandoenelmundo.com", "Calendario", Color.CYAN),
-    SERVICIOMETEOROLOGICO("src/data/weather-icon.png", 9, "http://www.smn.gov.ar", "Clima", Color.CYAN);
+    MAPAS("src/data/googlemaps-icon2.png", 4, "https://www.google.com.ar/maps", EToolTipTextTexto.MAPAS.getTexto(),
+            Color.BLUE),
+    TRANSITO("src/data/trafficjam-icon.png", 17, "http://servicios.lanacion.com.ar/transito",
+            EToolTipTextTexto.TRANSITO.getTexto(), Color.BLUE),
+    GUIATELEFONICA("src/data/phonebook-icon.png", 17, "http://guias.telecom.com.ar/",
+            EToolTipTextTexto.GUIATELEFONICA.getTexto(), Color.BLUE),
+    CORREOELECTRONICO("src/data/email-icon.png", 17, "https://www.google.com.ar",
+            EToolTipTextTexto.CORREOELECTRONICO.getTexto(), Color.BLUE),
+    AUXILIOMECANICO("src/data/acaLogo.jpg", 20, "http://www.aca.org.ar/", EToolTipTextTexto.AUXILIOMECANICO.getTexto(),
+            Color.BLUE),
+    EMERGENCIAMEDICA("src/data/emergenciasMedicasLogo.jpg", 5, "http://www.emergencias.com.ar/",
+            EToolTipTextTexto.EMERGENCIAMEDICA.getTexto(), Color.BLUE),
+    POLICIA("src/data/policiaPBALogo.jpg", 5, "http://www.pol.gba.gov.ar/", EToolTipTextTexto.POLICIA.getTexto(),
+            Color.BLUE),
+    BOMBEROS("src/data/bomberosLogo.jpg", 7, "http://www.bomberosra.org.ar/ta-provincias/buenos-aires/page/4",
+            EToolTipTextTexto.BOMBEROS.getTexto(), Color.BLUE),
+    CORREOPOSTAL("src/data/correoargentino-icon.jpg", 5, "http://www.correoargentino.com.ar/",
+            EToolTipTextTexto.CORREOPOSTAL.getTexto(), Color.BLUE),
+    CALENDARIO("src/data/calendar-icon.png", 9, "http://www.cuandoenelmundo.com",
+            EToolTipTextTexto.CALENDARIO.getTexto(), Color.CYAN),
+    SERVICIOMETEOROLOGICO("src/data/weather-icon.png", 9, "http://www.smn.gov.ar",
+            EToolTipTextTexto.SERVICIOMETEOROLOGICO.getTexto(), Color.CYAN);
 
     private int reduccion;
     private Color color;

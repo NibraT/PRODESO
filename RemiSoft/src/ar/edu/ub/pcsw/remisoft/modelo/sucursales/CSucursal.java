@@ -17,8 +17,8 @@ public class CSucursal {
     private Calendar fechaDeAlta;
     private Calendar fechaDeBaja;
 
-    public CSucursal(int numero, String domicilio, List<CCliente> clientes, List<CEmpleado> empleados, List<CVehiculo> vehiculos,
-                     Calendar fechaDeAlta, Calendar fechaDeBaja) {
+    public CSucursal(int numero, String domicilio, List<CCliente> clientes, List<CEmpleado> empleados,
+                     List<CVehiculo> vehiculos, Calendar fechaDeAlta, Calendar fechaDeBaja) {
         this.setNumero(numero);
         this.setDomicilio(domicilio);
         this.setClientes(clientes);

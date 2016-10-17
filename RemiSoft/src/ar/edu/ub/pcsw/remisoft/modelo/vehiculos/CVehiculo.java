@@ -2,12 +2,12 @@ package ar.edu.ub.pcsw.remisoft.modelo.vehiculos;
 
 public class CVehiculo {
 
+    private String aseguradora;
     private String fechaDeAlta;
     private String fechaDeBaja;
     private String marca;
     private String modelo;
     private String patente;
-    private String propietario;
 
     /*
     Constructor
@@ -20,15 +20,35 @@ public class CVehiculo {
     Constructor
      */
 
-    public CVehiculo(String marca, String modelo, String patente, String propietario, String fechaDeAlta,
+    public CVehiculo(String marca, String modelo, String patente, String aseguradora, String fechaDeAlta,
                      String fechaDeBaja) {
 
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setPatente(patente);
-        this.setPropietario(propietario);
+        this.setAseguradora(aseguradora);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
+    }
+
+    public String getAseguradora() { return this.aseguradora; }
+
+    public void setAseguradora(String aseguradora) { this.aseguradora = aseguradora; }
+
+    public String getFechaDeAlta() {
+        return this.fechaDeAlta;
+    }
+
+    public void setFechaDeAlta(String fechaDeAlta) {
+        this.fechaDeAlta = fechaDeAlta;
+    }
+
+    public String getFechaDeBaja() {
+        return this.fechaDeBaja;
+    }
+
+    public void setFechaDeBaja(String fechaDeBaja) {
+        this.fechaDeBaja = fechaDeBaja;
     }
 
     public String getMarca() {
@@ -55,33 +75,9 @@ public class CVehiculo {
         this.patente = patente;
     }
 
-    public String getPropietario() {
-        return this.propietario;
-    }
-
-    public void setPropietario(String propietario) {
-        this.propietario = propietario;
-    }
-
-    public String getFechaDeAlta() {
-        return this.fechaDeAlta;
-    }
-
-    public void setFechaDeAlta(String fechaDeAlta) {
-        this.fechaDeAlta = fechaDeAlta;
-    }
-
-    public String getFechaDeBaja() {
-        return this.fechaDeBaja;
-    }
-
-    public void setFechaDeBaja(String fechaDeBaja) {
-        this.fechaDeBaja = fechaDeBaja;
-    }
-
     public String toString() {
         return "Marca: " + this.getMarca() + "\nModelo: " + this.getModelo() +
-                "\nPatente: " + this.getPatente() + "\nPropietario: " + this.getPropietario();
+                "\nPatente: " + this.getPatente() + "\nAseguradora: " + this.getAseguradora();
     }
 
 }

@@ -1,12 +1,9 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
-import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
-import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,20 +11,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Calendar;
 
-public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
-        ActionListener, KeyListener {
+public class CPanelActividadAltaAuto extends CPanelActividadBase implements IJButtonSalir, IJTextFieldFactory,
+        IValidadorInput, ActionListener, KeyListener {
 
-    private CButtonSelectorPanel salirButton;
-    private JButton guardarButton;
-    private JComboBox<String> propietariosLista;
+    private JLabel aseguradoraLabel;
+    private JLabel marcaLabel;
+    private JLabel modeloLabel;
+    private JLabel patenteLabel;
+    private JTextField aseguradoraTextField;
     private JTextField marcaTextField;
     private JTextField modeloTextField;
     private JTextField patenteTextField;
+    private String aseguradora;
     private String marca;
     private String modelo;
     private String patente;
-    private String[] propietarios = new String[] {" ", "RSG", "19222185", "12089450", "14279142", "11782006"};
 
     public CPanelActividadAltaAuto() {
         this.inicializar();
@@ -35,77 +35,72 @@ public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJ
 
     private void inicializar() {
         this.setBackground(Color.GREEN);
-        this.setBorder(BorderFactory.createEtchedBorder());
-        this.setLayout(new BorderLayout());
-        JLabel altaAutoLabel = new JLabel("ALTA AUTO", SwingConstants.CENTER);
-        altaAutoLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
-        altaAutoLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        altaAutoLabel.setForeground(Color.WHITE);
-        this.add(altaAutoLabel, BorderLayout.NORTH);
-        JLabel surLabel = new JLabel();
-        surLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.add(surLabel, BorderLayout.SOUTH);
-        JPanel panelInput = new JPanel();
-        panelInput.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.insets = new Insets(15, 0, 15, 0);
-        JLabel referenciasLabel = new JLabel("(*) indica campo obligatorio");
-        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
-        JLabel marcaLabel = new JLabel("Marca (*)");
-        marcaLabel.setPreferredSize(new Dimension(165, 15));
-        JLabel modeloLabel = new JLabel("Modelo (*)");
-        JLabel patenteLabel = new JLabel("Patente (*)");
-        JLabel propietarioLabel = new JLabel("Propietario (*)");
+        this.getNorteLabel().setText("ALTA AUTO");
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(getNorteLabel(), BorderLayout.NORTH);
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(getSurLabel(), BorderLayout.SOUTH);
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.getReferenciasLabel().setText("<html><font color='red'>rojo</font> indica campo obligatorio</html>");
+        this.setMarcaLabel(new JLabel("Marca"));
+        this.getMarcaLabel().setPreferredSize(new Dimension(165, 15));
+        this.getMarcaLabel().setForeground(Color.RED);
+        this.setModeloLabel(new JLabel("Modelo"));
+        this.getModeloLabel().setForeground(Color.RED);
+        this.setPatenteLabel(new JLabel("Patente"));
+        this.getPatenteLabel().setForeground(Color.RED);
+        this.setAseguradoraLabel(new JLabel("Aseguradora"));
+        this.getAseguradoraLabel().setForeground(Color.RED);
         int ancho = 30;
-        this.setMarcaTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
-        this.setModeloTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
-        this.setPatenteTextField(this.setTextField(ancho, "Ingrese sólo letras, números y espacios en blanco", this));
-        this.setPropietariosLista(this.crearComboBox(this.getPropietarios(), 333, 20, Color.WHITE, "Seleccione propietario", this));
-        this.setGuardarButton(new JButton("Guardar"));
-        this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
-        this.getGuardarButton().setEnabled(false);
+        // método default de IJTextFieldFactory
+        this.setMarcaTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getMarcaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.MARCA.getTexto(),
+                getMarcaTextField().getToolTipText(), getMarcaLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setModeloTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getModeloTextField().setInputVerifier(validadorInput(ERegexValidadorInput.MODELO.getTexto(),
+                getModeloTextField().getToolTipText(), getModeloLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setPatenteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getPatenteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PATENTE.getTexto(),
+                getPatenteTextField().getToolTipText(), getPatenteLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setAseguradoraTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getAseguradoraTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getAseguradoraTextField().getToolTipText(),
+                getAseguradoraLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
-            JPanel panel = crearPanel();
-        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelInput.add(referenciasLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(marcaLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(modeloLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(patenteLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(propietarioLabel, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panelInput.add(this.getMarcaTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getModeloTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getPatenteTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getPropietariosLista(), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 10;
-        panelInput.add(this.getGuardarButton(), gbc);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        panelInput.add(this.getSalirButton(), gbc);
-        this.add(panelInput);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+        this.getGbc().gridx = 0;
+        this.getGbc().gridy = 0;
+        this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getMarcaLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getModeloLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getPatenteLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getAseguradoraLabel(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 1;
+        this.getPanelInput().add(this.getMarcaTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getModeloTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getPatenteTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getAseguradoraTextField(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 10;
+        this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
+        this.getGbc().anchor = GridBagConstraints.LINE_END;
+        this.getPanelInput().add(this.getSalirButton(), this.getGbc());
+        this.add(this.getPanelInput());
     }
 
     @Override
@@ -125,38 +120,50 @@ public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJ
                 setPatente(getPatenteTextField().getText());
             }
         }
+        else if (e.getSource().equals(getAseguradoraTextField())) {
+            if ((getAseguradoraTextField().getText() != null) || (! getAseguradoraTextField().getText().isEmpty())) {
+                setAseguradora(getAseguradoraTextField().getText());
+                getGuardarButton().setEnabled(true);
+            }
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        CVehiculo auto = new CVehiculo();
-        if (e.getSource().equals(getPropietariosLista())) {
-            getGuardarButton().setEnabled(true);
-        }
-        else if (e.getSource().equals(getPropietariosLista().getSelectedItem())) {
-            if ((getPropietariosLista().getSelectedItem().toString() != null) ||
-                    (! getPropietariosLista().getSelectedItem().toString().isEmpty())) {
-                auto.setPropietario((getPropietariosLista().getSelectedItem().toString()));
-            }
-        }
-        else if (e.getSource().equals(getGuardarButton())) {
+        if (e.getSource().equals(getGuardarButton())) {
+            CVehiculo auto = new CVehiculo();
             auto.setMarca(this.getMarca());
             auto.setModelo(this.getModelo());
             auto.setPatente(this.getPatente());
-            auto.setPropietario((getPropietariosLista().getSelectedItem().toString()));
+            auto.setAseguradora(this.getAseguradora());
         }
         else if (e.getSource().equals(getSalirButton())) {
-            accionarSalirButton(e); // método default de IJButtonSalir
+            // método default de IJButtonSalir
+            accionarSalirButton(e);
         }
     }
 
-    public CButtonSelectorPanel getSalirButton() { return this.salirButton; }
+    public JLabel getAseguradoraLabel() { return this.aseguradoraLabel; }
 
-    public void setSalirButton(CButtonSelectorPanel salirButton) { this.salirButton = salirButton; }
+    public void setAseguradoraLabel(JLabel aseguradoraLabel) { this.aseguradoraLabel = aseguradoraLabel; }
 
-    public JButton getGuardarButton() { return this.guardarButton; }
+    public JLabel getMarcaLabel() { return this.marcaLabel; }
 
-    public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
+    public void setMarcaLabel(JLabel marcaLabel) { this.marcaLabel = marcaLabel; }
+
+    public JLabel getModeloLabel() { return this.modeloLabel; }
+
+    public void setModeloLabel(JLabel modeloLabel) { this.modeloLabel = modeloLabel; }
+
+    public JLabel getPatenteLabel() { return this.patenteLabel; }
+
+    public void setPatenteLabel(JLabel patenteLabel) { this.patenteLabel = patenteLabel; }
+
+    public JTextField getAseguradoraTextField() { return this.aseguradoraTextField; }
+
+    public void setAseguradoraTextField(JTextField aseguradoraTextField) {
+        this.aseguradoraTextField = aseguradoraTextField;
+    }
 
     public JTextField getMarcaTextField() { return this.marcaTextField; }
 
@@ -170,13 +177,9 @@ public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJ
 
     public void setPatenteTextField(JTextField patenteTextField) { this.patenteTextField = patenteTextField; }
 
-    public String[] getPropietarios() { return this.propietarios; }
+    public String getAseguradora() { return this.aseguradora; }
 
-    public void setPropietarios(String[] propietarios) { this.propietarios = propietarios; }
-
-    public JComboBox<String> getPropietariosLista() { return this.propietariosLista; }
-
-    public void setPropietariosLista(JComboBox<String> propietariosLista) { this.propietariosLista = propietariosLista; }
+    public void setAseguradora(String aseguradora) { this.aseguradora = aseguradora; }
 
     public String getMarca() { return this.marca; }
 
@@ -189,5 +192,20 @@ public class CPanelActividadAltaAuto extends JPanel implements IJButtonSalir, IJ
     public String getPatente() { return this.patente; }
 
     public void setPatente(String patente) { this.patente = patente; }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public Calendar calcularTiempo() {
+        return null;
+    }
 
 }

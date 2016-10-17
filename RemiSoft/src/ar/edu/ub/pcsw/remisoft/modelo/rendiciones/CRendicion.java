@@ -3,26 +3,43 @@ package ar.edu.ub.pcsw.remisoft.modelo.rendiciones;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 
-import java.util.Calendar;
-
 public class CRendicion {
 
-    private Calendar fecha;
     private CEmpleado recepcionista;
-    private CViaje viaje;
+    private String costoEfectivo;
+    private String costoTestigo;
+    private String fecha;
     private String numero;
-    private String precioTestigo;
+    private String viajeNumero;
 
     public CRendicion() {
-        this(null, null, null, null, null);
+        this(null, null, null, null, null, null);
     }
 
-    public CRendicion(String numero, Calendar fecha, CEmpleado recepcionista, CViaje viaje, String precioTestigo) {
+    public CRendicion(String numero, String fecha, CEmpleado recepcionista, String viajeNumero, String costoEfectivo,
+                      String costoTestigo) {
         this.setNumero(numero);
         this.setFecha(fecha);
         this.setRecepcionista(recepcionista);
-        this.setViaje(viaje);
-        this.setPrecioTestigo(precioTestigo);
+        this.setViajeNumero(viajeNumero);
+        this.setCostoEfectivo(costoEfectivo);
+        this.setCostoTestigo(costoTestigo);
+    }
+
+    public String getCostoEfectivo() { return this.costoEfectivo; }
+
+    public void setCostoEfectivo(String costoEfectivo) { this.costoEfectivo = costoEfectivo; }
+
+    public String getCostoTestigo() { return this.costoTestigo; }
+
+    public void setCostoTestigo(String costoTestigo) { this.costoTestigo = costoTestigo; }
+
+    public String getFecha() {
+        return this.fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public String getNumero() {
@@ -33,14 +50,6 @@ public class CRendicion {
         this.numero = numero;
     }
 
-    public Calendar getFecha() {
-        return this.fecha;
-    }
-
-    public void setFecha(Calendar fecha) {
-        this.fecha = fecha;
-    }
-
     public CEmpleado getRecepcionista() {
         return this.recepcionista;
     }
@@ -49,21 +58,9 @@ public class CRendicion {
         this.recepcionista = recepcionista;
     }
 
-    public CViaje getViaje() {
-        return this.viaje;
-    }
+    public String getViajeNumero() { return this.viajeNumero; }
 
-    public void setViaje(CViaje viaje) {
-        this.viaje = viaje;
-    }
-
-    public String getPrecioTestigo() {
-        return this.precioTestigo;
-    }
-
-    public void setPrecioTestigo(String precioTestigo) {
-        this.precioTestigo = precioTestigo;
-    }
+    public void setViajeNumero(String viajeNumero) { this.viajeNumero = viajeNumero; }
 
     public String toString() {
         return null;

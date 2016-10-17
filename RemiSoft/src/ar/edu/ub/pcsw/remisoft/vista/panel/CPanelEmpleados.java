@@ -29,7 +29,7 @@ public class CPanelEmpleados extends JPanel implements ActionListener, IFrameRem
             public JPanel crearPanel() {
                 return new CPanelMenuEmpleados();
             }
-        }, ETextoButton.EMPLEADOS.getTexto(), "Habilita Menú Empleados"));
+        }, ETextoButton.EMPLEADOS.getTexto(), EToolTipTextTexto.MENUEMPLEADOS.getTexto()));
         this.getEmpleadosButton().setEnabled(false);
         this.getEmpleadosButton().addActionListener(this);
         this.add(getEmpleadosButton());
