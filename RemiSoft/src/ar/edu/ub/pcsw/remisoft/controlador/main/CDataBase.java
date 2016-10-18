@@ -7,7 +7,7 @@ import java.sql.*;
  */
 public class CDataBase {
     Connection connect() {
-        String url = "jdbc:sqlite:/Users/Pulpo1/Documents/UB/Programacion/UB/ProyectoSoftware/PRODESO/RemiSoftDB";
+        String url = "jdbc:sqlite:src/BaseDatos/RemiSoftDB";
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
