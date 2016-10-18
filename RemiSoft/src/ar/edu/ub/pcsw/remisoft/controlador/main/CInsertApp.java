@@ -182,7 +182,7 @@ public class CInsertApp extends CDataBase implements ITemporizable{
     public static void main(String[] args) {
         CInsertApp db = new CInsertApp();
         //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
-        //db.insertarArregloAuto("Arreglo tren delantero", 10000, "AAA000");
+        //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
         //db.insertarCuenta("Personal", 1000);
         //db.insertarFactura(200, 1);
         //db.insertarSucursal("Las cuartetas 100");
