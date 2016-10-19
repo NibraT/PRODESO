@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -149,6 +151,8 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
                     cliente.agregarCuenta(cliente.abrirCuenta(), cliente.getCuentasActivas());
                 }
             }
+            CInsertApp db = new CInsertApp();
+            db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(), cliente.getDomicilio(), cliente.getTelefono());
         }
         else if (e.getSource().equals(getSalirButton())) {
             // método default de IJButtonSalir
