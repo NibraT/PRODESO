@@ -29,7 +29,7 @@ public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisof
             public JPanel crearPanel() {
                 return new CPanelMenuAutos();
             }
-        }, ETextoButton.AUTOS.getTexto(), "Habilita Menú Autos"));
+        }, ETextoButton.AUTOS.getTexto(), EToolTipTextTexto.MENUAUTOS.getTexto()));
         this.getAutosButton().setEnabled(false);
         this.getAutosButton().addActionListener(this);
         this.add(getAutosButton());

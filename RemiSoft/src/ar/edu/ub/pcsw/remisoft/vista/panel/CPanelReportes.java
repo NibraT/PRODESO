@@ -29,7 +29,7 @@ public class CPanelReportes extends JPanel implements ActionListener, IFrameRemi
             public JPanel crearPanel() {
                 return new CPanelMenuReportes();
             }
-        }, ETextoButton.REPORTES.getTexto(), "Habilita Menú Reportes"));
+        }, ETextoButton.REPORTES.getTexto(), EToolTipTextTexto.MENUREPORTES.getTexto()));
         this.getReportesButton().setEnabled(false);
         this.getReportesButton().addActionListener(this);
         this.add(getReportesButton());

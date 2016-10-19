@@ -26,7 +26,7 @@ public class CPanelClientes extends JPanel implements ActionListener, IFrameRemi
             public JPanel crearPanel() {
                 return new CPanelMenuClientes();
             }
-        }, ETextoButton.CLIENTES.getTexto(), "Habilita Menú Clientes"));
+        }, ETextoButton.CLIENTES.getTexto(), EToolTipTextTexto.MENUCLIENTES.getTexto()));
         this.getClientesButton().addActionListener(this);
         this.add(getClientesButton());
     }

@@ -6,150 +6,169 @@ import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
-import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
-import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
-        ITemporizable, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
+        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
 
-    private CButtonSelectorPanel salirButton;
-    private CViaje viaje = new CViaje();
-    private JButton guardarButton;
     private JComboBox<String> autosLista;
     private JComboBox<String> choferesLista;
-    private JComboBox<String> recepcionistasLista;
+    private JComboBox<String> cuentasLista;
+    private JLabel autoLabel;
+    private JLabel choferLabel;
+    private JLabel clienteLabel;
+    private JLabel cuentaLabel;
+    private JLabel destinoLabel;
+    private JLabel horaLabel;
+    private JLabel origenLabel;
+    private JLabel precioLabel;
     private JTextField clienteTextField;
-    private JTextField cuentaTextField;
     private JTextField destinoTextField;
-    private JTextField fechaTextField;
     private JTextField horaTextField;
     private JTextField origenTextField;
+    private JTextField precioTextField;
     private String cliente;
     private String cuenta;
     private String destino;
-    private String fecha;
     private String hora;
     private String origen;
+    private String precio;
     private String[] autos = new String[] {" ", "NHU544", "KOW902", "LDP657", "PWS390"};
     private String[] choferes = new String[] {" ", "19222185", "12089450", "14279142", "11782006"};
-    private String[] recepcionistas = new String[] {" ", "15733921", "39576117", "10944823"};
+    private String[] cuentas = new String[] {" ", "354"};
 
     public CPanelActividadTomarViaje() {
+        super(3.0);
         this.inicializar();
     }
 
     private void inicializar() {
         this.setBackground(Color.ORANGE);
-        this.setBorder(BorderFactory.createEtchedBorder());
-        this.setLayout(new BorderLayout());
-        JLabel tomarViajeLabel = new JLabel("TOMAR VIAJE", SwingConstants.CENTER);
-        tomarViajeLabel.setPreferredSize(new Dimension(this.getWidth(), 75));
-        tomarViajeLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        tomarViajeLabel.setForeground(Color.WHITE);
-        this.add(tomarViajeLabel, BorderLayout.NORTH);
-        JLabel surLabel = new JLabel();
-        surLabel.setPreferredSize(new Dimension(this.getWidth(), 25));
-        this.add(surLabel, BorderLayout.SOUTH);
-        JPanel panelInput = new JPanel();
-        panelInput.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.insets = new Insets(10, 0, 10, 0);
-        JLabel referenciasLabel = new JLabel("(/) indica alternativa; (*) indica campo obligatorio");
-        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
-        JLabel clienteLabel = new JLabel("Cliente DNI / CUIL / CUIT (*)");
-        clienteLabel.setPreferredSize(new Dimension(260, 15));
-        JLabel cuentaLabel = new JLabel("Cuenta Número");
-        JLabel choferLabel = new JLabel("Chofer (*)");
-        JLabel autoLabel = new JLabel("Auto (*)");
-        JLabel origenLabel = new JLabel("Origen (*)");
-        JLabel destinoLabel = new JLabel("Destino (*)");
-        JLabel fechaLabel = new JLabel("Fecha (*)");
-        JLabel horaLabel = new JLabel("Hora (*)");
-        JLabel recepcionistaLabel = new JLabel("Recepcionista (*)");
+        this.getNorteLabel().setText("TOMAR VIAJE");
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 50));
+        this.add(getNorteLabel(), BorderLayout.NORTH);
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 15));
+        this.add(getSurLabel(), BorderLayout.SOUTH);
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.getGbc().insets = new Insets (10, 0, 10, 0);
+        this.setClienteLabel(new JLabel("Cliente DNI / CUIL / CUIT"));
+        this.getClienteLabel().setPreferredSize(new Dimension(260, 15));
+        this.getClienteLabel().setForeground(Color.RED);
+        this.setCuentaLabel(new JLabel("Cuenta Imputable"));
+        this.getCuentaLabel().setForeground(Color.RED);
+        this.setChoferLabel(new JLabel("Chofer Disponible"));
+        this.getChoferLabel().setForeground(Color.RED);
+        this.setAutoLabel(new JLabel("Auto Disponible"));
+        this.getAutoLabel().setForeground(Color.RED);
+        this.setOrigenLabel(new JLabel("Origen"));
+        this.getOrigenLabel().setForeground(Color.RED);
+        this.setDestinoLabel(new JLabel("Destino"));
+        this.getDestinoLabel().setForeground(Color.RED);
+        this.setHoraLabel(new JLabel("Hora"));
+        this.getHoraLabel().setForeground(Color.RED);
+        this.setPrecioLabel(new JLabel("Precio"));
+        this.getPrecioLabel().setForeground(Color.RED);
         int ancho = 30;
-        this.setClienteTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
-        this.setCuentaTextField(this.setTextField(ancho, "000", "Ingrese sólo letras y espacios en blanco", this));
-        this.setChoferesLista(this.crearComboBox(this.getChoferes(), 333, 20, Color.WHITE, "Seleccione chofer", this));
-        this.setAutosLista(this.crearComboBox(this.getAutos(), 333, 20, Color.WHITE, "Seleccione auto", this));
-        this.setOrigenTextField(this.setTextField(ancho, "Ingrese letras, números, símbolos y espacios en blanco", this));
-        this.setDestinoTextField(this.setTextField(ancho, "Ingrese letras, números, símbolos y espacios en blanco", this));
-        this.setFechaTextField(this.setTextField(ancho, "00/00/0000", "Ingrese la fecha con formato DD/MM/AAAA", this));
-        this.setHoraTextField(this.setTextField(ancho, "00:00:00", "Ingrese la hora con formato 00:00:00", this));
-        this.setRecepcionistasLista(this.crearComboBox(this.getRecepcionistas(), 333, 20, Color.WHITE, "Seleccione recepcionista", this));
-        this.setGuardarButton(new JButton("Guardar"));
-        this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
-        this.getGuardarButton().setEnabled(false);
+        // método default de IJTextFieldFactory
+        this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
+                getClienteTextField().getToolTipText(), getClienteLabel().getText()));
+        // método default de IJComboBoxFactory
+        this.setCuentasLista(this.crearComboBox(this.getCuentas(), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getCuentaLabel().getText(), this));
+        // método default de IValidadorInput
+        this.validadorInput(getCuentasLista(), getCuentasLista().getToolTipText(), getCuentaLabel().getText());
+        // método default de IJComboBoxFactory
+        this.setChoferesLista(this.crearComboBox(this.getChoferes(), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
+        // método default de IValidadorInput
+        this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
+        // método default de IJComboBoxFactory
+        this.setAutosLista(this.crearComboBox(this.getAutos(), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this));
+        // método default de IValidadorInput
+        this.validadorInput(getAutosLista(), getAutosLista().getToolTipText(), getAutoLabel().getText());
+        // método default de IJTextFieldFactory
+        this.setOrigenTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getOrigenTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
+                getOrigenTextField().getToolTipText(), getOrigenLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setDestinoTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getDestinoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
+                getDestinoTextField().getToolTipText(), getDestinoLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setHoraTextField(this.setTextField(ancho, "00:00:00", EToolTipTextTexto.HORA.getTexto(), this));
+        // método default de IValidadorInput
+        this.getHoraTextField().setInputVerifier(validadorInput(ERegexValidadorInput.HORA.getTexto(),
+                getHoraTextField().getToolTipText(), getHoraLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setPrecioTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getPrecioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PRECIO.getTexto(),
+                getPrecioTextField().getToolTipText(), getPrecioLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
-            JPanel panel = crearPanel();
-        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelInput.add(referenciasLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(clienteLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(cuentaLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(choferLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(autoLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(origenLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(destinoLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(fechaLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(horaLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(recepcionistaLabel, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panelInput.add(this.getClienteTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getCuentaTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getChoferesLista(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getAutosLista(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getOrigenTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getDestinoTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getFechaTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getHoraTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getRecepcionistasLista(), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 10;
-        panelInput.add(this.getGuardarButton(), gbc);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        panelInput.add(this.getSalirButton(), gbc);
-        this.add(panelInput);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+        this.getGbc().gridx = 0;
+        this.getGbc().gridy = 0;
+        this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getClienteLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getChoferLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getAutoLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getOrigenLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getDestinoLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getHoraLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getPrecioLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getRecepcionistaLabel(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 1;
+        this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getChoferesLista(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getAutosLista(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getOrigenTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getDestinoTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getHoraTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getPrecioTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getRecepcionistasLista(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 15;
+        this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
+        this.getGbc().anchor = GridBagConstraints.LINE_END;
+        this.getPanelInput().add(this.getSalirButton(), this.getGbc());
+        this.add(this.getPanelInput());
     }
 
     @Override
@@ -157,11 +176,6 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
         if (e.getSource().equals(getClienteTextField())) {
             if ((getClienteTextField().getText() != null) || (! getClienteTextField().getText().isEmpty())) {
                 setCliente(getClienteTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getCuentaTextField())) {
-            if ((getCuentaTextField().getText() != null) || (! getCuentaTextField().getText().isEmpty())) {
-                setCuenta(getCuentaTextField().getText());
             }
         }
         else if (e.getSource().equals(getOrigenTextField())) {
@@ -184,14 +198,16 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
                 setHora(getHoraTextField().getText());
             }
         }
+        else if (e.getSource().equals(getPrecioTextField())) {
+            if ((getPrecioTextField().getText() != null) || (! getPrecioTextField().getText().isEmpty())) {
+                setPrecio(getPrecioTextField().getText());
+            }
+        }
     }
 
     @Override
     public void focusGained(FocusEvent e) {
-        if (e.getSource().equals(getCuentaTextField())) {
-            getCuentaTextField().selectAll();
-        }
-        else if (e.getSource().equals(getFechaTextField())) {
+        if (e.getSource().equals(getFechaTextField())) {
             getFechaTextField().selectAll();
         }
         else if (e.getSource().equals(getHoraTextField())) {
@@ -200,13 +216,9 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
     }
 
     @Override
-    public void focusLost(FocusEvent e) {
-
-    }
-
-    @Override
     public void actionPerformed(ActionEvent e) {
-        getViaje().setCliente(new CCliente());
+        CViaje viaje = new CViaje();
+        viaje.setCliente(new CCliente());
         viaje.setCuenta(viaje.getCliente().getCuentasActivas().get(0));
         viaje.setChofer(new CChoferSinVehiculo());
         viaje.setAuto(new CVehiculo());
@@ -218,6 +230,12 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
             if ((getChoferesLista().getSelectedItem().toString() != null) ||
                     (! getChoferesLista().getSelectedItem().toString().isEmpty())) {
                 viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
+            }
+        }
+        else if (e.getSource().equals(getCuentasLista().getSelectedItem())) {
+            if ((getCuentasLista().getSelectedItem().toString() != null) ||
+                    (! getCuentasLista().getSelectedItem().toString().isEmpty())) {
+                setCuenta(getCuentasLista().getSelectedItem().toString());
             }
         }
         else if (e.getSource().equals(getAutosLista().getSelectedItem())) {
@@ -235,6 +253,7 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
         else if (e.getSource().equals(getGuardarButton())) {
             viaje.getCliente().setIdentificacion(this.getCliente());
             viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
+            viaje.getCuenta().setNumero(this.getCuenta());
             viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
             viaje.setOrigen(this.getOrigen());
@@ -243,43 +262,72 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
             setHora(getHoraTextField().getText());
             viaje.setFecha(this.setFechaCalendar(this.getFecha()));
             viaje.setHoraDeInicio(this.setHoraCalendar(this.getHora()));
+            setPrecio(getPrecioTextField().getText());
+            viaje.setPrecio(this.getPrecio());
         }
         else if (e.getSource().equals(getSalirButton())) {
-            accionarSalirButton(e); // método default de IJButtonSalir
+            // método default de IJButtonSalir
+            accionarSalirButton(e);
         }
     }
 
-    public JButton getGuardarButton() {
-        return this.guardarButton;
+    public JComboBox<String> getAutosLista() {
+        return this.autosLista;
     }
 
-    public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
-
-    public CButtonSelectorPanel getSalirButton() {
-        return this.salirButton;
+    public void setAutosLista(JComboBox<String> autosLista) {
+        this.autosLista = autosLista;
     }
 
-    public void setSalirButton(CButtonSelectorPanel salirButton) {
-        this.salirButton = salirButton;
+    public JComboBox<String> getChoferesLista() {
+        return this.choferesLista;
     }
 
-    public CViaje getViaje() { return this.viaje; }
+    public void setChoferesLista(JComboBox<String> choferesLista) {
+        this.choferesLista = choferesLista;
+    }
 
-    public void setViaje(CViaje viaje) { this.viaje = viaje; }
+    public JComboBox<String> getCuentasLista() { return this.cuentasLista; }
+
+    public void setCuentasLista(JComboBox<String> cuentasLista) { this.cuentasLista = cuentasLista; }
+
+    public JLabel getAutoLabel() { return this.autoLabel; }
+
+    public void setAutoLabel(JLabel autoLabel) { this.autoLabel = autoLabel; }
+
+    public JLabel getChoferLabel() { return this.choferLabel; }
+
+    public void setChoferLabel(JLabel choferLabel) { this.choferLabel = choferLabel; }
+
+    public JLabel getClienteLabel() { return this.clienteLabel; }
+
+    public void setClienteLabel(JLabel clienteLabel) { this.clienteLabel = clienteLabel; }
+
+    public JLabel getCuentaLabel() { return this.cuentaLabel; }
+
+    public void setCuentaLabel(JLabel cuentaLabel) { this.cuentaLabel = cuentaLabel; }
+
+    public JLabel getDestinoLabel() { return this.destinoLabel; }
+
+    public void setDestinoLabel(JLabel destinoLabel) { this.destinoLabel = destinoLabel; }
+
+    public JLabel getHoraLabel() { return this.horaLabel; }
+
+    public void setHoraLabel(JLabel horaLabel) { this.horaLabel = horaLabel; }
+
+    public JLabel getOrigenLabel() { return this.origenLabel; }
+
+    public void setOrigenLabel(JLabel origenLabel) { this.origenLabel = origenLabel; }
+
+    public JLabel getPrecioLabel() { return this.precioLabel; }
+
+    public void setPrecioLabel(JLabel precioLabel) { this.precioLabel = precioLabel; }
 
     public JTextField getClienteTextField() {
         return this.clienteTextField;
     }
 
     public void setClienteTextField(JTextField clienteTextField) { this.clienteTextField = clienteTextField; }
-
-    public JTextField getCuentaTextField() {
-        return this.cuentaTextField;
-    }
-
-    public void setCuentaTextField(JTextField cuentaTextField) {
-        this.cuentaTextField = cuentaTextField;
-    }
 
     public JTextField getOrigenTextField() {
         return this.origenTextField;
@@ -297,14 +345,6 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
         this.destinoTextField = destinoTextField;
     }
 
-    public JTextField getFechaTextField() {
-        return this.fechaTextField;
-    }
-
-    public void setFechaTextField(JTextField fechaTextField) {
-        this.fechaTextField = fechaTextField;
-    }
-
     public JTextField getHoraTextField() {
         return this.horaTextField;
     }
@@ -312,6 +352,10 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
     public void setHoraTextField(JTextField horaTextField) {
         this.horaTextField = horaTextField;
     }
+
+    public JTextField getPrecioTextField() { return this.precioTextField; }
+
+    public void setPrecioTextField(JTextField precioTextField) { this.precioTextField = precioTextField; }
 
     public String getCliente() {
         return this.cliente;
@@ -345,20 +389,24 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
         this.destino = destino;
     }
 
-    public String getFecha() {
-        return this.fecha;
-    }
-
-    public void setFecha(String fecha) {
-        this.fecha = fecha;
-    }
-
     public String getHora() {
         return this.hora;
     }
 
     public void setHora(String hora) {
         this.hora = hora;
+    }
+
+    public String getPrecio() { return this.precio; }
+
+    public void setPrecio(String precio) { this.precio = precio; }
+
+    public String[] getAutos() {
+        return this.autos;
+    }
+
+    public void setAutos(String[] autos) {
+        this.autos = autos;
     }
 
     public String[] getChoferes() {
@@ -369,48 +417,25 @@ public class CPanelActividadTomarViaje extends JPanel implements IJButtonSalir, 
         this.choferes = choferes;
     }
 
-    public String[] getAutos() {
-        return this.autos;
+    public String[] getCuentas() { return this.cuentas; }
+
+    public void setCuentas(String[] cuentas) { this.cuentas = cuentas; }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 
-    public void setAutos(String[] autos) {
-        this.autos = autos;
+    @Override
+    public void keyPressed(KeyEvent e) {
+
     }
 
-    public String[] getRecepcionistas() {
-        return this.recepcionistas;
-    }
+    @Override
+    public void focusLost(FocusEvent e) {
 
-    public void setRecepcionistas(String[] recepcionistas) {
-        this.recepcionistas = recepcionistas;
-    }
-
-    public JComboBox<String> getAutosLista() {
-        return this.autosLista;
-    }
-
-    public void setAutosLista(JComboBox<String> autosLista) {
-        this.autosLista = autosLista;
-    }
-
-    public JComboBox<String> getChoferesLista() {
-        return this.choferesLista;
-    }
-
-    public void setChoferesLista(JComboBox<String> choferesLista) {
-        this.choferesLista = choferesLista;
-    }
-
-    public JComboBox<String> getRecepcionistasLista() {
-        return this.recepcionistasLista;
-    }
-
-    public void setRecepcionistasLista(JComboBox<String> recepcionistasLista) {
-        this.recepcionistasLista = recepcionistasLista;
     }
 
     public Calendar calcularTiempo() { return null; }
-
-    public String setFechaYHora() { return null; }
 
 }

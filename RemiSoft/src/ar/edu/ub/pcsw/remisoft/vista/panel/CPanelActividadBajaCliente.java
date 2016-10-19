@@ -1,108 +1,94 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
-import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
-import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
+import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Calendar;
 
-public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir, IJComboBoxFactory, IJTextFieldFactory,
-        ActionListener, FocusListener, KeyListener {
+public class CPanelActividadBajaCliente extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
+        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
 
-    private CButtonSelectorPanel salirButton;
-    private JButton guardarButton;
     private JComboBox<String> causasLista;
-    private JTextField fechaTextField;
+    private JLabel identificacionLabel;
+    private JLabel nombreYApellidoORazonSocialLabel;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
-    private String fecha;
     private String identificacion;
     private String nombreYApellidoORazonSocial;
     private String[] causas = new String[] {" ", "Morosidad", "Incobrable", "Administración RSG"};
 
     public CPanelActividadBajaCliente() {
+        super(2);
         this.inicializar();
     }
 
     private void inicializar() {
         this.setBackground(Color.GRAY);
-        this.setBorder(BorderFactory.createEtchedBorder());
-        this.setLayout(new BorderLayout());
-        JLabel bajaClienteLabel = new JLabel("BAJA CLIENTE", SwingConstants.CENTER);
-        bajaClienteLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
-        bajaClienteLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        bajaClienteLabel.setForeground(Color.WHITE);
-        this.add(bajaClienteLabel, BorderLayout.NORTH);
-        JLabel surLabel = new JLabel();
-        surLabel.setPreferredSize(new Dimension(this.getWidth(), 125));
-        this.add(surLabel, BorderLayout.SOUTH);
-        JPanel panelInput = new JPanel();
-        panelInput.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.insets = new Insets(15, 0, 15, 0);
-        JLabel referenciasLabel = new JLabel("(/) indica alternativa; (*) indica campo obligatorio");
-        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
-        JLabel nombreYApellidoORazonSocialLabel = new JLabel("Nombre(s) y Apellido / Razón Social (*)");
-        nombreYApellidoORazonSocialLabel.setPreferredSize(new Dimension(260, 15));
-        JLabel identificacionLabel = new JLabel("DNI / CUIL / CUIT (*)");
-        JLabel causaBajaLabel = new JLabel("Causa de la baja (*)");
-        JLabel fechaLabel = new JLabel("Fecha de la baja");
+        this.getNorteLabel().setText("BAJA CLIENTE");
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(getNorteLabel(), BorderLayout.NORTH);
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.add(getSurLabel(), BorderLayout.SOUTH);
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.setNombreYApellidoORazonSocialLabel(new JLabel("Nombre(s) y Apellido / Razón Social"));
+        this.getNombreYApellidoORazonSocialLabel().setPreferredSize(new Dimension(260, 15));
+        this.getNombreYApellidoORazonSocialLabel().setForeground(Color.RED);
+        this.setIdentificacionLabel(new JLabel("DNI / CUIL / CUIT"));
+        this.getIdentificacionLabel().setForeground(Color.RED);
         int ancho = 30;
-        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
-        this.setIdentificacionTextField(this.setTextField(ancho, "Ingrese sólo números", this));
-        this.setCausasLista(this.crearComboBox(this.getCausas(), 333, 20, Color.WHITE, "Seleccione causa", this));
-        this.setFechaTextField(this.setTextField(ancho, "00/00/0000", "Ingrese la fecha con formato DD/MM/AAAA", this));
-        this.setGuardarButton(new JButton("Guardar"));
-        this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
-        this.getGuardarButton().setEnabled(false);
+        // método default de IJTextFieldFactory
+        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(),
+                this));
+        // método default de IValidadorInput
+        this.getNombreYApellidoORazonSocialTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getNombreYApellidoORazonSocialTextField().
+                getToolTipText(), getNombreYApellidoORazonSocialLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setIdentificacionTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getIdentificacionTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        IDENTIFICACION.getTexto(),
+                getIdentificacionTextField().getToolTipText(), getIdentificacionLabel().getText()));
+        // método default de IJComboBoxFactory
+        this.setCausasLista(this.crearComboBox(this.getCausas(), 333, 20, Color.WHITE, EToolTipTextTexto.
+                SELECCIONAR.getTexto() + getCausaLabel().getText(), this));
+        // método default de IValidadorInput
+        this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
-            JPanel panel = crearPanel();
-        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelInput.add(referenciasLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(nombreYApellidoORazonSocialLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(identificacionLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(causaBajaLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(fechaLabel, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panelInput.add(this.getNombreYApellidoORazonSocialTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getIdentificacionTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getCausasLista(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getFechaTextField(), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        panelInput.add(this.getGuardarButton(), gbc);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        panelInput.add(this.getSalirButton(), gbc);
-        this.add(panelInput);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+        this.getGbc().gridx = 0;
+        this.getGbc().gridy = 0;
+        this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getNombreYApellidoORazonSocialLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getIdentificacionLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCausaLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 1;
+        this.getPanelInput().add(this.getNombreYApellidoORazonSocialTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getIdentificacionTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCausasLista(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 10;
+        this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
+        this.getGbc().anchor = GridBagConstraints.LINE_END;
+        this.getPanelInput().add(this.getSalirButton(), this.getGbc());
+        this.add(this.getPanelInput());
     }
 
     @Override
@@ -114,7 +100,8 @@ public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir,
             }
         }
         else if (e.getSource().equals(getIdentificacionTextField())) {
-            if ((getIdentificacionTextField().getText() != null) || (! getIdentificacionTextField().getText().isEmpty())) {
+            if ((getIdentificacionTextField().getText() != null) || (! getIdentificacionTextField().getText().
+                    isEmpty())) {
                 setIdentificacion(getIdentificacionTextField().getText());
             }
         }
@@ -133,47 +120,41 @@ public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir,
     }
 
     @Override
-    public void focusLost(FocusEvent e) {
-
-    }
-
-    @Override
     public void actionPerformed(ActionEvent e) {
-        CCliente cliente = new CCliente();
         if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getCausasLista().getSelectedItem())) {
             if ((getCausasLista().getSelectedItem().toString() != null) ||
                     (! getCausasLista().getSelectedItem().toString().isEmpty())) {
-                cliente.setFechaDeBaja(this.getFecha());
+                setFecha(this.getFecha());
             }
         }
         else if (e.getSource().equals(getGuardarButton())) {
+            CCliente cliente = new CCliente();
             cliente.setNombreYApellidoORazonSocial(this.getNombreYApellidoORazonSocial());
             cliente.setIdentificacion(this.getIdentificacion());
             cliente.setFechaDeBaja(this.getFecha());
         }
         else if (e.getSource().equals(getSalirButton())) {
-            accionarSalirButton(e); // método default de IJButtonSalir
+            // método default de IJButtonSalir
+            accionarSalirButton(e);
         }
     }
-
-    public CButtonSelectorPanel getSalirButton() { return this.salirButton; }
-
-    public void setSalirButton(CButtonSelectorPanel salirButton) { this.salirButton = salirButton; }
-
-    public JButton getGuardarButton() { return this.guardarButton; }
-
-    public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
 
     public JComboBox<String> getCausasLista() { return this.causasLista; }
 
     public void setCausasLista(JComboBox<String> causasLista) { this.causasLista = causasLista; }
 
-    public JTextField getFechaTextField() { return this.fechaTextField; }
+    public JLabel getIdentificacionLabel() { return this.identificacionLabel; }
 
-    public void setFechaTextField(JTextField fechaTextField) { this.fechaTextField = fechaTextField; }
+    public void setIdentificacionLabel(JLabel identificacionLabel) { this.identificacionLabel = identificacionLabel; }
+
+    public JLabel getNombreYApellidoORazonSocialLabel() { return this.nombreYApellidoORazonSocialLabel; }
+
+    public void setNombreYApellidoORazonSocialLabel(JLabel nombreYApellidoORazonSocialLabel) {
+        this.nombreYApellidoORazonSocialLabel = nombreYApellidoORazonSocialLabel;
+    }
 
     public JTextField getIdentificacionTextField() { return this.identificacionTextField; }
 
@@ -186,10 +167,6 @@ public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir,
     public void setNombreYApellidoORazonSocialTextField(JTextField nombreYApellidoORazonSocialTextField) {
         this.nombreYApellidoORazonSocialTextField = nombreYApellidoORazonSocialTextField;
     }
-
-    public String getFecha() { return this.fecha; }
-
-    public void setFecha(String fecha) { this.fecha = fecha; }
 
     public String getIdentificacion() { return this.identificacion; }
 
@@ -204,5 +181,25 @@ public class CPanelActividadBajaCliente extends JPanel implements IJButtonSalir,
     public String[] getCausas() { return this.causas; }
 
     public void setCausas(String[] causas) { this.causas = causas; }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+
+    }
+
+    @Override
+    public Calendar calcularTiempo() {
+        return null;
+    }
 
 }

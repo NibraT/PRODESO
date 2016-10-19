@@ -18,7 +18,7 @@ public class CViaje implements ITemporizable {
     private float distancia;
     private int tramos;
     private Calendar duracion;
-    private float precio;
+    private String precio;
     private float costo;
     private Calendar fecha;
     private Calendar horaDeInicio;
@@ -31,15 +31,16 @@ public class CViaje implements ITemporizable {
     Constructor
      */
     public CViaje() {
-        this(0, null, null, null, null, 0, 0, null, 0, 0, null, null, null, null, null, null, null);
+        this(0, null, null, null, null, 0, 0, null, null, 0, null, null, null, null, null, null, null);
     }
 
     /*
     Constructor
      */
-    public CViaje(int numero, CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia, int tramos,
-                  Calendar duracion, float precio, float costo, Calendar fecha, Calendar horaDeInicio, Calendar horaDeFin,
-                  CCliente cliente, CCuenta cuenta, CEmpleado recepcionista, String motivoCancelacion) {
+    public CViaje(int numero, CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia,
+                  int tramos, Calendar duracion, String precio, float costo, Calendar fecha, Calendar horaDeInicio,
+                  Calendar horaDeFin, CCliente cliente, CCuenta cuenta, CEmpleado recepcionista,
+                  String motivoCancelacion) {
         this.setNumero(numero);
         this.setChofer(chofer);
         this.setAuto(auto);
@@ -113,11 +114,11 @@ public class CViaje implements ITemporizable {
         this.duracion = duracion;
     }
 
-    public float getPrecio() {
+    public String getPrecio() {
         return this.precio;
     }
 
-    public void setPrecio(float precio) {
+    public void setPrecio(String precio) {
         this.precio = precio;
     }
 
@@ -190,8 +191,6 @@ public class CViaje implements ITemporizable {
     public void setMotivoCancelacion(String motivoCancelacion) { this.motivoCancelacion = motivoCancelacion; }
 
     public String toString() {
-        //String fecha = this.setFechaString(this.getFecha());
-        //String hora = this.setHoraString(this.getHoraDeInicio());
         return "Origen: " + this.getOrigen() + "\n Destino: " + this.getDestino() +
                 "\n Cliente DNI: " + this.getCliente().getIdentificacion() + "\n Cuenta: " +
                 this.getCliente().getCuentasActivas().get(0).getNumero() +
