@@ -26,7 +26,7 @@ public class CPanelViajes extends JPanel implements ActionListener, IFrameRemiso
             public JPanel crearPanel() {
                 return new CPanelMenuViajes();
             }
-        }, ETextoButton.VIAJES.getTexto(), "Habilita Menú Viajes"));
+        }, ETextoButton.VIAJES.getTexto(), EToolTipTextTexto.MENUVIAJES.getTexto()));
         this.getViajesButton().addActionListener(this);
         this.add(this.getViajesButton());
     }

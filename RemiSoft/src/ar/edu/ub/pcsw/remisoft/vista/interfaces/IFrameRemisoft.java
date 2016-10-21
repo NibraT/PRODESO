@@ -8,7 +8,8 @@ public interface IFrameRemisoft {
 
     default CFrameRemisoft getFrameRemisoft() {
         JPanel panel = (JPanel) this;
-        CFrameRemisoft frameRemisoft = (CFrameRemisoft) panel.getParent().getParent().getParent().getParent().getParent();
+        CFrameRemisoft frameRemisoft = (CFrameRemisoft) panel.getParent().getParent().getParent().getParent().
+                getParent();
         return frameRemisoft;
     }
 }

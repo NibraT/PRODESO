@@ -1,127 +1,116 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+<<<<<<< HEAD
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
+=======
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
+>>>>>>> master
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
-import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
-import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Calendar;
 
-public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFactory, IJButtonSalir, ActionListener,
-        FocusListener, KeyListener {
+public class CPanelActividadAltaCliente extends CPanelActividadBase implements IJTextFieldFactory, IJButtonSalir,
+        IValidadorInput, ActionListener, FocusListener, KeyListener {
 
-    private CButtonSelectorPanel salirButton;
     private int numeroCuentaAdicional;
-    private JButton guardarButton;
+    private JLabel cuentaAdicionalLabel;
+    private JLabel identificacionLabel;
+    private JLabel nombreYApellidoORazonSocialLabel;
     private JTextField cuentaAdicionalTextField;
-    private JTextField domicilioTextField;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
-    private JTextField telefonoTextField;
-    private String domicilio;
     private String identificacion;
     private String nombreYApellidoORazonSocial;
-    private String telefono;
 
     public CPanelActividadAltaCliente() {
+        super("1");
         this.inicializar();
     }
 
     private void inicializar() {
         this.setBackground(Color.GRAY);
-        this.setBorder(BorderFactory.createEtchedBorder());
-        this.setLayout(new BorderLayout());
-        JLabel altaClienteLabel = new JLabel("ALTA CLIENTE", SwingConstants.CENTER);
-        altaClienteLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
-        altaClienteLabel.setFont(new Font("Arial", Font.BOLD, 25));
-        altaClienteLabel.setForeground(Color.WHITE);
-        this.add(altaClienteLabel, BorderLayout.NORTH);
-        JLabel surLabel = new JLabel();
-        surLabel.setPreferredSize(new Dimension(this.getWidth(), 100));
-        this.add(surLabel, BorderLayout.SOUTH);
-        JPanel panelInput = new JPanel();
-        panelInput.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.insets = new Insets(15, 0, 15, 0);
-        JLabel referenciasLabel = new JLabel("(/) indica alternativa; (*) indica campo obligatorio");
-        referenciasLabel.setFont(new Font("Arial", Font.ITALIC, 10));
-        JLabel nombreYApellidoORazonSocialLabel = new JLabel("Nombre(s) y Apellido / Razón Social (*)");
-        nombreYApellidoORazonSocialLabel.setPreferredSize(new Dimension(260, 15));
-        JLabel identificacionLabel = new JLabel("DNI / CUIL / CUIT (*)");
-        JLabel domicilioLabel = new JLabel("Domicilio (*)");
-        JLabel telefonoLabel = new JLabel("Teléfono (*)");
-        JLabel cuentaAdicionalLabel = new JLabel("Cuenta(s) Adicional(es)");
+        this.getNorteLabel().setText("ALTA CLIENTE");
+        this.add(getNorteLabel(), BorderLayout.NORTH);
+        this.add(getSurLabel(), BorderLayout.SOUTH);
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.setNombreYApellidoORazonSocialLabel(new JLabel("Nombre(s) y Apellido / Razón Social"));
+        this.getNombreYApellidoORazonSocialLabel().setPreferredSize(new Dimension(260, 15));
+        this.getNombreYApellidoORazonSocialLabel().setForeground(Color.RED);
+        this.setIdentificacionLabel(new JLabel("DNI / CUIL / CUIT"));
+        this.getIdentificacionLabel().setForeground(Color.RED);
+        this.setCuentaAdicionalLabel(new JLabel("Cuenta(s) Adicional(es)"));
         int ancho = 30;
-        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, "Ingrese sólo letras y espacios en blanco", this));
-        this.setIdentificacionTextField(this.setTextField(ancho, "Ingrese sólo números sin espacios en blanco", this));
-        this.setDomicilioTextField(this.setTextField(ancho, "Ingrese letras, números, símbolos y espacios en blanco", this));
-        this.setTelefonoTextField(this.setTextField(ancho, "Ingrese sólo números sin espacios en blanco", this));
-        this.setCuentaAdicionalTextField(this.setTextField(ancho, "0", "Ingrese un número de 1 a 4", this));
-        this.setGuardarButton(new JButton("Guardar"));
-        this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
-        this.getGuardarButton().setEnabled(false);
+        // método default de IJTextFieldFactory
+        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(),
+                this));
+        // método default de IValidadorInput
+        this.getNombreYApellidoORazonSocialTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getNombreYApellidoORazonSocialTextField().
+                getToolTipText(), getNombreYApellidoORazonSocialLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setIdentificacionTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getIdentificacionTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        IDENTIFICACION.getTexto(), getIdentificacionTextField().getToolTipText(),
+                getIdentificacionLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setCuentaAdicionalTextField(this.setTextField(ancho, "0", EToolTipTextTexto.CUENTAADICIONAL.getTexto(),
+                this));
+        // método default de IValidadorInput
+        this.getCuentaAdicionalTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
+                        CUENTAADICIONAL.getTexto(), getCuentaAdicionalTextField().getToolTipText(),
+                getCuentaAdicionalLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
-            JPanel panel = crearPanel();
-        }, ETextoButton.SALIR.getTexto(), "Habilita Salir de la Actividad"));
         this.getSalirButton().addActionListener(this);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        panelInput.add(referenciasLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(nombreYApellidoORazonSocialLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(identificacionLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(domicilioLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(telefonoLabel, gbc);
-        gbc.gridy++;
-        panelInput.add(cuentaAdicionalLabel, gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        panelInput.add(this.getNombreYApellidoORazonSocialTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getIdentificacionTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getDomicilioTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getTelefonoTextField(), gbc);
-        gbc.gridy++;
-        panelInput.add(this.getCuentaAdicionalTextField(), gbc);
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-        panelInput.add(this.getGuardarButton(), gbc);
-        gbc.anchor = GridBagConstraints.LINE_END;
-        panelInput.add(this.getSalirButton(), gbc);
-        this.add(panelInput);
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
+        this.getGbc().gridx = 0;
+        this.getGbc().gridy = 0;
+        this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getNombreYApellidoORazonSocialLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getIdentificacionLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getDomicilioLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getTelefonoLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCuentaAdicionalLabel(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 1;
+        this.getPanelInput().add(this.getNombreYApellidoORazonSocialTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getIdentificacionTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getDomicilioTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getTelefonoTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCuentaAdicionalTextField(), this.getGbc());
+        this.getGbc().gridx = 1;
+        this.getGbc().gridy = 6;
+        this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
+        this.getGbc().anchor = GridBagConstraints.LINE_END;
+        this.getPanelInput().add(this.getSalirButton(), this.getGbc());
+        this.add(this.getPanelInput());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getSource().equals(getNombreYApellidoORazonSocialTextField())) {
-            if ((getNombreYApellidoORazonSocialTextField().getText() != null) || (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
+            if ((getNombreYApellidoORazonSocialTextField().getText() != null) ||
+                    (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
                 setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
             }
         }
         else if (e.getSource().equals(getIdentificacionTextField())) {
-            if ((getIdentificacionTextField().getText() != null) || (! getIdentificacionTextField().getText().isEmpty())) {
+            if ((getIdentificacionTextField().getText() != null) ||
+                    (! getIdentificacionTextField().getText().isEmpty())) {
                 setIdentificacion(getIdentificacionTextField().getText());
             }
         }
@@ -137,7 +126,8 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
             }
         }
         else if (e.getSource().equals(getCuentaAdicionalTextField())) {
-            if ((getCuentaAdicionalTextField().getText() != null) || (! getCuentaAdicionalTextField().getText().isEmpty())) {
+            if ((getCuentaAdicionalTextField().getText() != null) ||
+                    (! getCuentaAdicionalTextField().getText().isEmpty())) {
                 setNumeroCuentaAdicional(Integer.parseInt(getCuentaAdicionalTextField().getText()));
             }
         }
@@ -148,11 +138,6 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         if (e.getSource().equals(getCuentaAdicionalTextField())) {
             getCuentaAdicionalTextField().selectAll();
         }
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-
     }
 
     @Override
@@ -169,30 +154,43 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
                     cliente.agregarCuenta(cliente.abrirCuenta(), cliente.getCuentasActivas());
                 }
             }
+<<<<<<< HEAD
             CInsertSQL db = new CInsertSQL();
             db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(), cliente.getDomicilio(), cliente.getTelefono());
+=======
+            CInsertApp db = new CInsertApp();
+            db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
+                    cliente.getDomicilio(), cliente.getTelefono());
+>>>>>>> master
         }
         else if (e.getSource().equals(getSalirButton())) {
-            accionarSalirButton(e); // método default de IJButtonSalir
+            // método default de IJButtonSalir
+            accionarSalirButton(e);
         }
     }
 
-    public JButton getGuardarButton() {
-        return this.guardarButton;
+    public JLabel getCuentaAdicionalLabel() { return this.cuentaAdicionalLabel; }
+
+    public void setCuentaAdicionalLabel(JLabel cuentaAdicionalLabel) {
+        this.cuentaAdicionalLabel = cuentaAdicionalLabel;
     }
 
-    public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
+    public JLabel getIdentificacionLabel() { return this.identificacionLabel; }
 
-    public CButtonSelectorPanel getSalirButton() { return this.salirButton;     }
+    public void setIdentificacionLabel(JLabel identificacionLabel) { this.identificacionLabel = identificacionLabel; }
+
+    public JLabel getNombreYApellidoORazonSocialLabel() { return this.nombreYApellidoORazonSocialLabel; }
+
+    public void setNombreYApellidoORazonSocialLabel(JLabel nombreYApellidoORazonSocialLabel) {
+        this.nombreYApellidoORazonSocialLabel = nombreYApellidoORazonSocialLabel;
+    }
 
     public int getNumeroCuentaAdicional() {
         return this.numeroCuentaAdicional;
     }
 
-    public void setNumeroCuentaAdicional(int numeroCuentaAdicional) { this.numeroCuentaAdicional = numeroCuentaAdicional; }
-
-    public void setSalirButton(CButtonSelectorPanel salirButton) {
-        this.salirButton = salirButton;
+    public void setNumeroCuentaAdicional(int numeroCuentaAdicional) {
+        this.numeroCuentaAdicional = numeroCuentaAdicional;
     }
 
     public JTextField getNombreYApellidoORazonSocialTextField() {
@@ -207,22 +205,8 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         return this.identificacionTextField;
     }
 
-    public void setIdentificacionTextField(JTextField identificacionTextField) { this.identificacionTextField = identificacionTextField; }
-
-    public JTextField getDomicilioTextField() {
-        return this.domicilioTextField;
-    }
-
-    public void setDomicilioTextField(JTextField domicilioTextField) {
-        this.domicilioTextField = domicilioTextField;
-    }
-
-    public JTextField getTelefonoTextField() {
-        return this.telefonoTextField;
-    }
-
-    public void setTelefonoTextField(JTextField telefonoTextField) {
-        this.telefonoTextField = telefonoTextField;
+    public void setIdentificacionTextField(JTextField identificacionTextField) {
+        this.identificacionTextField = identificacionTextField;
     }
 
     public JTextField getCuentaAdicionalTextField() {
@@ -249,20 +233,24 @@ public class CPanelActividadAltaCliente extends JPanel implements IJTextFieldFac
         this.identificacion = identificacion;
     }
 
-    public String getDomicilio() {
-        return this.domicilio;
+    @Override
+    public void keyTyped(KeyEvent e) {
+
     }
 
-    public void setDomicilio(String domicilio) {
-        this.domicilio = domicilio;
+    @Override
+    public void keyPressed(KeyEvent e) {
+
     }
 
-    public String getTelefono() {
-        return this.telefono;
+    @Override
+    public void focusLost(FocusEvent e) {
+
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    @Override
+    public Calendar calcularTiempo() {
+        return null;
     }
 
 }
