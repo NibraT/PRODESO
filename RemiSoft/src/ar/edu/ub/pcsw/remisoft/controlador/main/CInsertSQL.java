@@ -8,7 +8,7 @@ import java.util.Calendar;
 /**
  * Created by Pulpo1 on 9/24/16.
  */
-public class CInsertApp extends CDataBase implements ITemporizable{
+public class CInsertSQL extends CDataBase implements ITemporizable{
 
     public void insertarEmpleado (String dni, String apellido, String nombre, String domicilio, String telefono, String turno) {
         String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, fechaAlta, disponible, turno) VALUES(?,?,?,?,?,?,?,?)";
@@ -180,7 +180,7 @@ public class CInsertApp extends CDataBase implements ITemporizable{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        CInsertApp db = new CInsertApp();
+        CInsertSQL db = new CInsertSQL();
         //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
         //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
         //db.insertarCuenta("Personal", 1000);

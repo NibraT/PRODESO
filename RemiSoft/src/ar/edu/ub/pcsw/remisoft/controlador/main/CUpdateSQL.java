@@ -4,14 +4,13 @@ import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
 /**
  * Created by Pulpo1 on 9/25/16.
  */
-public class CUpdateApp extends CDataBase implements ITemporizable{
+public class CUpdateSQL extends CDataBase implements ITemporizable{
     public void updateFechaBajaCuenta (int idCuenta) {
         String sql = "UPDATE Cuenta SET fechaBaja = ? WHERE IdCuenta = ?";
 
@@ -247,7 +246,7 @@ public class CUpdateApp extends CDataBase implements ITemporizable{
     }
 
     public static void main(String[] args) {
-        CUpdateApp db = new CUpdateApp();
+        CUpdateSQL db = new CUpdateSQL();
         //db.updateFechaBajaCuenta(1);
         //db.updateDomicilioSucursal("Parana 2300, Garin, BsAs", 1);
         //db.updateFechaBajaSucursal(1);
