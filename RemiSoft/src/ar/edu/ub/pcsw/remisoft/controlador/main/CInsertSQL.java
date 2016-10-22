@@ -8,7 +8,7 @@ import java.util.Calendar;
 /**
  * Created by Pulpo1 on 9/24/16.
  */
-public class CInsertApp extends CDataBase implements ITemporizable{
+public class CInsertSQL extends CDataBase implements ITemporizable{
 
     public void insertarEmpleado (String dni, String apellido, String nombre, String domicilio, String telefono, String turno) {
         String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, fechaAlta, disponible, turno) VALUES(?,?,?,?,?,?,?,?)";
@@ -180,7 +180,7 @@ public class CInsertApp extends CDataBase implements ITemporizable{
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        CInsertApp db = new CInsertApp();
+        CInsertSQL db = new CInsertSQL();
         //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
         //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
         //db.insertarCuenta("Personal", 1000);
@@ -188,7 +188,7 @@ public class CInsertApp extends CDataBase implements ITemporizable{
         //db.insertarSucursal("Las cuartetas 100");
         //db.insertarTipoFactura("C");
         //db.insertarUsuario("Diego", "1234");
-        //db.insertarVehiculo("AAA000", "Ford", "Mustang", 7, 5000);
+        //db.insertarVehiculo("BBB000", "Renault", "19", 10, 50000);
         //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
         //db.insertarClienteCuenta("11222333", 1);
     }

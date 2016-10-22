@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -41,9 +43,12 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     private String hora;
     private String origen;
     private String precio;
-    private String[] autos = new String[] {" ", "NHU544", "KOW902", "LDP657", "PWS390"};
-    private String[] choferes = new String[] {" ", "19222185", "12089450", "14279142", "11782006"};
+    private String[] autos = new String[]{};
+    private String[] choferes = new String[]{};
     private String[] cuentas = new String[] {" ", "354"};
+
+    CSelectSQL select = new CSelectSQL();
+    CUpdateSQL update = new CUpdateSQL();
 
     public CPanelActividadTomarViaje() {
         super(3.0);
@@ -76,6 +81,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
         this.getHoraLabel().setForeground(Color.RED);
         this.setPrecioLabel(new JLabel("Precio"));
         this.getPrecioLabel().setForeground(Color.RED);
+        this.setAutos(select.selectDisponibles("Patente", "Vehiculo"));
+        this.setChoferes(select.selectDisponibles("Dni", "Empleado"));
         int ancho = 30;
         // método default de IJTextFieldFactory
         this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
@@ -264,6 +271,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
             viaje.setHoraDeInicio(this.setHoraCalendar(this.getHora()));
             setPrecio(getPrecioTextField().getText());
             viaje.setPrecio(this.getPrecio());
+            update.updateDisponibleEmpleado(0, viaje.getChofer().getDni());
+            update.updateDisponibleVehiculo(0, viaje.getAuto().getPatente());
         }
         else if (e.getSource().equals(getSalirButton())) {
             // método default de IJButtonSalir
@@ -405,9 +414,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
         return this.autos;
     }
 
-    public void setAutos(String[] autos) {
-        this.autos = autos;
-    }
+    public void setAutos(String[] autos) {this.autos = autos;}
 
     public String[] getChoferes() {
         return this.choferes;
