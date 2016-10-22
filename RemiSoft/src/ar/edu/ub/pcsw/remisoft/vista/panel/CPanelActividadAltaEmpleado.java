@@ -1,10 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-<<<<<<< HEAD
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
-=======
-import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
->>>>>>> master
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
@@ -165,16 +162,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             empleado.setDni(this.getDni());
             empleado.setDomicilio(this.getDomicilio());
             empleado.setTelefono(this.getTelefono());
-<<<<<<< HEAD
-            empleado.setTurno((getTurnosLista().getSelectedItem().toString()));
-            CInsertSQL db = new CInsertSQL();
-            db.insertarEmpleado(dni, apellido, nombre, domicilio, telefono, empleado.getTurno());
-=======
             empleado.setTurno(this.getTurno());
-            CInsertApp db = new CInsertApp();
+            CInsertSQL db = new CInsertSQL();
             db.insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
                     empleado.getDomicilio(), empleado.getTelefono(), empleado.getTurno());
->>>>>>> master
         }
         else if (e.getSource().equals(getSalirButton())) {
             // método default de IJButtonSalir

@@ -188,7 +188,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         //db.insertarSucursal("Las cuartetas 100");
         //db.insertarTipoFactura("C");
         //db.insertarUsuario("Diego", "1234");
-        //db.insertarVehiculo("AAA000", "Ford", "Mustang", 7, 5000);
+        //db.insertarVehiculo("BBB000", "Renault", "19", 10, 50000);
         //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
         //db.insertarClienteCuenta("11222333", 1);
     }

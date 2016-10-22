@@ -260,6 +260,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable{
         //db.updateKilometrajeVehiculo(10000, "AAA000");
         //db.updateCostoViaje(70, 1);
         //db.updateHoraFinViaje("10:00", 1);
+        //db.updateDisponibleVehiculo(1, "BBB000");
     }
 
     @Override

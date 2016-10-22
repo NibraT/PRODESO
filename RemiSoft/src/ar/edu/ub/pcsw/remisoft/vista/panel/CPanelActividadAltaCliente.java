@@ -1,10 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-<<<<<<< HEAD
+
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
-=======
-import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
->>>>>>> master
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -154,14 +151,10 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
                     cliente.agregarCuenta(cliente.abrirCuenta(), cliente.getCuentasActivas());
                 }
             }
-<<<<<<< HEAD
+
             CInsertSQL db = new CInsertSQL();
-            db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(), cliente.getDomicilio(), cliente.getTelefono());
-=======
-            CInsertApp db = new CInsertApp();
             db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
                     cliente.getDomicilio(), cliente.getTelefono());
->>>>>>> master
         }
         else if (e.getSource().equals(getSalirButton())) {
             // método default de IJButtonSalir
