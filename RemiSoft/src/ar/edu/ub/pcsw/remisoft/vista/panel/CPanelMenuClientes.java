@@ -14,7 +14,7 @@ public class CPanelMenuClientes extends CPanelMenuBase {
     }
 
     private void inicializar() {
-        this.setBackground(Color.GRAY);
+        this.setBackground(EColorPanel.CLIENTES.getColor());
         this.setButtonUno(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {

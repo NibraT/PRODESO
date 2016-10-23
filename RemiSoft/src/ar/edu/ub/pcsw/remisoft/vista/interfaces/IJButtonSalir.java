@@ -10,9 +10,9 @@ public interface IJButtonSalir extends IFrameRemisoft {
 
     default void accionarSalirButton(ActionEvent e) {
         // método default de IFrameRemisoft
-        getFrameRemisoft().setPanelMenu(null);
+        getFrameRemisoft().setearPanelMenu(null);
         // método default de IFrameRemisoft
-        getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+        getFrameRemisoft().setearPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         cerrarJOptionPane();
     }
 

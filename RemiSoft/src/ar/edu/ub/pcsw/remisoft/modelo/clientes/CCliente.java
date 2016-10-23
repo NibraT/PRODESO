@@ -10,14 +10,15 @@ import java.util.List;
 
 public class CCliente implements ITemporizable {
 
+    private List<CCuenta> cuentasActivas;
+    private List<CCuenta> cuentasBloqueadas;
+    private String causaBaja;
     private String domicilio;
+    private String fechaDeAlta;
+    private String fechaDeBaja;
     private String identificacion;
     private String nombreYApellidoORazonSocial;
     private String telefono;
-    private String fechaDeAlta;
-    private String fechaDeBaja;
-    private List<CCuenta> cuentasActivas;
-    private List<CCuenta> cuentasBloqueadas;
 
     /*
     Constructor
@@ -84,9 +85,9 @@ public class CCliente implements ITemporizable {
         }
     }
 
-    public Calendar calcularTiempo() {
-        return null;
-    }
+    public String getCausaBaja() { return this.causaBaja; }
+
+    public void setCausaBaja(String causaBaja) { this.causaBaja = causaBaja; }
 
     public String getDomicilio() {
         return this.domicilio;
@@ -181,6 +182,10 @@ public class CCliente implements ITemporizable {
                 this.getIdentificacion() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
                 this.getTelefono() + "\n Alta: " + this.getFechaDeAlta() + "\n Ctas. Activas:\n      " +
                 this.mostrarCuentasActivas() + "\n Ctas. Bloqueadas:\n      " + this.mostrarCuentasBloqueadas();
+    }
+
+    public Calendar calcularTiempo() {
+        return null;
     }
 
 }

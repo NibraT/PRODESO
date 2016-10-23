@@ -3,23 +3,23 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
+import ar.edu.ub.pcsw.remisoft.vista.interfaces.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 
-public abstract class CPanelActividadBase extends JPanel implements IJComboBoxFactory, IJTextFieldFactory,
-        ITemporizable, IValidadorInput {
+public abstract class CPanelActividadBase extends JPanel implements IJButtonSalir, IJComboBoxFactory,
+        IJTextFieldFactory, ITemporizable, IValidadorInput {
 
     private CButtonSelectorPanel salirButton;
     private GridBagConstraints gbc;
     private JButton guardarButton;
     private JComboBox<String> recepcionistasLista;
     private JLabel causaLabel;
+    private JLabel clienteLabel;
     private JLabel domicilioLabel;
     private JLabel fechaLabel;
     private JLabel norteLabel;
@@ -59,6 +59,15 @@ public abstract class CPanelActividadBase extends JPanel implements IJComboBoxFa
         this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
             JPanel panelFondo = crearPanel();
         }, ETextoButton.SALIR.getTexto(), EToolTipTextTexto.SALIRACTIVIDAD.getTexto()));
+        this.getSalirButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(getSalirButton())) {
+                    // método default de IJButtonSalir
+                    accionarSalirButton(e);
+                }
+            }
+        });
     }
 
     public CPanelActividadBase(String uno) {
@@ -95,6 +104,10 @@ public abstract class CPanelActividadBase extends JPanel implements IJComboBoxFa
 
     public CPanelActividadBase(double tres) {
         this();
+        this.setBackground(EColorPanel.VIAJES.getColor());
+        this.setClienteLabel(new JLabel("Cliente DNI / CUIL / CUIT"));
+        this.getClienteLabel().setPreferredSize(new Dimension(260, 15));
+        this.getClienteLabel().setForeground(Color.RED);
         this.setFechaLabel(new JLabel("Fecha"));
         this.getFechaLabel().setForeground(Color.RED);
         this.setRecepcionistaLabel(new JLabel("Recepcionista"));
@@ -134,6 +147,10 @@ public abstract class CPanelActividadBase extends JPanel implements IJComboBoxFa
     public JLabel getCausaLabel() { return this.causaLabel; }
 
     public void setCausaLabel(JLabel causaLabel) { this.causaLabel = causaLabel; }
+
+    public JLabel getClienteLabel() { return this.clienteLabel; }
+
+    public void setClienteLabel(JLabel clienteLabel) { this.clienteLabel = clienteLabel; }
 
     public JLabel getDomicilioLabel() { return this.domicilioLabel; }
 

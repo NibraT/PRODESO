@@ -3,7 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -13,18 +13,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadCancelarViaje extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadCancelarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private JComboBox<String> motivosLista;
-    private JLabel clienteLabel;
     private JLabel motivoLabel;
     private JTextField autoTextField;
     private JTextField choferTextField;
     private JTextField clienteTextField;
     private JTextField horaTextField;
     private JTextField numeroTextField;
-    private String cliente;
     private String[] motivos = new String[] {" ", "Cliente desistió de viajar", "Sin auto disponible",
             "Sin chofer disponible"};
 
@@ -34,17 +32,13 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     }
 
     public void inicializar() {
-        this.setBackground(Color.ORANGE);
-        this.getNorteLabel().setText("CANCELAR VIAJE");
+        this.getNorteLabel().setText(ETextoButton.CANCELARVIAJE.getTexto().toUpperCase());
         this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 80));
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 60));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
-        this.setClienteLabel(new JLabel("Cliente DNI / CUIL / CUIT"));
-        this.getClienteLabel().setPreferredSize(new Dimension(260, 15));
-        this.getClienteLabel().setForeground(Color.RED);
         JLabel numeroLabel = new JLabel("Viaje Reservado");
         JLabel choferLabel = new JLabel("Chofer Asignado");
         JLabel autoLabel = new JLabel("Auto Asignado");
@@ -73,7 +67,6 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         // método default de IValidadorInput
         this.validadorInput(getMotivosLista(), getMotivosLista().getToolTipText(), getMotivoLabel().getText());
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -119,52 +112,23 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getClienteTextField())) {
-            if ((getClienteTextField().getText() != null) || (! getClienteTextField().getText().isEmpty())) {
-                setCliente(getClienteTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void actionPerformed(ActionEvent e) {
-        CViaje viaje = new CViaje();
-        viaje.setCliente(new CCliente());
-        viaje.setRecepcionista(new CEmpleado());
         if (e.getSource().equals(getRecepcionistasLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getMotivosLista().getSelectedItem())) {
-            if ((getMotivosLista().getSelectedItem().toString() != null) ||
-                    (! getMotivosLista().getSelectedItem().toString().isEmpty())) {
-                viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
-            }
-        }
-        else if (e.getSource().equals(getRecepcionistasLista().getSelectedItem())) {
-            if ((getRecepcionistasLista().getSelectedItem().toString() != null) ||
-                    (! getRecepcionistasLista().getSelectedItem().toString().isEmpty())) {
-                viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
-            viaje.getCliente().setIdentificacion(this.getCliente());
+            CViaje viaje = new CViaje();
+            viaje.setCliente(new CCliente());
+            viaje.setRecepcionista(new CEmpleado());
+            viaje.getCliente().setIdentificacion(getClienteTextField().getText());
             viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
         }
     }
 
     public JComboBox<String> getMotivosLista() { return this.motivosLista; }
 
     public void setMotivosLista(JComboBox<String> motivosLista) { this.motivosLista = motivosLista; }
-
-    public JLabel getClienteLabel() { return this.clienteLabel; }
-
-    public void setClienteLabel(JLabel clienteLabel) { this.clienteLabel = clienteLabel; }
 
     public JLabel getMotivoLabel() { return this.motivoLabel; }
 
@@ -190,13 +154,14 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     public void setHoraTextField(JTextField horaTextField) { this.horaTextField = horaTextField; }
 
-    public String getCliente() { return this.cliente; }
-
-    public void setCliente(String cliente) { this.cliente = cliente; }
-
     public String[] getMotivos() { return this.motivos; }
 
     public void setMotivos(String[] motivos) { this.motivos = motivos; }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {

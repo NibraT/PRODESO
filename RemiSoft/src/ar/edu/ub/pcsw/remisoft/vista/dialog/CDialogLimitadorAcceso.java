@@ -18,7 +18,6 @@ public class CDialogLimitadorAcceso implements ActionListener {
                 int res = JOptionPane.showConfirmDialog(null, array, "ACCESO RESTRINGIDO",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (res == JOptionPane.OK_OPTION) {
-
                 }
             }
         });

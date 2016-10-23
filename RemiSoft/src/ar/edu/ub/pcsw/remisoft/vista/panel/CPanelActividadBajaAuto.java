@@ -1,19 +1,21 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.Calendar;
 
-public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadBajaAuto extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJComboBoxFactory, IJTextFieldFactory, IValidadorInput {
 
     private JComboBox<String> causasLista;
     private JComboBox<String> marcasLista;
@@ -22,9 +24,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
     private JLabel marcaLabel;
     private JLabel modeloLabel;
     private JLabel patenteLabel;
-    private String marca;
-    private String modelo;
-    private String patente;
     private String[] causas = new String[] {" ", "Venta", "Daño", "Robo"};
     private String[] marcas = new String[] {" ", "A", "B", "C", "D"};
     private String[] modelos = new String[] {" ", "A", "B", "C", "D"};
@@ -35,8 +34,8 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
         this.inicializar(); }
 
     private void inicializar() {
-        this.setBackground(Color.GREEN);
-        this.getNorteLabel().setText("BAJA AUTO");
+        this.setBackground(EColorPanel.AUTOS.getColor());
+        this.getNorteLabel().setText(ETextoButton.BAJAAUTO.getTexto().toUpperCase());
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
@@ -69,7 +68,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -103,15 +101,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getFechaTextField())) {
-            if ((getFechaTextField().getText() != null) || (! getFechaTextField().getText().isEmpty())) {
-                setFecha(getFechaTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void focusGained(FocusEvent e) {
         if (e.getSource().equals(getFechaTextField())) {
             getFechaTextField().selectAll();
@@ -123,40 +112,13 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
         if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getMarcasLista().getSelectedItem())) {
-            if ((getMarcasLista().getSelectedItem().toString() != null) ||
-                    (! getMarcasLista().getSelectedItem().toString().isEmpty())) {
-                setMarca(this.getMarca());
-            }
-        }
-        else if (e.getSource().equals(getModelosLista().getSelectedItem())) {
-            if ((getModelosLista().getSelectedItem().toString() != null) ||
-                    (! getModelosLista().getSelectedItem().toString().isEmpty())) {
-                setModelo(this.getModelo());
-            }
-        }
-        else if (e.getSource().equals(getPatentesLista().getSelectedItem())) {
-            if ((getPatentesLista().getSelectedItem().toString() != null) ||
-                    (! getPatentesLista().getSelectedItem().toString().isEmpty())) {
-                setPatente(this.getPatente());
-            }
-        }
-        else if (e.getSource().equals(getCausasLista().getSelectedItem())) {
-            if ((getCausasLista().getSelectedItem().toString() != null) ||
-                    (! getCausasLista().getSelectedItem().toString().isEmpty())) {
-                setFecha(this.getFecha());
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
             CVehiculo auto = new CVehiculo();
-            auto.setMarca(this.getMarca());
-            auto.setModelo(this.getModelo());
-            auto.setPatente(this.getPatente());
-            auto.setFechaDeBaja(this.getFecha());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            auto.setMarca(getMarcasLista().getSelectedItem().toString());
+            auto.setModelo(getModelosLista().getSelectedItem().toString());
+            auto.setPatente(getPatentesLista().getSelectedItem().toString());
+            auto.setCausaBaja(getCausasLista().getSelectedItem().toString());
+            auto.setFechaDeBaja(getFechaTextField().getText());
         }
     }
 
@@ -192,30 +154,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
 
     public void setPatenteLabel(JLabel patenteLabel) { this.patenteLabel = patenteLabel; }
 
-    public String getMarca() {
-        return this.marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getModelo() {
-        return this.modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public String getPatente() {
-        return this.patente;
-    }
-
-    public void setPatente(String patente) {
-        this.patente = patente;
-    }
-
     public String[] getCausas() {
         return this.causas;
     }
@@ -235,16 +173,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements IJBu
     public String[] getPatentes() { return this.patentes; }
 
     public void setPatentes(String[] patentes) { this.patentes = patentes; }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
 
     @Override
     public void focusLost(FocusEvent e) {

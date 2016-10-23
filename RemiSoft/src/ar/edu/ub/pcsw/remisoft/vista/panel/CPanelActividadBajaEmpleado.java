@@ -2,7 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -12,8 +12,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
     private JComboBox<String> apellidosLista;
     private JComboBox<String> causasLista;
@@ -22,9 +22,6 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     private JLabel apellidoLabel;
     private JLabel identificacionLabel;
     private JLabel nombreLabel;
-    private String apellido;
-    private String identificacion;
-    private String nombre;
     private String[] apellidos = new String[] {" ", "A", "B", "C", "D"};
     private String[] identificaciones = new String[] {" ", "A", "B", "C", "D"};
     private String[] nombres = new String[] {" ", "A", "B", "C", "D"};
@@ -36,8 +33,8 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     }
 
     private void inicializar() {
-        this.setBackground(Color.MAGENTA);
-        this.getNorteLabel().setText("BAJA EMPLEADO");
+        this.setBackground(EColorPanel.EMPLEADOS.getColor());
+        this.getNorteLabel().setText(ETextoButton.BAJAEMPLEADO.getTexto().toUpperCase());
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
@@ -71,7 +68,7 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getCausaLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
-        this.getSalirButton().addActionListener(this);
+        this.getGuardarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -105,15 +102,6 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if  (e.getSource().equals(getFechaTextField())) {
-            if ((getFechaTextField().getText() != null) || (! getFechaTextField().getText().isEmpty())) {
-                setFecha(getFechaTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void focusGained(FocusEvent e) {
         if (e.getSource().equals(getFechaTextField())) {
             getFechaTextField().selectAll();
@@ -125,40 +113,13 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getNombresLista().getSelectedItem())) {
-            if ((getNombresLista().getSelectedItem().toString() != null) ||
-                    (! getNombresLista().getSelectedItem().toString().isEmpty())) {
-                setNombre(this.getNombre());
-            }
-        }
-        else if (e.getSource().equals(getApellidosLista().getSelectedItem())) {
-            if ((getApellidosLista().getSelectedItem().toString() != null) ||
-                    (! getApellidosLista().getSelectedItem().toString().isEmpty())) {
-                setApellido(this.getApellido());
-            }
-        }
-        else if (e.getSource().equals(getIdentificacionesLista().getSelectedItem())) {
-            if ((getIdentificacionesLista().getSelectedItem().toString() != null) ||
-                    (! getIdentificacionesLista().getSelectedItem().toString().isEmpty())) {
-                setIdentificacion(this.getIdentificacion());
-            }
-        }
-        else if (e.getSource().equals(getCausasLista().getSelectedItem())) {
-            if ((getCausasLista().getSelectedItem().toString() != null) ||
-                    (! getCausasLista().getSelectedItem().toString().isEmpty())) {
-                setFecha(this.getFecha());
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
             CEmpleado empleado = new CEmpleado();
-            empleado.setNombre(this.getNombre());
-            empleado.setApellido((this.getApellido()));
-            empleado.setDni(this.getIdentificacion());
-            empleado.setFechaDeBaja(this.getFecha());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            empleado.setNombre(getNombresLista().getSelectedItem().toString());
+            empleado.setApellido(getApellidosLista().getSelectedItem().toString());
+            empleado.setDni(getIdentificacionesLista().getSelectedItem().toString());
+            empleado.setCausaBaja(getCausasLista().getSelectedItem().toString());
+            empleado.setFechaDeBaja(getFechaTextField().getText());
         }
     }
 
@@ -192,18 +153,6 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
 
     public void setNombreLabel(JLabel nombreLabel) { this.nombreLabel = nombreLabel; }
 
-    public String getApellido() { return this.apellido; }
-
-    public void setApellido(String apellido) { this.apellido = apellido; }
-
-    public String getIdentificacion() { return this.identificacion; }
-
-    public void setIdentificacion(String identificacion) { this.identificacion = identificacion; }
-
-    public String getNombre() { return this.nombre; }
-
-    public void setNombre(String nombre) { this.nombre = nombre; }
-
     public String[] getApellidos() { return this.apellidos; }
 
     public void setApellidos(String[] apellidos) { this.apellidos = apellidos; }
@@ -219,6 +168,11 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     public String[] getNombres() { return this.nombres; }
 
     public void setNombres(String[] nombres) { this.nombres = nombres; }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {

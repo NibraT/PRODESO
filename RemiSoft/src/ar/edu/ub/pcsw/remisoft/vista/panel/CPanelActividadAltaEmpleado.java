@@ -1,8 +1,9 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertApp;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.modelo.usuarios.CUsuario;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -15,21 +16,21 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Calendar;
 
-public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, IValidadorInput, ActionListener, KeyListener {
+public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements ActionListener, IJComboBoxFactory,
+        IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private JComboBox<String> turnosLista;
     private JLabel apellidoLabel;
+    private JLabel claveLabel;
     private JLabel dniLabel;
     private JLabel nombreLabel;
     private JLabel turnoLabel;
+    private JLabel usuarioLabel;
     private JTextField apellidoTextField;
+    private JTextField claveTextField;
     private JTextField dniTextField;
     private JTextField nombreTextField;
-    private String apellido;
-    private String dni;
-    private String nombre;
-    private String turno;
+    private JTextField usuarioTextField;
     private String[] turnos = new String[] {" ", "6-15", "15-24"};
 
     public CPanelActividadAltaEmpleado() {
@@ -38,13 +39,14 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     }
 
     private void inicializar() {
-        this.setBackground(Color.MAGENTA);
-        this.getNorteLabel().setText("ALTA EMPLEADO");
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 75));
+        this.setBackground(EColorPanel.EMPLEADOS.getColor());
+        this.getNorteLabel().setText(ETextoButton.ALTAEMPLEADO.getTexto().toUpperCase());
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 80));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 75));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 60));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.getGbc().insets = new Insets (10, 0, 10, 0);
         this.getReferenciasLabel().setText("<html><font color='red'>rojo</font> indica campo obligatorio</html>");
         this.setNombreLabel(new JLabel("Nombre(s)"));
         this.getNombreLabel().setForeground(Color.RED);
@@ -55,6 +57,8 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getDniLabel().setForeground(Color.RED);
         this.setTurnoLabel(new JLabel("Turno"));
         this.getTurnoLabel().setForeground(Color.RED);
+        this.setUsuarioLabel(new JLabel("Nombre de Usuario"));
+        this.setClaveLabel(new JLabel("Clave de Usuario"));
         int ancho = 30;
         // método default de IJTextFieldFactory
         this.setNombreTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
@@ -76,8 +80,17 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
                 SELECCIONAR.getTexto() + getTurnoLabel().getText(), this)));
         // método default de IValidadorInput
         this.validadorInput(getTurnosLista(), getTurnosLista().getToolTipText(), getTurnoLabel().getText());
+        // método default de IJTextFieldFactory
+        this.setUsuarioTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getUsuarioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NOMBRE.getTexto(),
+                getUsuarioTextField().getToolTipText(), getUsuarioLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setClaveTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getClaveTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
+                getClaveTextField().getToolTipText(), getClaveLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -93,6 +106,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getPanelInput().add(this.getTelefonoLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getTurnoLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getUsuarioLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getClaveLabel(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getNombreTextField(), this.getGbc());
@@ -106,6 +123,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getPanelInput().add(this.getTelefonoTextField(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getTurnosLista(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getUsuarioTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getClaveTextField(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
@@ -115,60 +136,25 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getNombreTextField())) {
-            if ((getNombreTextField().getText() != null) || (! getNombreTextField().getText().isEmpty())) {
-                setNombre(getNombreTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getApellidoTextField())) {
-            if ((getApellidoTextField().getText() != null) || (! getApellidoTextField().getText().isEmpty())) {
-                setApellido(getApellidoTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getDniTextField())) {
-            if ((getDniTextField().getText() != null) || (! getDniTextField().getText().isEmpty())) {
-                setDni(getDniTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getDomicilioTextField())) {
-            if ((getDomicilioTextField().getText() != null) || (! getDomicilioTextField().getText().isEmpty())) {
-                setDomicilio(getDomicilioTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getTelefonoTextField())) {
-            if ((getTelefonoTextField().getText() != null) || (! getTelefonoTextField().getText().isEmpty())) {
-                setTelefono(getTelefonoTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getTurnosLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getTurnosLista().getSelectedItem())) {
-            if ((getTurnosLista().getSelectedItem().toString() != null) ||
-                    (! getTurnosLista().getSelectedItem().toString().isEmpty())) {
-                setTurno((getTurnosLista().getSelectedItem().toString()));
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
             CEmpleado empleado = new CEmpleado();
-            empleado.setNombre(this.getNombre());
-            empleado.setApellido(this.getApellido());
-            empleado.setDni(this.getDni());
-            empleado.setDomicilio(this.getDomicilio());
-            empleado.setTelefono(this.getTelefono());
-            empleado.setTurno(this.getTurno());
-            CInsertApp db = new CInsertApp();
-            db.insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
-                    empleado.getDomicilio(), empleado.getTelefono(), empleado.getTurno());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            CUsuario usuario = new CUsuario();
+            empleado.setNombre(getNombreTextField().getText());
+            empleado.setApellido(getApellidoTextField().getText());
+            empleado.setDni(getDniTextField().getText());
+            empleado.setDomicilio(getDomicilioTextField().getText());
+            empleado.setTelefono(getTelefonoTextField().getText());
+            empleado.setTurno(getTurnosLista().getSelectedItem().toString());
+            // método default de ITemporizable
+            empleado.setFechaDeAlta(setFechaString());
+            usuario.setNombre(getUsuarioTextField().getText());
+            usuario.setClave(getClaveLabel().getText());
+            new CInsertSQL().insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
+                    empleado.getDomicilio(), empleado.getTelefono(), empleado.getTurno(), empleado.getFechaDeAlta());
         }
     }
 
@@ -179,6 +165,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     public JLabel getApellidoLabel() { return this.apellidoLabel; }
 
     public void setApellidoLabel(JLabel apellidoLabel) { this.apellidoLabel = apellidoLabel; }
+
+    public JLabel getClaveLabel() { return this.claveLabel; }
+
+    public void setClaveLabel(JLabel claveLabel) { this.claveLabel = claveLabel; }
 
     public JLabel getDniLabel() { return this.dniLabel; }
 
@@ -192,37 +182,38 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
 
     public void setTurnoLabel(JLabel turnoLabel) { this.turnoLabel = turnoLabel; }
 
-    public JTextField getNombreTextField() { return this.nombreTextField; }
+    public JLabel getUsuarioLabel() { return this.usuarioLabel; }
 
-    public void setNombreTextField(JTextField nombreTextField) { this.nombreTextField = nombreTextField; }
+    public void setUsuarioLabel(JLabel usuarioLabel) { this.usuarioLabel = usuarioLabel; }
 
     public JTextField getApellidoTextField() { return this.apellidoTextField; }
 
     public void setApellidoTextField(JTextField apellidoTextField) { this.apellidoTextField = apellidoTextField; }
 
+    public JTextField getClaveTextField() { return this.claveTextField; }
+
+    public void setClaveTextField(JTextField claveTextField) { this.claveTextField = claveTextField; }
+
     public JTextField getDniTextField() { return this.dniTextField; }
 
     public void setDniTextField(JTextField dniTextField) { this.dniTextField = dniTextField; }
 
-    public String getNombre() { return this.nombre; }
+    public JTextField getNombreTextField() { return this.nombreTextField; }
 
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    public void setNombreTextField(JTextField nombreTextField) { this.nombreTextField = nombreTextField; }
 
-    public String getApellido() { return this.apellido; }
+    public JTextField getUsuarioTextField() { return this.usuarioTextField; }
 
-    public void setApellido(String apellido) { this.apellido = apellido; }
-
-    public String getDni() { return this.dni; }
-
-    public void setDni(String dni) { this.dni = dni; }
-
-    public String getTurno() { return this.turno; }
-
-    public void setTurno(String turno) { this.turno = turno; }
+    public void setUsuarioTextField(JTextField usuarioTextField) { this.usuarioTextField = usuarioTextField; }
 
     public String[] getTurnos() { return this.turnos; }
 
     public void setTurnos(String[] turnos) { this.turnos = turnos; }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {

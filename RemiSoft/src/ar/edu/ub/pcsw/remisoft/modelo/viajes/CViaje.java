@@ -4,44 +4,48 @@ import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.cuentas.CCuenta;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
+import ar.edu.ub.pcsw.remisoft.modelo.sucursales.CSucursal;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 
 import java.util.Calendar;
 
 public class CViaje implements ITemporizable {
 
-    private int numero;
-    private CEmpleado chofer;
-    private CVehiculo auto;
-    private String origen;
-    private String destino;
-    private float distancia;
-    private int tramos;
     private Calendar duracion;
-    private String precio;
-    private float costo;
-    private Calendar fecha;
-    private Calendar horaDeInicio;
-    private Calendar horaDeFin;
     private CCliente cliente;
     private CCuenta cuenta;
-    private CEmpleado recepcionista;    private String motivoCancelacion;
+    private CEmpleado chofer;
+    private CEmpleado recepcionista;
+    private CSucursal sucursal;
+    private CVehiculo auto;
+    private float costo;
+    private float distancia;
+    private int tramos;
+    private String destino;
+    private String fecha;
+    private String horaDeFin;
+    private String horaDeInicio;
+    private String motivoCancelacion;
+    private String numero;
+    private String origen;
+    private String precio;
+    public static int NUMERODEVIAJE = 1;
 
     /*
     Constructor
      */
     public CViaje() {
-        this(0, null, null, null, null, 0, 0, null, null, 0, null, null, null, null, null, null, null);
+        this(null, null, null, null, 0, 0, null, null, 0, null, null, null, null, null, null, null);
     }
 
     /*
     Constructor
      */
-    public CViaje(int numero, CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia,
-                  int tramos, Calendar duracion, String precio, float costo, Calendar fecha, Calendar horaDeInicio,
-                  Calendar horaDeFin, CCliente cliente, CCuenta cuenta, CEmpleado recepcionista,
+    public CViaje(CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia,
+                  int tramos, Calendar duracion, String precio, float costo, String fecha, String horaDeInicio,
+                  String horaDeFin, CCliente cliente, CCuenta cuenta, CEmpleado recepcionista,
                   String motivoCancelacion) {
-        this.setNumero(numero);
+        this.setNumero(String.valueOf(NUMERODEVIAJE++));
         this.setChofer(chofer);
         this.setAuto(auto);
         this.setOrigen(origen);
@@ -60,11 +64,11 @@ public class CViaje implements ITemporizable {
         this.setMotivoCancelacion(motivoCancelacion);
     }
 
-    public int getNumero() {
+    public String getNumero() {
         return this.numero;
     }
 
-    public void setNumero(int numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 
@@ -130,19 +134,19 @@ public class CViaje implements ITemporizable {
         this.costo = costo;
     }
 
-    public Calendar getHoraDeInicio() {
+    public String getHoraDeInicio() {
         return this.horaDeInicio;
     }
 
-    public void setHoraDeInicio(Calendar horaDeInicio) {
+    public void setHoraDeInicio(String horaDeInicio) {
         this.horaDeInicio = horaDeInicio;
     }
 
-    public Calendar getHoraDeFin() {
+    public String getHoraDeFin() {
         return this.horaDeFin;
     }
 
-    public void setHoraDeFin(Calendar horaDeFin) {
+    public void setHoraDeFin(String horaDeFin) {
         this.horaDeFin = horaDeFin;
     }
 
@@ -162,11 +166,11 @@ public class CViaje implements ITemporizable {
         this.cuenta = cuenta;
     }
 
-    public Calendar getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Calendar fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -177,6 +181,10 @@ public class CViaje implements ITemporizable {
     public void setRecepcionista(CEmpleado recepcionista) {
         this.recepcionista = recepcionista;
     }
+
+    public CSucursal getSucursal() { return this.sucursal; }
+
+    public void setSucursal(CSucursal sucursal) { this.sucursal = sucursal; }
 
     public CVehiculo getAuto() {
         return this.auto;
@@ -191,12 +199,13 @@ public class CViaje implements ITemporizable {
     public void setMotivoCancelacion(String motivoCancelacion) { this.motivoCancelacion = motivoCancelacion; }
 
     public String toString() {
-        return "Origen: " + this.getOrigen() + "\n Destino: " + this.getDestino() +
-                "\n Cliente DNI: " + this.getCliente().getIdentificacion() + "\n Cuenta: " +
+        return "Cliente ID: " + this.getCliente().getIdentificacion() + "\n Cuenta: " +
                 this.getCliente().getCuentasActivas().get(0).getNumero() +
-                "\n Patente: " + this.getAuto().getPatente() + "\n Chofer: " + this.getChofer().getDni() +
-                "\n Recepcionista: " + this.getRecepcionista().getDni()  + "\n Fecha: " + this.getFecha() +
-                "\n Hora: " + this.getHoraDeInicio();
+                "\n Chofer: " + this.getChofer().getDni() + "\n Patente: " + this.getAuto().getPatente() +
+                "\n Origen: " + this.getOrigen() + "\n Destino: " + this.getDestino() +
+                "\n Fecha: " + this.getFecha() + "\n Hora: " + this.getHoraDeInicio() +
+                "\n Precio: " + this.getPrecio() + "\n Recepcionista: " + this.getRecepcionista().getDni() +
+                "\n Numero: " + this.getNumero() + "\n Sucursal: " + this.getSucursal().getNumero();
     }
 
     @Override

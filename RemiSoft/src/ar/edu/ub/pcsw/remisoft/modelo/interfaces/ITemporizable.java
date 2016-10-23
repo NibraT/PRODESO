@@ -47,9 +47,14 @@ public interface ITemporizable {
         return sdf.format(fecha.getTime());
     }
 
+    default String setFechaString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("d/MM/yyyy");
+        return sdf.format(Calendar.getInstance().getTime());
+    }
+
     default String setHoraString(Calendar hora) {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
-        return sdf.format(hora.getTime());
+        return sdf.format(Calendar.getInstance().getTime());
     }
 
 

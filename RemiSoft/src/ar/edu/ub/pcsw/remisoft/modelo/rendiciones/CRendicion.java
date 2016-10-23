@@ -1,7 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.modelo.rendiciones;
 
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
-import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 
 public class CRendicion {
 
@@ -11,14 +10,21 @@ public class CRendicion {
     private String fecha;
     private String numero;
     private String viajeNumero;
+    public static int NUMERODERENDICION = 1;
 
+    /*
+    Constructor
+     */
     public CRendicion() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 
-    public CRendicion(String numero, String fecha, CEmpleado recepcionista, String viajeNumero, String costoEfectivo,
+    /*
+    Constructor
+     */
+    public CRendicion(String fecha, CEmpleado recepcionista, String viajeNumero, String costoEfectivo,
                       String costoTestigo) {
-        this.setNumero(numero);
+        this.setNumero(String.valueOf(NUMERODERENDICION++));
         this.setFecha(fecha);
         this.setRecepcionista(recepcionista);
         this.setViajeNumero(viajeNumero);
@@ -63,7 +69,10 @@ public class CRendicion {
     public void setViajeNumero(String viajeNumero) { this.viajeNumero = viajeNumero; }
 
     public String toString() {
-        return null;
+        return "Fecha: " + this.getFecha() + "\n Viaje Número: " + this.getViajeNumero() +
+                "\n Costo Efectivo: " + this.getCostoEfectivo() +
+                "\n Recepcionista: " + this.getRecepcionista().getDni() +
+                "\n Numero: " + this.getNumero();
     }
 
 }

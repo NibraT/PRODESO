@@ -4,9 +4,10 @@ import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
+import ar.edu.ub.pcsw.remisoft.modelo.sucursales.CSucursal;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -16,15 +17,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
     private JComboBox<String> autosLista;
     private JComboBox<String> choferesLista;
     private JComboBox<String> cuentasLista;
     private JLabel autoLabel;
     private JLabel choferLabel;
-    private JLabel clienteLabel;
     private JLabel cuentaLabel;
     private JLabel destinoLabel;
     private JLabel horaLabel;
@@ -35,12 +35,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     private JTextField horaTextField;
     private JTextField origenTextField;
     private JTextField precioTextField;
-    private String cliente;
-    private String cuenta;
-    private String destino;
-    private String hora;
-    private String origen;
-    private String precio;
     private String[] autos = new String[] {" ", "NHU544", "KOW902", "LDP657", "PWS390"};
     private String[] choferes = new String[] {" ", "19222185", "12089450", "14279142", "11782006"};
     private String[] cuentas = new String[] {" ", "354"};
@@ -51,17 +45,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     }
 
     private void inicializar() {
-        this.setBackground(Color.ORANGE);
-        this.getNorteLabel().setText("TOMAR VIAJE");
+        this.getNorteLabel().setText(ETextoButton.TOMARVIAJE.getTexto().toUpperCase());
         this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 50));
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 15));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
-        this.setClienteLabel(new JLabel("Cliente DNI / CUIL / CUIT"));
-        this.getClienteLabel().setPreferredSize(new Dimension(260, 15));
-        this.getClienteLabel().setForeground(Color.RED);
         this.setCuentaLabel(new JLabel("Cuenta Imputable"));
         this.getCuentaLabel().setForeground(Color.RED);
         this.setChoferLabel(new JLabel("Chofer Disponible"));
@@ -118,7 +108,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
         this.getPrecioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PRECIO.getTexto(),
                 getPrecioTextField().getToolTipText(), getPrecioLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -172,40 +161,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getClienteTextField())) {
-            if ((getClienteTextField().getText() != null) || (! getClienteTextField().getText().isEmpty())) {
-                setCliente(getClienteTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getOrigenTextField())) {
-            if ((getOrigenTextField().getText() != null) || (! getOrigenTextField().getText().isEmpty())) {
-                setOrigen(getOrigenTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getDestinoTextField())) {
-            if ((getDestinoTextField().getText() != null) || (! getDestinoTextField().getText().isEmpty())) {
-                setDestino(getDestinoTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getFechaTextField())) {
-            if ((getFechaTextField().getText() != null) || (! getFechaTextField().getText().isEmpty())) {
-                setFecha(getFechaTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getHoraTextField())) {
-            if ((getHoraTextField().getText() != null) || (! getHoraTextField().getText().isEmpty())) {
-                setHora(getHoraTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getPrecioTextField())) {
-            if ((getPrecioTextField().getText() != null) || (! getPrecioTextField().getText().isEmpty())) {
-                setPrecio(getPrecioTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void focusGained(FocusEvent e) {
         if (e.getSource().equals(getFechaTextField())) {
             getFechaTextField().selectAll();
@@ -217,57 +172,30 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        CViaje viaje = new CViaje();
-        viaje.setCliente(new CCliente());
-        viaje.setCuenta(viaje.getCliente().getCuentasActivas().get(0));
-        viaje.setChofer(new CChoferSinVehiculo());
-        viaje.setAuto(new CVehiculo());
-        viaje.setRecepcionista(new CEmpleado());
         if (e.getSource().equals(getRecepcionistasLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getChoferesLista().getSelectedItem())) {
-            if ((getChoferesLista().getSelectedItem().toString() != null) ||
-                    (! getChoferesLista().getSelectedItem().toString().isEmpty())) {
-                viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
-            }
-        }
-        else if (e.getSource().equals(getCuentasLista().getSelectedItem())) {
-            if ((getCuentasLista().getSelectedItem().toString() != null) ||
-                    (! getCuentasLista().getSelectedItem().toString().isEmpty())) {
-                setCuenta(getCuentasLista().getSelectedItem().toString());
-            }
-        }
-        else if (e.getSource().equals(getAutosLista().getSelectedItem())) {
-            if ((getAutosLista().getSelectedItem().toString() != null) ||
-                    (! getAutosLista().getSelectedItem().toString().isEmpty())) {
-                viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
-            }
-        }
-        else if (e.getSource().equals(getRecepcionistasLista().getSelectedItem())) {
-            if ((getRecepcionistasLista().getSelectedItem().toString() != null) ||
-                    (! getRecepcionistasLista().getSelectedItem().toString().isEmpty())) {
-                viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
-            viaje.getCliente().setIdentificacion(this.getCliente());
+            CViaje viaje = new CViaje();
+            CSucursal sucursal = new CSucursal();
+            sucursal.setNumero("1");
+            viaje.setSucursal(sucursal);
+            viaje.setCliente(new CCliente());
+            viaje.setCuenta(viaje.getCliente().getCuentasActivas().get(0));
+            viaje.setChofer(new CChoferSinVehiculo());
+            viaje.setAuto(new CVehiculo());
+            viaje.setRecepcionista(new CEmpleado());
+            viaje.getCliente().setIdentificacion(getClienteTextField().getText());
+            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
             viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
-            viaje.getCuenta().setNumero(this.getCuenta());
             viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
+            viaje.setOrigen(getOrigenTextField().getText());
+            viaje.setDestino(getDestinoTextField().getText());
+            viaje.setFecha(getFechaTextField().getText());
+            viaje.setHoraDeInicio(getHoraTextField().getText());
+            viaje.setPrecio(getPrecioTextField().getText());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            viaje.setOrigen(this.getOrigen());
-            viaje.setDestino(this.getDestino());
-            setFecha(getFechaTextField().getText());
-            setHora(getHoraTextField().getText());
-            viaje.setFecha(this.setFechaCalendar(this.getFecha()));
-            viaje.setHoraDeInicio(this.setHoraCalendar(this.getHora()));
-            setPrecio(getPrecioTextField().getText());
-            viaje.setPrecio(this.getPrecio());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            sucursal.getViajes().add(viaje);
         }
     }
 
@@ -298,10 +226,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     public JLabel getChoferLabel() { return this.choferLabel; }
 
     public void setChoferLabel(JLabel choferLabel) { this.choferLabel = choferLabel; }
-
-    public JLabel getClienteLabel() { return this.clienteLabel; }
-
-    public void setClienteLabel(JLabel clienteLabel) { this.clienteLabel = clienteLabel; }
 
     public JLabel getCuentaLabel() { return this.cuentaLabel; }
 
@@ -357,50 +281,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
 
     public void setPrecioTextField(JTextField precioTextField) { this.precioTextField = precioTextField; }
 
-    public String getCliente() {
-        return this.cliente;
-    }
-
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
-    }
-
-    public String getCuenta() {
-        return this.cuenta;
-    }
-
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
-    }
-
-    public String getOrigen() {
-        return this.origen;
-    }
-
-    public void setOrigen(String origen) {
-        this.origen = origen;
-    }
-
-    public String getDestino() {
-        return this.destino;
-    }
-
-    public void setDestino(String destino) {
-        this.destino = destino;
-    }
-
-    public String getHora() {
-        return this.hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
-    }
-
-    public String getPrecio() { return this.precio; }
-
-    public void setPrecio(String precio) { this.precio = precio; }
-
     public String[] getAutos() {
         return this.autos;
     }
@@ -430,6 +310,12 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements IJ
     public void keyPressed(KeyEvent e) {
 
     }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
 
     @Override
     public void focusLost(FocusEvent e) {

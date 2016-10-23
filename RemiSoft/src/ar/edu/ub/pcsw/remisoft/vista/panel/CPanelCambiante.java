@@ -2,7 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import javax.swing.*;
 
-public class CPanelCambiante extends JPanel {
+public abstract class CPanelCambiante extends CPanelBase {
 
     public void cambiarPanel(JPanel nuevoPanel) {
         while (getComponents().length > 0) {
