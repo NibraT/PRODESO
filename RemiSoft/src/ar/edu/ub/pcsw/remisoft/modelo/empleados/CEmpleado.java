@@ -3,6 +3,7 @@ package ar.edu.ub.pcsw.remisoft.modelo.empleados;
 public class CEmpleado {
 
     private String apellido;
+    private String causaBaja;
     private String dni;
     private String domicilio;
     private String fechaDeAlta;
@@ -27,14 +28,6 @@ public class CEmpleado {
         this.setFechaDeBaja(fechaDeBaja);
     }
 
-    public String getNombre() {
-        return this.nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public String getApellido() {
         return this.apellido;
     }
@@ -42,6 +35,10 @@ public class CEmpleado {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
+
+    public String getCausaBaja() { return this.causaBaja; }
+
+    public void setCausaBaja(String causaBaja) { this.causaBaja = causaBaja; }
 
     public String getDni() {
         return this.dni;
@@ -57,6 +54,14 @@ public class CEmpleado {
 
     public void setDomicilio(String domicilio) {
         this.domicilio = domicilio;
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getTelefono() { return this.telefono; }
@@ -88,7 +93,9 @@ public class CEmpleado {
     }
 
     public String toString() {
-        return null;
+        return "Empleado: " + "\n Nombre: " + this.getNombre() + "\n Apellido: " + this.getApellido() + "\n DNI: " +
+                this.getDni() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
+                this.getTelefono() + "\n Turno: " + this.getTurno() + "\n Alta: " + this.getFechaDeAlta();
     }
 
 }

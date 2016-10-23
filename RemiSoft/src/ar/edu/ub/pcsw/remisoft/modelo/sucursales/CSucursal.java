@@ -3,45 +3,36 @@ package ar.edu.ub.pcsw.remisoft.modelo.sucursales;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
+import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 
-import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CSucursal {
 
-    private int numero;
-    private String domicilio;
     private List<CCliente> clientes;
     private List<CEmpleado> empleados;
     private List<CVehiculo> vehiculos;
-    private Calendar fechaDeAlta;
-    private Calendar fechaDeBaja;
+    private List<CViaje> viajes;
+    private String fechaDeAlta;
+    private String fechaDeBaja;
+    private String domicilio;
+    private String numero;
 
-    public CSucursal(int numero, String domicilio, List<CCliente> clientes, List<CEmpleado> empleados,
-                     List<CVehiculo> vehiculos, Calendar fechaDeAlta, Calendar fechaDeBaja) {
+    public CSucursal() {
+        this(null, null, null, null, null, null, null, null);
+    }
+
+    public CSucursal(String numero, String domicilio, List<CCliente> clientes, List<CEmpleado> empleados,
+                     List<CVehiculo> vehiculos, List<CViaje> viajes, String fechaDeAlta, String fechaDeBaja) {
         this.setNumero(numero);
         this.setDomicilio(domicilio);
         this.setClientes(clientes);
         this.setEmpleados(empleados);
         this.setVehiculos(vehiculos);
+        this.setViajes(new LinkedList<>());
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
-    }
-
-    public int getNumero() {
-        return this.numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
-
-    public String getDomicilio() {
-        return this.domicilio;
-    }
-
-    public void setDomicilio(String domicilio) {
-        this.domicilio = domicilio;
     }
 
     public List<CCliente> getClientes() {
@@ -68,20 +59,40 @@ public class CSucursal {
         this.vehiculos = vehiculos;
     }
 
-    public Calendar getFechaDeAlta() {
+    public List<CViaje> getViajes() { return this.viajes; }
+
+    public void setViajes(List<CViaje> viajes) { this.viajes = viajes; }
+
+    public String getFechaDeAlta() {
         return this.fechaDeAlta;
     }
 
-    public void setFechaDeAlta(Calendar fechaDeAlta) {
+    public void setFechaDeAlta(String fechaDeAlta) {
         this.fechaDeAlta = fechaDeAlta;
     }
 
-    public Calendar getFechaDeBaja() {
+    public String getFechaDeBaja() {
         return this.fechaDeBaja;
     }
 
-    public void setFechaDeBaja(Calendar fechaDeBaja) {
+    public void setFechaDeBaja(String fechaDeBaja) {
         this.fechaDeBaja = fechaDeBaja;
+    }
+
+    public String getDomicilio() {
+        return this.domicilio;
+    }
+
+    public void setDomicilio(String domicilio) {
+        this.domicilio = domicilio;
+    }
+
+    public String getNumero() {
+        return this.numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     public String toString() {

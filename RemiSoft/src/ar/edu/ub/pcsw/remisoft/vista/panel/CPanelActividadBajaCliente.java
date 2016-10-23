@@ -1,8 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
-import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -12,16 +11,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadBajaCliente extends CPanelActividadBase implements IJButtonSalir, IJComboBoxFactory,
-        IJTextFieldFactory, ITemporizable, IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadBajaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private JComboBox<String> causasLista;
     private JLabel identificacionLabel;
     private JLabel nombreYApellidoORazonSocialLabel;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
-    private String identificacion;
-    private String nombreYApellidoORazonSocial;
     private String[] causas = new String[] {" ", "Morosidad", "Incobrable", "Administración RSG"};
 
     public CPanelActividadBajaCliente() {
@@ -30,8 +27,8 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements I
     }
 
     private void inicializar() {
-        this.setBackground(Color.GRAY);
-        this.getNorteLabel().setText("BAJA CLIENTE");
+        this.setBackground(EColorPanel.CLIENTES.getColor());
+        this.getNorteLabel().setText(ETextoButton.BAJACLIENTE.getTexto().toUpperCase());
         this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
@@ -62,7 +59,6 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements I
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -92,27 +88,6 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements I
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getNombreYApellidoORazonSocialTextField())) {
-            if ((getNombreYApellidoORazonSocialTextField().getText() != null) ||
-                    (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
-                setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getIdentificacionTextField())) {
-            if ((getIdentificacionTextField().getText() != null) || (! getIdentificacionTextField().getText().
-                    isEmpty())) {
-                setIdentificacion(getIdentificacionTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getFechaTextField())) {
-            if ((getFechaTextField().getText() != null) || (! getFechaTextField().getText().isEmpty())) {
-                setFecha(getFechaTextField().getText());
-            }
-        }
-    }
-
-    @Override
     public void focusGained(FocusEvent e) {
         if (e.getSource().equals(getFechaTextField())) {
             getFechaTextField().selectAll();
@@ -124,21 +99,12 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements I
         if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
-        else if (e.getSource().equals(getCausasLista().getSelectedItem())) {
-            if ((getCausasLista().getSelectedItem().toString() != null) ||
-                    (! getCausasLista().getSelectedItem().toString().isEmpty())) {
-                setFecha(this.getFecha());
-            }
-        }
         else if (e.getSource().equals(getGuardarButton())) {
             CCliente cliente = new CCliente();
-            cliente.setNombreYApellidoORazonSocial(this.getNombreYApellidoORazonSocial());
-            cliente.setIdentificacion(this.getIdentificacion());
-            cliente.setFechaDeBaja(this.getFecha());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            cliente.setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
+            cliente.setIdentificacion(getIdentificacionTextField().getText());
+            cliente.setCausaBaja(getCausasLista().getSelectedItem().toString());
+            cliente.setFechaDeBaja(getFechaTextField().getText());
         }
     }
 
@@ -168,19 +134,15 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements I
         this.nombreYApellidoORazonSocialTextField = nombreYApellidoORazonSocialTextField;
     }
 
-    public String getIdentificacion() { return this.identificacion; }
-
-    public void setIdentificacion(String identificacion) { this.identificacion = identificacion; }
-
-    public String getNombreYApellidoORazonSocial() { return this.nombreYApellidoORazonSocial; }
-
-    public void setNombreYApellidoORazonSocial(String nombreYApellidoORazonSocial) {
-        this.nombreYApellidoORazonSocial = nombreYApellidoORazonSocial;
-    }
-
     public String[] getCausas() { return this.causas; }
 
     public void setCausas(String[] causas) { this.causas = causas; }
+
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {

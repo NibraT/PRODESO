@@ -7,7 +7,6 @@ import ar.edu.ub.pcsw.remisoft.vista.label.CReloj;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.EtchedBorder;
-import java.awt.*;
 
 public class CPanelTiempos extends JPanel {
 
@@ -16,16 +15,20 @@ public class CPanelTiempos extends JPanel {
     }
 
     private void inicializar() {
-        this.setBackground(Color.cyan);
+        this.setBackground(EColorPanel.TIEMPOS.getColor());
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setBorder(BorderFactory.createCompoundBorder(new EmptyBorder(5,5,5,5), new EtchedBorder()));
         CReloj reloj = new CReloj();
         reloj.start();
-        this.add(new CButtonIcono(EIcono.CALENDARIO));
+        EIcono calendario = EIcono.CALENDARIO;
+        calendario.setColor(this.getBackground());
+        this.add(new CButtonIcono(calendario));
         this.add(Box.createHorizontalStrut(40));
         this.add(reloj.time);
         this.add(Box.createHorizontalStrut(40));
-        this.add(new CButtonIcono(EIcono.SERVICIOMETEOROLOGICO));
+        EIcono servicioMeteorologico = EIcono.SERVICIOMETEOROLOGICO;
+        servicioMeteorologico.setColor(this.getBackground());
+        this.add(new CButtonIcono(servicioMeteorologico));
     }
 
 }

@@ -7,13 +7,12 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class CPanelEmpleados extends JPanel implements ActionListener, IFrameRemisoft, MouseListener {
+public class CPanelEmpleados extends JPanel implements IFrameRemisoft, MouseListener {
 
     private CButtonSelectorPanel empleadosButton;
 
@@ -22,7 +21,7 @@ public class CPanelEmpleados extends JPanel implements ActionListener, IFrameRem
     }
 
     private void inicializar() {
-        this.setBackground(Color.MAGENTA);
+        this.setBackground(EColorPanel.EMPLEADOS.getColor());
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setEmpleadosButton(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
@@ -31,16 +30,17 @@ public class CPanelEmpleados extends JPanel implements ActionListener, IFrameRem
             }
         }, ETextoButton.EMPLEADOS.getTexto(), EToolTipTextTexto.MENUEMPLEADOS.getTexto()));
         this.getEmpleadosButton().setEnabled(false);
-        this.getEmpleadosButton().addActionListener(this);
+        this.getEmpleadosButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(getEmpleadosButton())) {
+                    // método default de IFrameRemisoft
+                    getFrameRemisoft().setearPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+                }
+            }
+        });
         this.add(getEmpleadosButton());
         this.addMouseListener(this);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getEmpleadosButton())) {
-            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
-        }
     }
 
     @Override

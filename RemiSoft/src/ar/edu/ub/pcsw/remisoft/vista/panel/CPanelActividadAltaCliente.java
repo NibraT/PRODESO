@@ -1,9 +1,8 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
-import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJButtonSalir;
+import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 
@@ -12,8 +11,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
-public class CPanelActividadAltaCliente extends CPanelActividadBase implements IJTextFieldFactory, IJButtonSalir,
-        IValidadorInput, ActionListener, FocusListener, KeyListener {
+public class CPanelActividadAltaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
+        IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private int numeroCuentaAdicional;
     private JLabel cuentaAdicionalLabel;
@@ -22,8 +21,6 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
     private JTextField cuentaAdicionalTextField;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
-    private String identificacion;
-    private String nombreYApellidoORazonSocial;
 
     public CPanelActividadAltaCliente() {
         super("1");
@@ -31,8 +28,8 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
     }
 
     private void inicializar() {
-        this.setBackground(Color.GRAY);
-        this.getNorteLabel().setText("ALTA CLIENTE");
+        this.setBackground(EColorPanel.CLIENTES.getColor());
+        this.getNorteLabel().setText(ETextoButton.ALTACLIENTE.getTexto().toUpperCase());
         this.add(getNorteLabel(), BorderLayout.NORTH);
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
@@ -64,7 +61,6 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
                         CUENTAADICIONAL.getTexto(), getCuentaAdicionalTextField().getToolTipText(),
                 getCuentaAdicionalLabel().getText()));
         this.getGuardarButton().addActionListener(this);
-        this.getSalirButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -99,33 +95,9 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getNombreYApellidoORazonSocialTextField())) {
-            if ((getNombreYApellidoORazonSocialTextField().getText() != null) ||
-                    (! getNombreYApellidoORazonSocialTextField().getText().isEmpty())) {
-                setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getIdentificacionTextField())) {
-            if ((getIdentificacionTextField().getText() != null) ||
-                    (! getIdentificacionTextField().getText().isEmpty())) {
-                setIdentificacion(getIdentificacionTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getDomicilioTextField())) {
-            if ((getDomicilioTextField().getText() != null) || (! getDomicilioTextField().getText().isEmpty())) {
-                setDomicilio(getDomicilioTextField().getText());
-            }
-        }
-        else if (e.getSource().equals(getTelefonoTextField())) {
+        if (e.getSource().equals(getTelefonoTextField())) {
             if ((getTelefonoTextField().getText() != null) || (! getTelefonoTextField().getText().isEmpty())) {
-                setTelefono(getTelefonoTextField().getText());
                 getGuardarButton().setEnabled(true);
-            }
-        }
-        else if (e.getSource().equals(getCuentaAdicionalTextField())) {
-            if ((getCuentaAdicionalTextField().getText() != null) ||
-                    (! getCuentaAdicionalTextField().getText().isEmpty())) {
-                setNumeroCuentaAdicional(Integer.parseInt(getCuentaAdicionalTextField().getText()));
             }
         }
     }
@@ -141,24 +113,21 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getGuardarButton())) {
             CCliente cliente = new CCliente();
-            cliente.setNombreYApellidoORazonSocial(this.getNombreYApellidoORazonSocial());
-            cliente.setIdentificacion(this.getIdentificacion());
-            cliente.setDomicilio(this.getDomicilio());
-            cliente.setTelefono(this.getTelefono());
+            cliente.setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
+            cliente.setIdentificacion(getIdentificacionTextField().getText());
+            cliente.setDomicilio(getDomicilioTextField().getText());
+            cliente.setTelefono(getTelefonoTextField().getText());
             setNumeroCuentaAdicional(Integer.parseInt(getCuentaAdicionalTextField().getText()));
             if (this.getNumeroCuentaAdicional() > 0) {
                 for (int i = 0; i < this.getNumeroCuentaAdicional(); i++) {
                     cliente.agregarCuenta(cliente.abrirCuenta(), cliente.getCuentasActivas());
                 }
             }
-
-            CInsertSQL db = new CInsertSQL();
-            db.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
-                    cliente.getDomicilio(), cliente.getTelefono());
-        }
-        else if (e.getSource().equals(getSalirButton())) {
-            // método default de IJButtonSalir
-            accionarSalirButton(e);
+            // método default de ITemporizable
+            cliente.setFechaDeAlta(setFechaString());
+            new CInsertSQL().insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
+                    cliente.getDomicilio(), cliente.getTelefono(), cliente.getFechaDeAlta(),
+                    cliente.getCuentasActivas().size());
         }
     }
 
@@ -208,22 +177,6 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements I
 
     public void setCuentaAdicionalTextField(JTextField cuentaAdicionalTextField) {
         this.cuentaAdicionalTextField = cuentaAdicionalTextField;
-    }
-
-    public String getNombreYApellidoORazonSocial() {
-        return this.nombreYApellidoORazonSocial;
-    }
-
-    public void setNombreYApellidoORazonSocial(String nombreYApellidoORazonSocial) {
-        this.nombreYApellidoORazonSocial = nombreYApellidoORazonSocial;
-    }
-
-    public String getIdentificacion() {
-        return this.identificacion;
-    }
-
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
     }
 
     @Override

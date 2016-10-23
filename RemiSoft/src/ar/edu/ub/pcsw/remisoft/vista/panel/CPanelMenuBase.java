@@ -22,7 +22,7 @@ public abstract class CPanelMenuBase extends JPanel implements ActionListener, I
     public void actionPerformed(ActionEvent e) {
         if ((e.getSource().equals(getButtonUno())) || (e.getSource().equals(getButtonDos()))) {
             // método default de IFrameRemisoft
-            getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+            getFrameRemisoft().setearPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

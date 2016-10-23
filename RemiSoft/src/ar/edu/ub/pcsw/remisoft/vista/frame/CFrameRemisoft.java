@@ -32,10 +32,10 @@ public class CFrameRemisoft extends JFrame {
         CPanelPrincipal panelPrincipal = new CPanelPrincipal();
         panelPrincipal.setPreferredSize(new Dimension(150, this.getHeight()));
         this.add(panelPrincipal, BorderLayout.WEST);
-        this.panelMenu = new CPanelMenu();
+        this.setPanelMenu(new CPanelMenu());
         this.add(this.getPanelMenu());
-        this.panelActividad = new CPanelActividad();
-        panelActividad.setPreferredSize(new Dimension(1065, this.getHeight()));
+        this.setPanelActividad(new CPanelActividad());
+        this.getPanelActividad().setPreferredSize(new Dimension(1065, this.getHeight()));
         this.add(this.getPanelActividad(), BorderLayout.EAST);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
@@ -52,21 +52,27 @@ public class CFrameRemisoft extends JFrame {
         this.setVisible(true);
     }
 
+    public void setearPanelMenu(JPanel panelMenu) {
+        // método de CPanelCambiante
+        this.getPanelMenu().cambiarPanel(panelMenu);
+    }
+
+    public void setearPanelActividad(JPanel panelActividad) {
+        // método de CPanelCambiante
+        this.getPanelActividad().cambiarPanel(panelActividad);
+    }
+
     public CPanelMenu getPanelMenu() {
         return this.panelMenu;
     }
 
-    public void setPanelMenu(JPanel panelMenu) {
-        this.getPanelMenu().cambiarPanel(panelMenu);
-    }
+    public void setPanelMenu(CPanelMenu panelMenu) { this.panelMenu = panelMenu; }
 
     public CPanelActividad getPanelActividad() {
         return this.panelActividad;
     }
 
-    public void setPanelActividad(JPanel panelActividad) {
-        this.getPanelActividad().cambiarPanel(panelActividad);
-    }
+    public void setPanelActividad(CPanelActividad panelActividad) { this.panelActividad = panelActividad; }
 
 }
 

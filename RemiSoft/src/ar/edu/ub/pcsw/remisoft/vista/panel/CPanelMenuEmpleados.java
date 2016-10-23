@@ -14,7 +14,7 @@ public class CPanelMenuEmpleados extends CPanelMenuBase {
     }
 
     private void inicializar() {
-        this.setBackground(Color.MAGENTA);
+        this.setBackground(EColorPanel.EMPLEADOS.getColor());
         this.setButtonUno(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {

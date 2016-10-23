@@ -14,7 +14,7 @@ public class CPanelMenuAutos extends CPanelMenuBase {
     }
 
     private void inicializar() {
-        this.setBackground(Color.GREEN);
+        this.setBackground(EColorPanel.AUTOS.getColor());
         this.setButtonUno(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {

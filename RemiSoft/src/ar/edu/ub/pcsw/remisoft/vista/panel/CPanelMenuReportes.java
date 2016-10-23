@@ -5,7 +5,6 @@ import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class CPanelMenuReportes extends CPanelMenuBase {
 
@@ -14,22 +13,22 @@ public class CPanelMenuReportes extends CPanelMenuBase {
     }
 
     private void inicializar() {
-        this.setBackground(Color.PINK);
+        this.setBackground(EColorPanel.REPORTES.getColor());
         this.setButtonUno(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {
-                return new CPanelActividadReporteGestion();
+                return new CPanelActividadReporteOperativo();
             }
-        }, ETextoButton.REPORTEGESTION.getTexto(), EToolTipTextTexto.ACTIVIDADREPORTEGESTION.getTexto()));
+        }, ETextoButton.REPORTEOPERATIVO.getTexto(), EToolTipTextTexto.ACTIVIDADREPORTEGESTION.getTexto()));
         this.getButtonUno().addActionListener(this);
         this.setButtonDos(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {
-                return new CPanelActividadReporteCaja();
+                return new CPanelActividadReporteFinanciero();
             }
-        }, ETextoButton.REPORTECAJA.getTexto(), EToolTipTextTexto.ACTIVIDADREPORTECAJA.getTexto()));
+        }, ETextoButton.REPORTEFINANCIERO.getTexto(), EToolTipTextTexto.ACTIVIDADREPORTECAJA.getTexto()));
         this.getButtonDos().addActionListener(this);
-        this.add(Box.createHorizontalStrut(35));
+        this.add(Box.createHorizontalStrut(45));
         this.add(this.getButtonUno());
         this.add(Box.createVerticalStrut(150));
         this.add(this.getButtonDos());

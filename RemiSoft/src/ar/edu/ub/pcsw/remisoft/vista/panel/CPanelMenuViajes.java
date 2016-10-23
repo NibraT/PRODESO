@@ -5,7 +5,6 @@ import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class CPanelMenuViajes extends CPanelMenuBase {
@@ -15,13 +14,13 @@ public class CPanelMenuViajes extends CPanelMenuBase {
     }
 
     private void inicializar() {
-        this.setBackground(Color.ORANGE);
+        this.setBackground(EColorPanel.VIAJES.getColor());
         this.setButtonUno(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {
                 return new CPanelActividadTomarViaje();
             }
-        }, ETextoButton.TOMARVIAJE.getTexto(), EToolTipTextTexto.ACTIVIDADTOMARVIAJE.getTexto()));
+        }, "  " + ETextoButton.TOMARVIAJE.getTexto() + "  ", EToolTipTextTexto.ACTIVIDADTOMARVIAJE.getTexto()));
         this.getButtonUno().addActionListener(this);
         this.setButtonDos(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
@@ -35,9 +34,9 @@ public class CPanelMenuViajes extends CPanelMenuBase {
             public JPanel crearPanel() {
                 return new CPanelActividadRendirViaje();
             }
-        }, ETextoButton.RENDIRVIAJE.getTexto(), EToolTipTextTexto.ACTIVIDADRENDIRVIAJE.getTexto()));
+        }, "  " + ETextoButton.RENDIRVIAJE.getTexto() + "  ", EToolTipTextTexto.ACTIVIDADRENDIRVIAJE.getTexto()));
         this.getButtonTres().addActionListener(this);
-        this.add(Box.createHorizontalStrut(35));
+        this.add(Box.createHorizontalStrut(27));
         this.add(this.getButtonUno());
         this.add(Box.createVerticalStrut(125));
         this.add(this.getButtonDos());
@@ -50,7 +49,7 @@ public class CPanelMenuViajes extends CPanelMenuBase {
     public void actionPerformed(ActionEvent e) {
         if ((e.getSource().equals(getButtonUno())) || (e.getSource().equals(getButtonDos())) ||
                 (e.getSource().equals(getButtonTres()))) {
-            getFrameRemisoft().setPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+            getFrameRemisoft().setearPanelActividad(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
         }
     }
 

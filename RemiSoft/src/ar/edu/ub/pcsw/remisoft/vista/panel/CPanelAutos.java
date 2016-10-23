@@ -7,13 +7,12 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisoft, MouseListener {
+public class CPanelAutos extends JPanel implements IFrameRemisoft, MouseListener {
 
     private CButtonSelectorPanel autosButton;
 
@@ -22,7 +21,7 @@ public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisof
     }
 
     private void inicializar() {
-        this.setBackground(Color.GREEN);
+        this.setBackground(EColorPanel.AUTOS.getColor());
         this.setBorder(BorderFactory.createEtchedBorder());
         this.setAutosButton(new CButtonSelectorPanel(new IPanelFactory() {
             @Override
@@ -31,16 +30,17 @@ public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisof
             }
         }, ETextoButton.AUTOS.getTexto(), EToolTipTextTexto.MENUAUTOS.getTexto()));
         this.getAutosButton().setEnabled(false);
-        this.getAutosButton().addActionListener(this);
+        this.getAutosButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(getAutosButton())) {
+                    // método default de IFrameRemisoft
+                    getFrameRemisoft().setearPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+                }
+            }
+        });
         this.add(getAutosButton());
         this.addMouseListener(this);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getAutosButton())) {
-            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
-        }
     }
 
     @Override
@@ -71,12 +71,8 @@ public class CPanelAutos extends JPanel implements ActionListener, IFrameRemisof
 
     }
 
-    public CButtonSelectorPanel getAutosButton() {
-        return this.autosButton;
-    }
+    public CButtonSelectorPanel getAutosButton() { return this.autosButton; }
 
-    public void setAutosButton(CButtonSelectorPanel autosButton) {
-        this.autosButton = autosButton;
-    }
+    public void setAutosButton(CButtonSelectorPanel autosButton) { this.autosButton = autosButton; }
 
 }

@@ -6,44 +6,34 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IFrameRemisoft;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class CPanelClientes extends JPanel implements ActionListener, IFrameRemisoft {
-
-    private CButtonSelectorPanel clientesButton;
+public class CPanelClientes extends JPanel implements IFrameRemisoft {
 
     public CPanelClientes() {
         this.inicializar();
     }
 
     private void inicializar() {
-        this.setBackground(Color.GRAY);
+        this.setBackground(EColorPanel.CLIENTES.getColor());
         this.setBorder(BorderFactory.createEtchedBorder());
-        this.setClientesButton(new CButtonSelectorPanel(new IPanelFactory() {
+        CButtonSelectorPanel clientesButton = new CButtonSelectorPanel(new IPanelFactory() {
             @Override
             public JPanel crearPanel() {
                 return new CPanelMenuClientes();
             }
-        }, ETextoButton.CLIENTES.getTexto(), EToolTipTextTexto.MENUCLIENTES.getTexto()));
-        this.getClientesButton().addActionListener(this);
-        this.add(getClientesButton());
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getClientesButton())) {
-            getFrameRemisoft().setPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
-        }
-    }
-
-    public CButtonSelectorPanel getClientesButton() {
-        return this.clientesButton;
-    }
-
-    public void setClientesButton(CButtonSelectorPanel clientesButton) {
-        this.clientesButton = clientesButton;
+        }, ETextoButton.CLIENTES.getTexto(), EToolTipTextTexto.MENUCLIENTES.getTexto());
+        clientesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(clientesButton)) {
+                    // método default de IFrameRemisoft
+                    getFrameRemisoft().setearPanelMenu(((CButtonSelectorPanel)e.getSource()).getFactory().crearPanel());
+                }
+            }
+        });
+        this.add(clientesButton);
     }
 
 }

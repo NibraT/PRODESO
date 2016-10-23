@@ -2,7 +2,6 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IPanelFactory;
 
-import javax.swing.*;
 import java.awt.*;
 
 public class CPanelActividad extends CPanelCambiante implements IPanelFactory {
@@ -12,9 +11,6 @@ public class CPanelActividad extends CPanelCambiante implements IPanelFactory {
     }
 
     private void inicializar() {
-        this.setBackground(Color.DARK_GRAY);
-        this.setBorder(BorderFactory.createEtchedBorder());
-        this.setLayout(new BorderLayout());
         CPanelFondo panelFondo = (CPanelFondo) crearPanel();
         panelFondo.add(new CPanelActividadTomarViaje());
         panelFondo.add(new CPanelActividadRendirViaje());
@@ -24,8 +20,8 @@ public class CPanelActividad extends CPanelCambiante implements IPanelFactory {
         panelFondo.add(new CPanelActividadBajaAuto());
         panelFondo.add(new CPanelActividadAltaEmpleado());
         panelFondo.add(new CPanelActividadBajaEmpleado());
-        panelFondo.add(new CPanelActividadReporteGestion());
-        panelFondo.add(new CPanelActividadReporteCaja());
+        panelFondo.add(new CPanelActividadReporteOperativo());
+        panelFondo.add(new CPanelActividadReporteFinanciero());
         this.add(panelFondo, BorderLayout.CENTER);
     }
 
