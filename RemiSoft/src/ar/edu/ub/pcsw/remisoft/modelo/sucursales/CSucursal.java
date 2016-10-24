@@ -19,17 +19,22 @@ public class CSucursal {
     private String domicilio;
     private String numero;
 
+    /*
+    Constructor
+     */
     public CSucursal() {
-        this(null, null, null, null, null, null, null, null);
+        this(null, null, null, null);
     }
 
-    public CSucursal(String numero, String domicilio, List<CCliente> clientes, List<CEmpleado> empleados,
-                     List<CVehiculo> vehiculos, List<CViaje> viajes, String fechaDeAlta, String fechaDeBaja) {
+    /*
+    Constructor
+     */
+    public CSucursal(String numero, String domicilio, String fechaDeAlta, String fechaDeBaja) {
         this.setNumero(numero);
         this.setDomicilio(domicilio);
-        this.setClientes(clientes);
-        this.setEmpleados(empleados);
-        this.setVehiculos(vehiculos);
+        this.setClientes(new LinkedList<>());
+        this.setEmpleados(new LinkedList<>());
+        this.setVehiculos(new LinkedList<>());
         this.setViajes(new LinkedList<>());
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
