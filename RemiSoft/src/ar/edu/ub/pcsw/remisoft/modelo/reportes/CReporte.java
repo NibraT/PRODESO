@@ -2,18 +2,26 @@ package ar.edu.ub.pcsw.remisoft.modelo.reportes;
 
 import ar.edu.ub.pcsw.remisoft.modelo.sucursales.CSucursal;
 
-import java.util.Calendar;
-
 public class CReporte {
 
-    private String titulo;
-    private String tipo;
-    private String autor;
-    private int numero;
     private CSucursal sucursal;
-    private Calendar fecha;
+    private int numero;
+    private String autor;
+    private String fecha;
+    private String tipo;
+    private String titulo;
 
-    public CReporte(String titulo, String tipo, String autor, int numero, CSucursal sucursal, Calendar fecha) {
+    /*
+    Constructor
+     */
+    public CReporte() {
+        this(null, null, null, 0, null, null);
+    }
+
+    /*
+    Constructor
+     */
+    public CReporte(String titulo, String tipo, String autor, int numero, CSucursal sucursal, String fecha) {
         this.setTitulo(titulo);
         this.setTipo(tipo);
         this.setAutor(autor);
@@ -62,11 +70,11 @@ public class CReporte {
         this.sucursal = sucursal;
     }
 
-    public Calendar getFecha() {
+    public String getFecha() {
         return this.fecha;
     }
 
-    public void setFecha(Calendar fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 

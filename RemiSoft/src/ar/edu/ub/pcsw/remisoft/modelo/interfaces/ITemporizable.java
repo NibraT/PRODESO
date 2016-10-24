@@ -57,5 +57,4 @@ public interface ITemporizable {
         return sdf.format(Calendar.getInstance().getTime());
     }
 
-
 }

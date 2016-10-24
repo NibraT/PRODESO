@@ -10,7 +10,7 @@ public class CRendicion {
     private String fecha;
     private String numero;
     private String viajeNumero;
-    public static int NUMERODERENDICION = 1;
+    public static int numeroDeRendicion = 1;
 
     /*
     Constructor
@@ -24,7 +24,7 @@ public class CRendicion {
      */
     public CRendicion(String fecha, CEmpleado recepcionista, String viajeNumero, String costoEfectivo,
                       String costoTestigo) {
-        this.setNumero(String.valueOf(NUMERODERENDICION++));
+        this.setNumero(String.valueOf(numeroDeRendicion++));
         this.setFecha(fecha);
         this.setRecepcionista(recepcionista);
         this.setViajeNumero(viajeNumero);

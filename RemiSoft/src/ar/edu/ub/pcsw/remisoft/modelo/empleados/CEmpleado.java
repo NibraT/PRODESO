@@ -12,10 +12,16 @@ public class CEmpleado {
     private String telefono;
     private String turno;
 
+    /*
+    Constructor
+     */
     public CEmpleado() {
         this(null, null, null, null, null, null, null, null);
     }
 
+    /*
+    Constructor
+     */
     public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String turno,
                      String fechaDeAlta, String fechaDeBaja) {
         this.setNombre(nombre);

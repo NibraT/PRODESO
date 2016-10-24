@@ -7,11 +7,11 @@ import java.util.Calendar;
 
 public class CCuenta implements ITemporizable {
 
-    private String numero;
     private CCliente cliente;
+    private double saldo;
     private String fechaDeAlta;
     private String fechaDeBaja;
-    private double saldo;
+    private String numero;
     private final static double SALDO_MAXIMO = 1000.0;
 
     /*

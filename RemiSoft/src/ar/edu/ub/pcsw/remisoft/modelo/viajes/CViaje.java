@@ -29,13 +29,13 @@ public class CViaje implements ITemporizable {
     private String numero;
     private String origen;
     private String precio;
-    public static int NUMERODEVIAJE = 1;
+    public static int numeroDeViaje = 1;
 
     /*
     Constructor
      */
     public CViaje() {
-        this(null, null, null, null, 0, 0, null, null, 0, null, null, null, null, null, null, null);
+        this(null, null, null, null, 0, 0, null, null, 0, null, null, null, null, null, null, null, null);
     }
 
     /*
@@ -43,9 +43,9 @@ public class CViaje implements ITemporizable {
      */
     public CViaje(CEmpleado chofer, CVehiculo auto, String origen, String destino, float distancia,
                   int tramos, Calendar duracion, String precio, float costo, String fecha, String horaDeInicio,
-                  String horaDeFin, CCliente cliente, CCuenta cuenta, CEmpleado recepcionista,
+                  String horaDeFin, CCliente cliente, CCuenta cuenta, CEmpleado recepcionista, CSucursal sucursal,
                   String motivoCancelacion) {
-        this.setNumero(String.valueOf(NUMERODEVIAJE++));
+        this.setNumero(String.valueOf(numeroDeViaje++));
         this.setChofer(chofer);
         this.setAuto(auto);
         this.setOrigen(origen);
@@ -61,6 +61,7 @@ public class CViaje implements ITemporizable {
         this.setCliente(cliente);
         this.setCuenta(cuenta);
         this.setRecepcionista(recepcionista);
+        this.setSucursal(sucursal);
         this.setMotivoCancelacion(motivoCancelacion);
     }
 

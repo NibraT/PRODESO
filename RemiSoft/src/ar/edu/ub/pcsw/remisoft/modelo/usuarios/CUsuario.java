@@ -5,10 +5,16 @@ public class CUsuario {
     private String clave;
     private String nombre;
 
+    /*
+    Constructor
+     */
     public CUsuario() {
         this(null, null);
     }
 
+    /*
+    Constructor
+     */
     public CUsuario(String nombre, String clave) {
         this.setNombre(nombre);
         this.setClave(clave);
