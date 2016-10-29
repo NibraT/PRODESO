@@ -29,9 +29,9 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     }
 
     public void insertarCliente(String name, String identificacion, String domicilio, String telefono,
-                                String fechaDeAlta, int cuentasActivas) {
+                                String fechaDeAlta) {
         String sql = "INSERT INTO Cliente(identificacion, nombreORazonSocial, domicilio, telefono," +
-                " fechaAlta, cuentasActivas) VALUES(?,?,?,?,?,?)";
+                " fechaAlta) VALUES(?,?,?,?,?)";
 
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -40,7 +40,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.setString(3, domicilio);
             pstmt.setString(4, telefono);
             pstmt.setString(5, fechaDeAlta);
-            pstmt.setInt(6, cuentasActivas);
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -190,7 +189,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         //db.insertarSucursal("Las cuartetas 100");
         //db.insertarTipoFactura("C");
         //db.insertarUsuario("Diego", "1234");
-        //db.insertarVehiculo("BBB000", "Renault", "19", 10, 50000);
+        //db.insertarVehiculo("CCC000", "Ford", "focus", 15, 30000);
         //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
         //db.insertarClienteCuenta("11222333", 1);
     }

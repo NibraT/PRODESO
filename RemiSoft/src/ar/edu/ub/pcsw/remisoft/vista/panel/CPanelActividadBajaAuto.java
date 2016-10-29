@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
@@ -25,9 +27,12 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
     private JLabel modeloLabel;
     private JLabel patenteLabel;
     private String[] causas = new String[] {" ", "Venta", "Daño", "Robo"};
-    private String[] marcas = new String[] {" ", "A", "B", "C", "D"};
-    private String[] modelos = new String[] {" ", "A", "B", "C", "D"};
-    private String[] patentes = new String[] {" ", "A", "B", "C", "D"};
+    private String[] marcas = new String[] {};
+    private String[] modelos = new String[] {};
+    private String[] patentes = new String[] {};
+
+    private CSelectSQL select = new CSelectSQL();
+    private CUpdateSQL update = new CUpdateSQL();
 
     public CPanelActividadBajaAuto() {
         super(2);
@@ -48,17 +53,17 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.setPatenteLabel(new JLabel("Patente"));
         this.getPatenteLabel().setForeground(Color.RED);
         // método default de IJComboBoxFactory
-        this.setMarcasLista(this.crearComboBox(this.getMarcas(), 333, 20, Color.WHITE, EToolTipTextTexto.
+        this.setMarcasLista(this.crearComboBox(select.selectAtributoAuto("marca"), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getMarcaLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getMarcasLista(), getMarcasLista().getToolTipText(), getMarcaLabel().getText());
         // método default de IJComboBoxFactory
-        this.setModelosLista(this.crearComboBox(this.getModelos(), 333, 20, Color.WHITE, EToolTipTextTexto.
+        this.setModelosLista(this.crearComboBox(select.selectAtributoAuto("modelo"), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getModeloLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getModelosLista(), getModelosLista().getToolTipText(), getModeloLabel().getText());
         // método default de IJComboBoxFactory
-        this.setPatentesLista(this.crearComboBox(this.getPatentes(), 333, 20, Color.WHITE, EToolTipTextTexto.
+        this.setPatentesLista(this.crearComboBox(select.selectAtributoAuto("Patente"), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getPatenteLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getPatentesLista(), getPatentesLista().getToolTipText(), getPatenteLabel().getText());
@@ -113,12 +118,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CVehiculo auto = new CVehiculo();
-            auto.setMarca(getMarcasLista().getSelectedItem().toString());
-            auto.setModelo(getModelosLista().getSelectedItem().toString());
-            auto.setPatente(getPatentesLista().getSelectedItem().toString());
-            auto.setCausaBaja(getCausasLista().getSelectedItem().toString());
-            auto.setFechaDeBaja(getFechaTextField().getText());
+            update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
         }
     }
 

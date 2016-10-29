@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
@@ -20,6 +22,9 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
     private String[] causas = new String[] {" ", "Morosidad", "Incobrable", "Administración RSG"};
+
+    private CUpdateSQL update = new CUpdateSQL();
+    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadBajaCliente() {
         super(2);
@@ -100,11 +105,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CCliente cliente = new CCliente();
-            cliente.setNombreYApellidoORazonSocial(getNombreYApellidoORazonSocialTextField().getText());
-            cliente.setIdentificacion(getIdentificacionTextField().getText());
-            cliente.setCausaBaja(getCausasLista().getSelectedItem().toString());
-            cliente.setFechaDeBaja(getFechaTextField().getText());
+            update.updateFechaBajaCliente(getIdentificacionTextField().getText());
         }
     }
 

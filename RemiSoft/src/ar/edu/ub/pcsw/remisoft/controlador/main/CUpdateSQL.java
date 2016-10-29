@@ -11,6 +11,7 @@ import java.util.Calendar;
  * Created by Pulpo1 on 9/25/16.
  */
 public class CUpdateSQL extends CDataBase implements ITemporizable{
+
     public void updateFechaBajaCuenta (int idCuenta) {
         String sql = "UPDATE Cuenta SET fechaBaja = ? WHERE IdCuenta = ?";
 
