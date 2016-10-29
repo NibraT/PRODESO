@@ -1,6 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -21,6 +22,8 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
     private JTextField cuentaAdicionalTextField;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
+
+    private CInsertSQL insert = new CInsertSQL();
 
     public CPanelActividadAltaCliente() {
         super("1");
@@ -125,9 +128,8 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
             }
             // método default de ITemporizable
             cliente.setFechaDeAlta(setFechaString());
-            new CInsertSQL().insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
-                    cliente.getDomicilio(), cliente.getTelefono(), cliente.getFechaDeAlta(),
-                    cliente.getCuentasActivas().size());
+            insert.insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
+                    cliente.getDomicilio(), cliente.getTelefono(), cliente.getFechaDeAlta());
         }
     }
 
