@@ -88,7 +88,7 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         // método default de IJTextFieldFactory
         this.setClaveTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
         // método default de IValidadorInput
-        this.getClaveTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
+        this.getClaveTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CLAVE.getTexto(),
                 getClaveTextField().getToolTipText(), getClaveLabel().getText()));
         this.getGuardarButton().addActionListener(this);
         this.getGbc().gridx = 0;
@@ -155,6 +155,7 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             usuario.setClave(getClaveLabel().getText());
             new CInsertSQL().insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
                     empleado.getDomicilio(), empleado.getTelefono(), empleado.getFechaDeAlta(), empleado.getTurno());
+            // new CInsertSQL().insertarEmpleado_Didier(empleado);
         }
     }
 

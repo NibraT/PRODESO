@@ -21,8 +21,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     private JTextField autoTextField;
     private JTextField choferTextField;
     private JTextField clienteTextField;
+    private JTextField destinoTextField;
     private JTextField horaTextField;
     private JTextField numeroTextField;
+    private JTextField origenTextField;
     private String[] motivos = new String[] {" ", "Cliente desistió de viajar", "Sin auto disponible",
             "Sin chofer disponible"};
 
@@ -33,9 +35,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     public void inicializar() {
         this.getNorteLabel().setText(ETextoButton.CANCELARVIAJE.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 80));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 50));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 60));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 15));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
@@ -44,6 +46,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         JLabel autoLabel = new JLabel("Auto Asignado");
         this.getFechaLabel().setForeground(Color.BLACK);
         JLabel horaLabel = new JLabel("Hora");
+        JLabel origenLabel = new JLabel("Origen");
+        JLabel destinoLabel = new JLabel("Destino");
         this.setMotivoLabel(new JLabel("Motivo de la cancelación"));
         this.getMotivoLabel().setForeground(Color.RED);
         int ancho = 30;
@@ -61,6 +65,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getFechaTextField().setToolTipText("Fecha del Viaje a cancelar");
         // método default de IJTextFieldFactory
         this.setHoraTextField(this.setTextField(ancho, "Hora del Viaje a cancelar", this));
+        // método default de IJTextFieldFactory
+        this.setOrigenTextField(this.setTextField(ancho, "Origen del Viaje a cancelar", this));
+        // método default de IJTextFieldFactory
+        this.setDestinoTextField(this.setTextField(ancho, "Destino del Viaje a cancelar", this));
         // método default de IJComboBoxFactory
         this.setMotivosLista(this.crearComboBox(this.getMotivos(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getMotivoLabel().getText(), this));
@@ -83,6 +91,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getGbc().gridy++;
         this.getPanelInput().add(horaLabel, this.getGbc());
         this.getGbc().gridy++;
+        this.getPanelInput().add(origenLabel, this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(destinoLabel, this.getGbc());
+        this.getGbc().gridy++;
         this.getPanelInput().add(this.getMotivoLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRecepcionistaLabel(), this.getGbc());
@@ -100,11 +112,15 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getHoraTextField(), this.getGbc());
         this.getGbc().gridy++;
+        this.getPanelInput().add(this.getOrigenTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getDestinoTextField(), this.getGbc());
+        this.getGbc().gridy++;
         this.getPanelInput().add(this.getMotivosLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRecepcionistasLista(), this.getGbc());
         this.getGbc().gridx = 1;
-        this.getGbc().gridy = 10;
+        this.getGbc().gridy = 15;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -121,6 +137,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             viaje.setCliente(new CCliente());
             viaje.setRecepcionista(new CEmpleado());
             viaje.getCliente().setIdentificacion(getClienteTextField().getText());
+            viaje.setOrigen(getOrigenTextField().getText());
+            viaje.setDestino(getDestinoTextField().getText());
             viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
         }
@@ -142,9 +160,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     public void setClienteTextField(JTextField clienteTextField) { this.clienteTextField = clienteTextField; }
 
-    public JTextField getNumeroTextField() { return this.numeroTextField; }
+    public JTextField getDestinoTextField() { return this.destinoTextField; }
 
-    public void setNumeroTextField(JTextField numeroTextField) { this.numeroTextField = numeroTextField; }
+    public void setDestinoTextField(JTextField destinoTextField) { this.destinoTextField = destinoTextField; }
 
     public JTextField getChoferTextField() { return this.choferTextField; }
 
@@ -153,6 +171,14 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     public JTextField getHoraTextField() { return this.horaTextField; }
 
     public void setHoraTextField(JTextField horaTextField) { this.horaTextField = horaTextField; }
+
+    public JTextField getNumeroTextField() { return this.numeroTextField; }
+
+    public void setNumeroTextField(JTextField numeroTextField) { this.numeroTextField = numeroTextField; }
+
+    public JTextField getOrigenTextField() { return this.origenTextField; }
+
+    public void setOrigenTextField(JTextField origenTextField) { this.origenTextField = origenTextField; }
 
     public String[] getMotivos() { return this.motivos; }
 

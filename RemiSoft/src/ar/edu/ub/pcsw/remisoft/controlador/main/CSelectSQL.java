@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.lang.*;
 
-/**
- * Created by Pulpo1 on 10/21/16.
- */
 public class CSelectSQL extends CDataBase implements ITemporizable{
 
     public String[] selectDisponibles(String select, String from) {
@@ -30,6 +27,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
+            //CLogger.getInstance().logException(e);
+            //    dentro: e.getMessage(), e.getStackTrace() (necesita convertirse a String)
         }
         return null;
     }

@@ -7,6 +7,27 @@ import java.util.Calendar;
 
 public class CInsertSQL extends CDataBase implements ITemporizable{
 
+    public void insertarEmpleado_Didier(ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado empleado)
+    {
+        String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, turno, fechaAlta, disponible, " +
+                "turno) VALUES(?,?,?,?,?,?,?,?)";
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, empleado.getDni());
+            pstmt.setString(2, empleado.getApellido());
+            pstmt.setString(3, empleado.getNombre());
+            pstmt.setString(4, empleado.getDomicilio());
+            pstmt.setString(5, empleado.getTelefono());
+            pstmt.setString(6, empleado.getFechaDeAlta());
+            pstmt.setInt(7, 1);
+            pstmt.setString(8, empleado.getTurno());
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void insertarEmpleado(String dni, String apellido, String nombre, String domicilio, String telefono,
                                   String turno, String fechaDeAlta) {
         String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, turno, fechaAlta, disponible, " +
@@ -28,7 +49,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarCliente(String name, String identificacion, String domicilio, String telefono,
+    public void insertarCliente(String nombre, String identificacion, String domicilio, String telefono,
                                 String fechaDeAlta, int cuentasActivas) {
         String sql = "INSERT INTO Cliente(identificacion, nombreORazonSocial, domicilio, telefono," +
                 " fechaAlta, cuentasActivas) VALUES(?,?,?,?,?,?)";
@@ -36,7 +57,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, identificacion);
-            pstmt.setString(2, name);
+            pstmt.setString(2, nombre);
             pstmt.setString(3, domicilio);
             pstmt.setString(4, telefono);
             pstmt.setString(5, fechaDeAlta);
@@ -144,7 +165,8 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarViaje (String origen, String destino, int distancia,int precio, String horaInicio, String identificacion, String dni, String patente, int idSucursal) {
+    public void insertarViaje (String origen, String destino, int distancia,int precio, String horaInicio,
+                               String identificacion, String dni, String patente, int idSucursal) {
         String sql = "INSERT INTO Viaje(origen, destino, distancia, precio, fecha, horaInicio, identificacion, dni, patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = super.connect();
@@ -176,23 +198,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        CInsertSQL db = new CInsertSQL();
-        //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
-        //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
-        //db.insertarCuenta("Personal", 1000);
-        //db.insertarFactura(200, 1);
-        //db.insertarSucursal("Las cuartetas 100");
-        //db.insertarTipoFactura("C");
-        //db.insertarUsuario("Diego", "1234");
-        //db.insertarVehiculo("BBB000", "Renault", "19", 10, 50000);
-        //db.insertarViaje("La reja 100, caba", "Porton 300, caba", 13, 150, "09:00", "Juan", "34583511", "AAA000", 1);
-        //db.insertarClienteCuenta("11222333", 1);
     }
 
     @Override
