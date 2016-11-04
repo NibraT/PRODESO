@@ -4,16 +4,15 @@ import java.sql.*;
 
 public class CDataBase {
 
-    public Connection connect() {
+    Connection connect() {
+        String url = "jdbc:sqlite:src/BaseDatos/RemiSoftDB";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:src/BaseDatos/RemiSoftDB");
-        }
-        catch (SQLException e) {
+            conn = DriverManager.getConnection(url);
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
         return conn;
     }
-
 }
 

@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -35,9 +36,11 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     private JTextField horaTextField;
     private JTextField origenTextField;
     private JTextField precioTextField;
-    private String[] autos = new String[] {" ", "NHU544", "KOW902", "LDP657", "PWS390"};
-    private String[] choferes = new String[] {" ", "19222185", "12089450", "14279142", "11782006"};
-    private String[] cuentas = new String[] {" ", "354"};
+    private String[] autos = new String[] {};
+    private String[] choferes = new String[] {};
+    private String[] cuentas = new String[] {};
+
+    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadTomarViaje() {
         super(3.0);
@@ -78,12 +81,12 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         // método default de IValidadorInput
         this.validadorInput(getCuentasLista(), getCuentasLista().getToolTipText(), getCuentaLabel().getText());
         // método default de IJComboBoxFactory
-        this.setChoferesLista(this.crearComboBox(this.getChoferes(), 333, 20, Color.WHITE,
+        this.setChoferesLista(this.crearComboBox(select.selectEmpleadoDisponibles(1, 1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
         // método default de IJComboBoxFactory
-        this.setAutosLista(this.crearComboBox(this.getAutos(), 333, 20, Color.WHITE,
+        this.setAutosLista(this.crearComboBox(select.selectAutoDisponibles(1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getAutosLista(), getAutosLista().getToolTipText(), getAutoLabel().getText());
