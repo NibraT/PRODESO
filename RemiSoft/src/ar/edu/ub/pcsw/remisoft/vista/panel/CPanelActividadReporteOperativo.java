@@ -2,7 +2,8 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
-import ar.edu.ub.pcsw.remisoft.vista.reportes.CChartFrame;
+import ar.edu.ub.pcsw.remisoft.vista.reportes.CReporteFactory;
+import org.jfree.chart.ChartFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,10 +28,6 @@ public class CPanelActividadReporteOperativo extends CPanelActividadBase impleme
     private JLabel label;
     private JLabel reporteLabel;
     private JLabel viajesLabel;
-    private String reporteAutos;
-    private String reporteClientes;
-    private String reporteEmpleados;
-    private String reporteViajes;
     private String[] autos = new String[] {" ", "Total autos", "Autos disponibles hoy", "Autos no disponibles hoy"};
     private String[] clientes = new String[] {" ", "Total clientes", "Total clientes particulares",
             "Total clientes corporativos", "Antiguedad clientes"};
@@ -142,44 +139,24 @@ public class CPanelActividadReporteOperativo extends CPanelActividadBase impleme
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JComboBox<String> lista = null;
         if (e.getSource().equals(getVerReporteAutosButton())) {
-            setReporteAutos(getCategoriaAutosLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaAutosLista().getItemCount(); i++) {
-                if (getReporteAutos().equals(getCategoriaAutosLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReporteAutos());
-                }
-            }
+            lista = getCategoriaAutosLista();
         }
         else if (e.getSource().equals(getVerReporteClientesButton())) {
-            setReporteClientes(getCategoriaClientesLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaClientesLista().getItemCount(); i++) {
-                if (getReporteClientes().equals(getCategoriaClientesLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReporteClientes());
-                }
-            }
+            lista = getCategoriaClientesLista();
         }
         else if (e.getSource().equals(getVerReporteEmpleadosButton())) {
-            setReporteEmpleados(getCategoriaEmpleadosLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaEmpleadosLista().getItemCount(); i++) {
-                if (getReporteEmpleados().equals(getCategoriaEmpleadosLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReporteEmpleados());
-                }
-            }
+            lista = getCategoriaEmpleadosLista();
         }
         else if (e.getSource().equals(getVerReporteViajesButton())) {
-            setReporteViajes(getCategoriaViajesLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaViajesLista().getItemCount(); i++) {
-                if (getReporteViajes().equals(getCategoriaViajesLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReporteViajes());
-                }
+            lista = getCategoriaViajesLista();
+        }
+        if (lista != null) {
+            if (! lista.getSelectedItem().toString().equals(" ")) {
+                CReporteFactory reporte = new CReporteFactory();
+                ChartFrame frame = reporte.crear(lista.getSelectedItem().toString());
+                frame.setVisible(true);
             }
         }
     }
@@ -259,22 +236,6 @@ public class CPanelActividadReporteOperativo extends CPanelActividadBase impleme
     public JLabel getViajesLabel() { return this.viajesLabel; }
 
     public void setViajesLabel(JLabel viajesLabel) { this.viajesLabel = viajesLabel; }
-
-    public String getReporteAutos() { return this.reporteAutos; }
-
-    public void setReporteAutos(String reporteAutos) { this.reporteAutos = reporteAutos; }
-
-    public String getReporteClientes() { return this.reporteClientes; }
-
-    public void setReporteClientes(String reporteClientes) { this.reporteClientes = reporteClientes; }
-
-    public String getReporteEmpleados() { return this.reporteEmpleados; }
-
-    public void setReporteEmpleados(String reporteEmpleados) { this.reporteEmpleados = reporteEmpleados; }
-
-    public String getReporteViajes() { return this.reporteViajes; }
-
-    public void setReporteViajes(String reporteViajes) { this.reporteViajes = reporteViajes; }
 
     public String[] getAutos() { return this.autos; }
 

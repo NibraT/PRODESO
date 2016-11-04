@@ -32,11 +32,12 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
 
     private void inicializar() {
         this.getNorteLabel().setText(ETextoButton.RENDIRVIAJE.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 75));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 85));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 75));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 85));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
+        this.getGbc().insets = new Insets (10, 0, 10, 0);
         this.getReferenciasLabel().setText("<html><font color='red'>rojo</font> indica campo obligatorio</html>");
         this.getFechaLabel().setText("Fecha de la rendición");
         this.getFechaLabel().setPreferredSize(new Dimension(175, 15));
@@ -62,6 +63,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
                 getCostoEfectivoTextField().getToolTipText(), getCostoEfectivoLabel().getText()));
         // método default de IJTextFieldFactory
         this.setCostoTestigoTextField(this.setTextField(ancho, "Costo testigo", this));
+        this.getGuardarButton().setText("Aceptar");
         this.getGuardarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
@@ -94,6 +96,11 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        JButton rechazarButton = new JButton("Rechazar");
+        rechazarButton.setPreferredSize(new Dimension(100, 30));
+        this.getPanelInput().add(rechazarButton, this.getGbc());
+        this.getGbc().gridy++;
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
         this.add(this.getPanelInput());

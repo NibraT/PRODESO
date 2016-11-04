@@ -7,9 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Calendar;
 
-/**
- * Created by Pulpo1 on 9/25/16.
- */
 public class CUpdateSQL extends CDataBase implements ITemporizable{
 
     public void updateFechaBajaCuenta (int idCuenta) {
@@ -244,24 +241,6 @@ public class CUpdateSQL extends CDataBase implements ITemporizable{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-    public static void main(String[] args) {
-        CUpdateSQL db = new CUpdateSQL();
-        //db.updateFechaBajaCuenta(1);
-        //db.updateDomicilioSucursal("Parana 2300, Garin, BsAs", 1);
-        //db.updateFechaBajaSucursal(1);
-        //db.updateDomicilioCliente("Paraguay 2300", "11222333");
-        //db.updateFechaBajaCliente("11222333");
-        //db.updateSaldoClienteCuenta(1000, "11222333");
-        //db.updateDomicilioEmpleado("Lanus Este", "doaho");
-        //db.updateDisponibleEmpleado(0, "doaho");
-        //db.updateTurnoEmpleado("13-24", "doaho");
-        //db.updatePasswordUsuario("Vega", "Diego");
-        //db.updateKilometrajeVehiculo(10000, "AAA000");
-        //db.updateCostoViaje(70, 1);
-        //db.updateHoraFinViaje("10:00", 1);
-        //db.updateDisponibleVehiculo(1, "BBB000");
     }
 
     @Override

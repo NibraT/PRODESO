@@ -2,7 +2,8 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
-import ar.edu.ub.pcsw.remisoft.vista.reportes.CChartFrame;
+import ar.edu.ub.pcsw.remisoft.vista.reportes.CReporteFactory;
+import org.jfree.chart.ChartFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 
-public class CPanelActividadReporteFinanciero extends CPanelActividadBase  implements ActionListener, IJComboBoxFactory {
+public class CPanelActividadReporteFinanciero extends CPanelActividadBase  implements ActionListener,
+        IJComboBoxFactory {
 
     private JButton verReporteActivosButton;
     private JButton verReportePasivosButton;
@@ -21,8 +23,6 @@ public class CPanelActividadReporteFinanciero extends CPanelActividadBase  imple
     private JLabel label;
     private JLabel pasivosLabel;
     private JLabel reporteLabel;
-    private String reporteActivos;
-    private String reportePasivos;
     private String[] activos = new String[] {" ", "Total activo", "Cuentas a cobrar", "Otros activos"};
     private String[] pasivos = new String[] {" ", "Total pasivo", "Cuentas a pagar", "Otros pasivos"};
 
@@ -98,24 +98,18 @@ public class CPanelActividadReporteFinanciero extends CPanelActividadBase  imple
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JComboBox<String> lista = null;
         if (e.getSource().equals(getVerReporteActivosButton())) {
-            setReporteActivos(getCategoriaActivosLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaActivosLista().getItemCount(); i++) {
-                if (getReporteActivos().equals(getCategoriaActivosLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReporteActivos());
-                }
-            }
+            lista = getCategoriaActivosLista();
         }
         else if (e.getSource().equals(getVerReportePasivosButton())) {
-            setReportePasivos(getCategoriaPasivosLista().getSelectedItem().toString());
-            CChartFrame reporte = new CChartFrame();
-            for (int i = 1; i < getCategoriaPasivosLista().getItemCount(); i++) {
-                if (getReportePasivos().equals(getCategoriaPasivosLista().getItemAt(i))) {
-                    // método de CChartFrame
-                    reporte.getReporte(getReportePasivos());
-                }
+            lista = getCategoriaPasivosLista();
+        }
+        if (lista != null) {
+            if (! lista.getSelectedItem().toString().equals(" ")) {
+                CReporteFactory reporte = new CReporteFactory();
+                ChartFrame frame = reporte.crear(lista.getSelectedItem().toString());
+                frame.setVisible(true);
             }
         }
     }
@@ -163,14 +157,6 @@ public class CPanelActividadReporteFinanciero extends CPanelActividadBase  imple
     public JLabel getReporteLabel() { return this.reporteLabel; }
 
     public void setReporteLabel(JLabel reporteLabel) { this.reporteLabel = reporteLabel; }
-
-    public String getReporteActivos() { return this.reporteActivos; }
-
-    public void setReporteActivos(String reporteActivos) { this.reporteActivos = reporteActivos; }
-
-    public String getReportePasivos() { return this.reportePasivos; }
-
-    public void setReportePasivos(String reportePasivos) { this.reportePasivos = reportePasivos; }
 
     public String[] getActivos() { return this.activos; }
 
