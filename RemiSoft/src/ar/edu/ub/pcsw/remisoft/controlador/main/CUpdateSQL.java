@@ -243,6 +243,25 @@ public class CUpdateSQL extends CDataBase implements ITemporizable{
         }
     }
 
+    public void updateCanceladoViaje (int numeroViaje, String motivo){
+        String sql = "UPDATE Viaje SET cancelado = ?, motivoCancelacion = ? WHERE Numero = ?";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, 1);
+            pstmt.setString(2, motivo);
+            pstmt.setInt(3, numeroViaje);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void main (String[] args){
+        CUpdateSQL u = new CUpdateSQL();
+        //u.updateCanceladoViaje(4, "No llego el remis");
+    }
+
     @Override
     public Calendar calcularTiempo() {
         return null;
