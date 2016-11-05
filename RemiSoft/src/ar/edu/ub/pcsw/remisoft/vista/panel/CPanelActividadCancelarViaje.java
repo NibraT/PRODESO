@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
@@ -13,11 +15,14 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
+import static java.lang.Integer.parseInt;
+
 public class CPanelActividadCancelarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private JComboBox<String> motivosLista;
     private JLabel motivoLabel;
+    private JTextField fechaTextField;
     private JTextField autoTextField;
     private JTextField choferTextField;
     private JTextField clienteTextField;
@@ -27,6 +32,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     private JTextField origenTextField;
     private String[] motivos = new String[] {" ", "Cliente desistió de viajar", "Sin auto disponible",
             "Sin chofer disponible"};
+
+    private CUpdateSQL update = new CUpdateSQL();
+    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadCancelarViaje() {
         super(3.0);
@@ -54,6 +62,7 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         // método default de IJTextFieldFactory
         this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
         // método default de IValidadorInput
+        this.getClienteTextField().addFocusListener(this);
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
         // método default de IJTextFieldFactory
@@ -141,6 +150,7 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             viaje.setDestino(getDestinoTextField().getText());
             viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
+            update.updateCanceladoViaje(parseInt(getNumeroTextField().getText()), getMotivosLista().getSelectedItem().toString());
         }
     }
 
@@ -184,6 +194,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     public void setMotivos(String[] motivos) { this.motivos = motivos; }
 
+    public JTextField getFechaTextField() { return this.fechaTextField; }
+
+    public void setFechaTextField(JTextField fechaTextField) { this.fechaTextField = fechaTextField; }
+
     @Override
     public void keyReleased(KeyEvent e) {
 
@@ -206,12 +220,17 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     @Override
     public void focusLost(FocusEvent e) {
-
+        this.numeroTextField.setText(select.selectViajesNumero(getClienteTextField().getText())[0]);
+        this.choferTextField.setText(select.selectViajesChofer(getClienteTextField().getText())[0]);
+        this.autoTextField.setText(select.selectViajesAuto(getClienteTextField().getText())[0]);
+        this.fechaTextField.setText(select.selectViajesFecha(getClienteTextField().getText())[0]);
+        this.horaTextField.setText(select.selectViajesHora(getClienteTextField().getText())[0]);
+        this.origenTextField.setText(select.selectViajesOrigen(getClienteTextField().getText())[0]);
+        this.destinoTextField.setText(select.selectViajesDestino(getClienteTextField().getText())[0]);
     }
 
     @Override
     public Calendar calcularTiempo() {
         return null;
     }
-
 }

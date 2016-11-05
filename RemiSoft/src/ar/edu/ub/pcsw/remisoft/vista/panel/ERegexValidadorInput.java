@@ -59,8 +59,7 @@ public enum ERegexValidadorInput {
       \d{4}              # no más de 9 caracteres
       |                  # disyunción no exclusiva
     */
-    FECHA("^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|" +
-            "(?:(?:29|30)(\\/|-|\\.)(?:0?[1,3-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)\\d{2})$"),
+    FECHA("((([1-9][0-9])\\d{2,4})[^\\.][^\\s])"),
     /*Explicación de la regex HORA
       ([0-1]?[0-9])  # sólo números entre 0 y 19
       |              # disyunción no exclusiva
