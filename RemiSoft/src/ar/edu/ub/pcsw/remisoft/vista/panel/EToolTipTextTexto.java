@@ -23,7 +23,7 @@ public enum EToolTipTextTexto {
     FECHA("Ingrese la fecha con formato DD/MM/AAAA"),
     GUARDAR("Habilita Guardar la Actividad"),
     GUIATELEFONICA("Guía Telefónica"),
-    HORA("Ingrese la hora con formato 00:00:00"),
+    HORA("Ingrese la hora con formato 00:00"),
     MAPAS("Mapas"),
     MENUAUTOS("Habilita Menú Autos"),
     MENUCLIENTES("Habilita Menú Clientes"),
