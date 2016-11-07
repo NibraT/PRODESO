@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.modelo.rendiciones.CRendicion;
@@ -13,6 +14,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
+import static java.lang.Double.parseDouble;
+
 public class CPanelActividadRendirViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
@@ -24,6 +27,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     private JTextField costoTestigoTextField;
     private JTextField rendicionTextField;
     private JTextField viajeTextField;
+
+    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadRendirViaje() {
         super(3.0);
@@ -52,6 +57,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         // método default de IJTextFieldFactory
         this.setRendicionTextField(this.setTextField(ancho, "Número de la rendición", this));
         // método default de IJTextFieldFactory
+        this.getRendicionTextField().addFocusListener(this);
         this.setViajeTextField(this.setTextField(ancho, "Ingrese número del viaje a rendir", this));
         // método default de IValidadorInput
         this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CUENTA.getTexto(),
@@ -63,6 +69,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
                 getCostoEfectivoTextField().getToolTipText(), getCostoEfectivoLabel().getText()));
         // método default de IJTextFieldFactory
         this.setCostoTestigoTextField(this.setTextField(ancho, "Costo testigo", this));
+        this.getCostoTestigoTextField().addFocusListener(this);
         this.getGuardarButton().setText("Aceptar");
         this.getGuardarButton().addActionListener(this);
         this.getGbc().gridx = 0;
@@ -159,7 +166,12 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
 
     @Override
     public void focusGained(FocusEvent e) {
-
+        if (e.getSource().equals(rendicionTextField)) {
+            this.rendicionTextField.setText(select.selectCantidadFilasRendicion());
+        }
+        else if (e.getSource().equals(costoTestigoTextField)) {
+            this.costoTestigoTextField.setText(Double.toString(parseDouble(getCostoEfectivoTextField().getText()) * 1.2));
+        }
     }
 
     @Override
