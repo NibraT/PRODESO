@@ -101,7 +101,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getDestinoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
                 getDestinoTextField().getToolTipText(), getDestinoLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setHoraTextField(this.setTextField(ancho, "00:00:00", EToolTipTextTexto.HORA.getTexto(), this));
+        this.setHoraTextField(this.setTextField(ancho, "00:00", EToolTipTextTexto.HORA.getTexto(), this));
         // método default de IValidadorInput
         this.getHoraTextField().setInputVerifier(validadorInput(ERegexValidadorInput.HORA.getTexto(),
                 getHoraTextField().getToolTipText(), getHoraLabel().getText()));
