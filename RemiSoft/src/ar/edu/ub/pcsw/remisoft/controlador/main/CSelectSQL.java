@@ -2,10 +2,12 @@ package ar.edu.ub.pcsw.remisoft.controlador.main;
 
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.lang.*;
 
 public class CSelectSQL extends CDataBase implements ITemporizable{
 
@@ -13,7 +15,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         String sql = "SELECT Patente FROM Vehiculo where disponible = " + disponible;
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -27,17 +28,14 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         }
         catch (SQLException e) {
             System.out.println(e.getMessage());
-            //CLogger.getInstance().logException(e);
-            //    dentro: e.getMessage(), e.getStackTrace() (necesita convertirse a String)
         }
         return null;
     }
 
     public String[] selectAtributoAuto(String atributo) {
-        String sql = "SELECT distinct " + atributo + " FROM Vehiculo where fechaBaja is null";
+        String sql = "SELECT distinct " + atributo + " FROM Vehiculo where disponible = 1";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -56,10 +54,10 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectEmpleadoDisponibles(int disponible, int tipoEmpleado) {
-        String sql = "SELECT Dni FROM Empleado where disponible = " + disponible + " and tipoEmpleado = " + tipoEmpleado;
+        String sql = "SELECT Dni FROM Empleado where disponible = " + disponible + " and tipoEmpleado = " +
+                tipoEmpleado;
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -78,9 +76,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesNumero (String identificacion) {
-        String sql = "SELECT Numero FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -99,9 +97,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesChofer (String identificacion) {
-        String sql = "SELECT Numero, dni FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, dni FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -120,9 +118,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesAuto (String identificacion) {
-        String sql = "SELECT Numero, patente FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, patente FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -141,9 +139,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesFecha (String identificacion) {
-        String sql = "SELECT Numero, fecha FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, fecha FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -162,9 +160,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesHora (String identificacion) {
-        String sql = "SELECT Numero, horaInicio FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, horaInicio FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -183,9 +181,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesOrigen (String identificacion) {
-        String sql = "SELECT Numero, origen FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, origen FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -204,9 +202,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectViajesDestino (String identificacion) {
-        String sql = "SELECT Numero, destino FROM Viaje where identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, destino FROM Viaje where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -225,9 +223,9 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     public String[] selectCliente(String identificacion) {
-        String sql = "SELECT Numero, Identificacion FROM Cliente where Identificacion = " + identificacion + " order by Numero desc limit 1";
+        String sql = "SELECT Numero, Identificacion FROM Cliente where Identificacion = " + identificacion +
+                " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -248,7 +246,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     public String selectCantidadFilasRendicion() {
         String sql = "SELECT count() as cont from Rendicion";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -266,7 +263,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     public String selectCostoTestigoViaje(String viaje) {
         String sql = "SELECT Numero, horaInicio FROM Viaje where Numero = " + viaje + " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
-
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql))
@@ -292,7 +288,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         //s.verArray(s.selectCantidadFilasRendicion());
         //s.verArray(s.selectCliente());
     }
-
 
     @Override
     public Calendar calcularTiempo() {

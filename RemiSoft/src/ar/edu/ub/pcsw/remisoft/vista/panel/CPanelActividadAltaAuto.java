@@ -1,7 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
-import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -17,6 +16,7 @@ import java.util.Calendar;
 public class CPanelActividadAltaAuto extends CPanelActividadBase implements ActionListener, IJTextFieldFactory,
         IValidadorInput, KeyListener {
 
+    //private CInsertSQL insert = new CInsertSQL();
     private JLabel aseguradoraLabel;
     private JLabel marcaLabel;
     private JLabel modeloLabel;
@@ -25,7 +25,6 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     private JTextField marcaTextField;
     private JTextField modeloTextField;
     private JTextField patenteTextField;
-    private CInsertSQL insert = new CInsertSQL();
 
     public CPanelActividadAltaAuto() {
         this.inicializar();
@@ -112,7 +111,8 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getGuardarButton())) {
-            insert.insertarVehiculo(getPatenteTextField().getText(), getMarcaTextField().getText(), getModeloTextField().getText(), 0, 0);
+            new CInsertSQL().insertarVehiculo(getPatenteTextField().getText(), getMarcaTextField().getText(),
+                    getModeloTextField().getText(), 0, 0); ///
         }
     }
 

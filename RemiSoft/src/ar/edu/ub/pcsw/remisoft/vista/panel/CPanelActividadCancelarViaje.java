@@ -20,6 +20,8 @@ import static java.lang.Integer.parseInt;
 public class CPanelActividadCancelarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
+    //private CSelectSQL select = new CSelectSQL();
+    //private CUpdateSQL update = new CUpdateSQL();
     private JComboBox<String> motivosLista;
     private JLabel motivoLabel;
     private JTextField fechaTextField;
@@ -32,9 +34,6 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     private JTextField origenTextField;
     private String[] motivos = new String[] {" ", "Cliente desistió de viajar", "Sin auto disponible",
             "Sin chofer disponible"};
-
-    private CUpdateSQL update = new CUpdateSQL();
-    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadCancelarViaje() {
         super(3.0);
@@ -61,8 +60,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         int ancho = 30;
         // método default de IJTextFieldFactory
         this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
-        // método default de IValidadorInput
         this.getClienteTextField().addFocusListener(this);
+        // método default de IValidadorInput
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
         // método default de IJTextFieldFactory
@@ -150,8 +149,21 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             viaje.setDestino(getDestinoTextField().getText());
             viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            update.updateCanceladoViaje(parseInt(getNumeroTextField().getText()), getMotivosLista().getSelectedItem().toString());
+            new CUpdateSQL().updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
+                    getMotivosLista().getSelectedItem().toString()); ///
         }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        CSelectSQL select = new CSelectSQL(); ///
+        this.getNumeroTextField().setText(select.selectViajesNumero(getClienteTextField().getText())[0]); ///
+        this.getChoferTextField().setText(select.selectViajesChofer(getClienteTextField().getText())[0]); ///
+        this.getAutoTextField().setText(select.selectViajesAuto(getClienteTextField().getText())[0]); ///
+        this.getFechaTextField().setText(select.selectViajesFecha(getClienteTextField().getText())[0]); ///
+        this.getHoraTextField().setText(select.selectViajesHora(getClienteTextField().getText())[0]); ///
+        this.getOrigenTextField().setText(select.selectViajesOrigen(getClienteTextField().getText())[0]); ///
+        this.getDestinoTextField().setText(select.selectViajesDestino(getClienteTextField().getText())[0]); ///
     }
 
     public JComboBox<String> getMotivosLista() { return this.motivosLista; }
@@ -219,18 +231,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     }
 
     @Override
-    public void focusLost(FocusEvent e) {
-        this.numeroTextField.setText(select.selectViajesNumero(getClienteTextField().getText())[0]);
-        this.choferTextField.setText(select.selectViajesChofer(getClienteTextField().getText())[0]);
-        this.autoTextField.setText(select.selectViajesAuto(getClienteTextField().getText())[0]);
-        this.fechaTextField.setText(select.selectViajesFecha(getClienteTextField().getText())[0]);
-        this.horaTextField.setText(select.selectViajesHora(getClienteTextField().getText())[0]);
-        this.origenTextField.setText(select.selectViajesOrigen(getClienteTextField().getText())[0]);
-        this.destinoTextField.setText(select.selectViajesDestino(getClienteTextField().getText())[0]);
-    }
-
-    @Override
     public Calendar calcularTiempo() {
         return null;
     }
+
 }

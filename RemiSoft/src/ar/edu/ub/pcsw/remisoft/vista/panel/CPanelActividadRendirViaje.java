@@ -19,6 +19,7 @@ import static java.lang.Double.parseDouble;
 public class CPanelActividadRendirViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
+    //private CSelectSQL select = new CSelectSQL();
     private JLabel costoEfectivoLabel;
     private JLabel costoTestigoLabel;
     private JLabel rendicionLabel;
@@ -27,8 +28,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     private JTextField costoTestigoTextField;
     private JTextField rendicionTextField;
     private JTextField viajeTextField;
-
-    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadRendirViaje() {
         super(3.0);
@@ -56,8 +55,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getFechaTextField().setToolTipText(getFechaLabel().getText());
         // método default de IJTextFieldFactory
         this.setRendicionTextField(this.setTextField(ancho, "Número de la rendición", this));
-        // método default de IJTextFieldFactory
         this.getRendicionTextField().addFocusListener(this);
+        // método default de IJTextFieldFactory
         this.setViajeTextField(this.setTextField(ancho, "Ingrese número del viaje a rendir", this));
         // método default de IValidadorInput
         this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CUENTA.getTexto(),
@@ -128,6 +127,16 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         }
     }
 
+    @Override
+    public void focusGained(FocusEvent e) {
+        if (e.getSource().equals(getRendicionTextField())) { ///
+            getRendicionTextField().setText(new CSelectSQL().selectCantidadFilasRendicion()); ///
+        }
+        else if (e.getSource().equals(getCostoTestigoTextField())) { ///
+            getCostoTestigoTextField().setText(Double.toString(parseDouble(getCostoEfectivoTextField().getText()) * 0.8)); ///
+        }
+    }
+
     public JLabel getCostoEfectivoLabel() { return this.costoEfectivoLabel; }
 
     public void setCostoEfectivoLabel(JLabel costoEfectivoLabel) { this.costoEfectivoLabel = costoEfectivoLabel; }
@@ -163,16 +172,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     public JTextField getViajeTextField() { return this.viajeTextField; }
 
     public void setViajeTextField(JTextField viajeTextField) { this.viajeTextField = viajeTextField; }
-
-    @Override
-    public void focusGained(FocusEvent e) {
-        if (e.getSource().equals(rendicionTextField)) {
-            this.rendicionTextField.setText(select.selectCantidadFilasRendicion());
-        }
-        else if (e.getSource().equals(costoTestigoTextField)) {
-            this.costoTestigoTextField.setText(Double.toString(parseDouble(getCostoEfectivoTextField().getText()) * 1.2));
-        }
-    }
 
     @Override
     public void focusLost(FocusEvent e) {
