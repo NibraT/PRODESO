@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
@@ -17,6 +18,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
@@ -41,6 +44,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     private String[] cuentas = new String[] {};
 
     private CSelectSQL select = new CSelectSQL();
+    private CInsertSQL insert = new CInsertSQL();
 
     public CPanelActividadTomarViaje() {
         super(3.0);
@@ -189,7 +193,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setAuto(new CVehiculo());
             viaje.setRecepcionista(new CEmpleado());
             viaje.getCliente().setIdentificacion(getClienteTextField().getText());
-            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
+//            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
             viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
             viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
             viaje.setOrigen(getOrigenTextField().getText());
@@ -199,6 +203,9 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setPrecio(getPrecioTextField().getText());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
             sucursal.getViajes().add(viaje);
+            insert.insertarViaje(viaje.getOrigen(), viaje.getDestino(), viaje.getDistancia(), parseDouble(viaje.getPrecio()),
+                    viaje.getHoraDeInicio(), viaje.getCliente().toString(), viaje.getRecepcionista().toString(),
+                    viaje.getAuto().toString(), parseInt(viaje.getSucursal().toString()));
         }
     }
 

@@ -28,8 +28,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarCliente(String name, String identificacion, String domicilio, String telefono,
-                                String fechaDeAlta) {
+    public void insertarCliente(String name, String identificacion, String domicilio, String telefono) {
         String sql = "INSERT INTO Cliente(identificacion, nombreORazonSocial, domicilio, telefono," +
                 " fechaAlta) VALUES(?,?,?,?,?)";
 
@@ -39,7 +38,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.setString(2, name);
             pstmt.setString(3, domicilio);
             pstmt.setString(4, telefono);
-            pstmt.setString(5, fechaDeAlta);
+            pstmt.setString(5, setFechaString(Calendar.getInstance()));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -143,15 +142,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarViaje (String origen, String destino, int distancia,int precio, String horaInicio, String identificacion, String dni, String patente, int idSucursal) {
+    public void insertarViaje (String origen, String destino, float distancia,double precio, String horaInicio, String identificacion, String dni, String patente, int idSucursal) {
         String sql = "INSERT INTO Viaje(origen, destino, distancia, precio, fecha, horaInicio, identificacion, dni, patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, origen);
             pstmt.setString(2, destino);
-            pstmt.setInt(3, distancia);
-            pstmt.setInt(4, precio);
+            pstmt.setDouble(3, distancia);
+            pstmt.setDouble(4, precio);
             pstmt.setString(5, setFechaString(Calendar.getInstance()));
             pstmt.setString(6, horaInicio);
             pstmt.setString(7, identificacion);
@@ -165,7 +164,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     }
 
     public void insertarViajeMotivoCancelacion (String motivo) {
-        String sql = "INSERT INTO Viaje(motivoCancelacion) VALUES(?)";
+        String sql = "INSERT INTO Viaje (motivoCancelacion) VALUES(?)";
 
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -177,7 +176,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     }
 
     public void insertarClienteCuenta (String identificacion, int idCuenta) {
-        String sql = "INSERT INTO ClienteCuenta(Identificacion, IdCuenta) VALUES(?,?)";
+        String sql = "INSERT INTO ClienteCuenta (Identificacion, IdCuenta) VALUES(?,?)";
 
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -189,12 +188,27 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
+    public void insertarViajeRendicion (int idViaje, int costoEfectivo, int costoTestigo, int idEmpleado) {
+        String sql = "INSERT INTO Rendicion (idViaje, costoEfectivo, costoTestigo, idEmpleado) VALUES(?,?,?,?)";
+
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, idViaje);
+            pstmt.setInt(2, costoEfectivo);
+            pstmt.setInt(3, costoTestigo);
+            pstmt.setInt(4, idEmpleado);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         CInsertSQL db = new CInsertSQL();
-        //db.insertarCliente("Didier", "2", "Paraguay 100, Garin, BsAs", "15487654321");
+        db.insertarCliente("Juan Tarallo", "88888888", "Lacroze 6000", "0987654321");
         //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
         //db.insertarCuenta("Personal", 1000);
         //db.insertarFactura(200, 1);

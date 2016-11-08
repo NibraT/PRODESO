@@ -289,7 +289,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
 
     public static void main (String[] args){
         CSelectSQL s = new CSelectSQL();
-        //s.verArray(s.selectCantidadFilasRendicion());
+        s.selectCantidadFilasRendicion();
         //s.verArray(s.selectCliente());
     }
 
