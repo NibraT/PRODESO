@@ -155,7 +155,6 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             usuario.setClave(getClaveLabel().getText());
             new CInsertSQL().insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
                     empleado.getDomicilio(), empleado.getTelefono(), empleado.getFechaDeAlta(), empleado.getTurno());
-            // new CInsertSQL().insertarEmpleado_Didier(empleado);
         }
     }
 

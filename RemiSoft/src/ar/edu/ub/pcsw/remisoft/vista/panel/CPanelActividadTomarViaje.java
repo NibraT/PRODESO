@@ -21,6 +21,7 @@ import java.util.Calendar;
 public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
+    //private CSelectSQL select = new CSelectSQL();
     private JComboBox<String> autosLista;
     private JComboBox<String> choferesLista;
     private JComboBox<String> cuentasLista;
@@ -36,11 +37,9 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     private JTextField horaTextField;
     private JTextField origenTextField;
     private JTextField precioTextField;
-    private String[] autos = new String[] {};
-    private String[] choferes = new String[] {};
+    //private String[] autos = new String[] {};
+    //private String[] choferes = new String[] {};
     private String[] cuentas = new String[] {};
-
-    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadTomarViaje() {
         super(3.0);
@@ -81,13 +80,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         // método default de IValidadorInput
         this.validadorInput(getCuentasLista(), getCuentasLista().getToolTipText(), getCuentaLabel().getText());
         // método default de IJComboBoxFactory
-        this.setChoferesLista(this.crearComboBox(select.selectEmpleadoDisponibles(1, 1), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
+        this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectEmpleadoDisponibles(1, 1), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
         // método default de IJComboBoxFactory
-        this.setAutosLista(this.crearComboBox(select.selectAutoDisponibles(1), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this));
+        this.setAutosLista(this.crearComboBox(new CSelectSQL().selectAutoDisponibles(1), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getAutosLista(), getAutosLista().getToolTipText(), getAutoLabel().getText());
         // método default de IJTextFieldFactory
@@ -283,10 +282,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     public JTextField getPrecioTextField() { return this.precioTextField; }
 
     public void setPrecioTextField(JTextField precioTextField) { this.precioTextField = precioTextField; }
-
-    public String[] getAutos() {
-        return this.autos;
-    }
+/*
+    public String[] getAutos() { return this.autos; }
 
     public void setAutos(String[] autos) {
         this.autos = autos;
@@ -299,6 +296,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     public void setChoferes(String[] choferes) {
         this.choferes = choferes;
     }
+*/
 
     public String[] getCuentas() { return this.cuentas; }
 
@@ -318,7 +316,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     public void keyReleased(KeyEvent e) {
 
     }
-
 
     @Override
     public void focusLost(FocusEvent e) {

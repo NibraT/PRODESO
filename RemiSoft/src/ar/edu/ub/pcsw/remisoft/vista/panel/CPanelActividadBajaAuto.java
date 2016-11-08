@@ -2,7 +2,6 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -19,6 +18,8 @@ import java.util.Calendar;
 public class CPanelActividadBajaAuto extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput {
 
+    //private CSelectSQL select = new CSelectSQL();
+    //private CUpdateSQL update = new CUpdateSQL();
     private JComboBox<String> causasLista;
     private JComboBox<String> marcasLista;
     private JComboBox<String> modelosLista;
@@ -27,12 +28,9 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
     private JLabel modeloLabel;
     private JLabel patenteLabel;
     private String[] causas = new String[] {" ", "Venta", "Daño", "Robo"};
-    private String[] marcas = new String[] {};
+    /*private String[] marcas = new String[] {};
     private String[] modelos = new String[] {};
-    private String[] patentes = new String[] {};
-
-    private CSelectSQL select = new CSelectSQL();
-    private CUpdateSQL update = new CUpdateSQL();
+    private String[] patentes = new String[] {};*/
 
     public CPanelActividadBajaAuto() {
         super(2);
@@ -53,18 +51,18 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.setPatenteLabel(new JLabel("Patente"));
         this.getPatenteLabel().setForeground(Color.RED);
         // método default de IJComboBoxFactory
-        this.setMarcasLista(this.crearComboBox(select.selectAtributoAuto("marca"), 333, 20, Color.WHITE, EToolTipTextTexto.
-                SELECCIONAR.getTexto() + getMarcaLabel().getText(), this));
+        this.setMarcasLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("marca"), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getMarcaLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getMarcasLista(), getMarcasLista().getToolTipText(), getMarcaLabel().getText());
         // método default de IJComboBoxFactory
-        this.setModelosLista(this.crearComboBox(select.selectAtributoAuto("modelo"), 333, 20, Color.WHITE, EToolTipTextTexto.
-                SELECCIONAR.getTexto() + getModeloLabel().getText(), this));
+        this.setModelosLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("modelo"), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getModeloLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getModelosLista(), getModelosLista().getToolTipText(), getModeloLabel().getText());
         // método default de IJComboBoxFactory
-        this.setPatentesLista(this.crearComboBox(select.selectAtributoAuto("Patente"), 333, 20, Color.WHITE, EToolTipTextTexto.
-                SELECCIONAR.getTexto() + getPatenteLabel().getText(), this));
+        this.setPatentesLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("Patente"), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getPatenteLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getPatentesLista(), getPatentesLista().getToolTipText(), getPatenteLabel().getText());
         // método default de IJComboBoxFactory
@@ -118,6 +116,8 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
+            CUpdateSQL update = new CUpdateSQL(); ///
+            update.updateDisponibleVehiculo(0, getPatentesLista().getSelectedItem().toString());
             update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
         }
     }
@@ -162,7 +162,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.causas = causas;
     }
 
-    public String[] getMarcas() { return this.marcas; }
+    /*public String[] getMarcas() { return this.marcas; }
 
     public void setMarcas(String[] marcas) { this.marcas = marcas; }
 
@@ -172,7 +172,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
 
     public String[] getPatentes() { return this.patentes; }
 
-    public void setPatentes(String[] patentes) { this.patentes = patentes; }
+    public void setPatentes(String[] patentes) { this.patentes = patentes; }*/
 
     @Override
     public void focusLost(FocusEvent e) {
