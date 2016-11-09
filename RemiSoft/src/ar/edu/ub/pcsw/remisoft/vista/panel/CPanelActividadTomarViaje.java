@@ -1,6 +1,8 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -18,6 +20,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
 
+import static java.lang.Integer.parseInt;
+
 public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
@@ -27,7 +31,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     private JComboBox<String> cuentasLista;
     private JLabel autoLabel;
     private JLabel choferLabel;
-    private JLabel cuentaLabel;
+    //private JLabel cuentaLabel;
     private JLabel destinoLabel;
     private JLabel horaLabel;
     private JLabel origenLabel;
@@ -48,14 +52,14 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
 
     private void inicializar() {
         this.getNorteLabel().setText(ETextoButton.TOMARVIAJE.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 50));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 65));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 15));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 30));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
-        this.setCuentaLabel(new JLabel("Cuenta Imputable"));
-        this.getCuentaLabel().setForeground(Color.RED);
+//        this.setCuentaLabel(new JLabel("Cuenta Imputable"));
+//        this.getCuentaLabel().setForeground(Color.RED);
         this.setChoferLabel(new JLabel("Chofer Disponible"));
         this.getChoferLabel().setForeground(Color.RED);
         this.setAutoLabel(new JLabel("Auto Disponible"));
@@ -74,11 +78,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         // método default de IValidadorInput
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
+/*
         // método default de IJComboBoxFactory
         this.setCuentasLista(this.crearComboBox(this.getCuentas(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getCuentaLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getCuentasLista(), getCuentasLista().getToolTipText(), getCuentaLabel().getText());
+*/
         // método default de IJComboBoxFactory
         this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectEmpleadoDisponibles(1, 1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this)); ///
@@ -115,8 +121,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getClienteLabel(), this.getGbc());
-        this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
+//        this.getGbc().gridy++;
+//        this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferLabel(), this.getGbc());
         this.getGbc().gridy++;
@@ -136,8 +142,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
-        this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
+//        this.getGbc().gridy++;
+//        this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferesLista(), this.getGbc());
         this.getGbc().gridy++;
@@ -188,7 +194,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setAuto(new CVehiculo());
             viaje.setRecepcionista(new CEmpleado());
             viaje.getCliente().setIdentificacion(getClienteTextField().getText());
-            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
+            //viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
             viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
             viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
             viaje.setOrigen(getOrigenTextField().getText());
@@ -197,7 +203,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setHoraDeInicio(getHoraTextField().getText());
             viaje.setPrecio(getPrecioTextField().getText());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            sucursal.getViajes().add(viaje);
+            //sucursal.getViajes().add(viaje);
+            new CInsertSQL().insertarViaje(getOrigenTextField().getText(), getDestinoTextField().getText(),
+                    parseInt(getPrecioTextField().getText()), getHoraTextField().getText(),
+                    getClienteTextField().getText(), getRecepcionistasLista().getSelectedItem().toString(),
+                    getAutosLista().getSelectedItem().toString(), 1);
+            new CUpdateSQL().updateDisponibleVehiculo(0, getAutosLista().getSelectedItem().toString());
+            new CUpdateSQL().updateDisponibleEmpleado(0, getChoferesLista().getSelectedItem().toString());
         }
     }
 
@@ -228,10 +240,12 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     public JLabel getChoferLabel() { return this.choferLabel; }
 
     public void setChoferLabel(JLabel choferLabel) { this.choferLabel = choferLabel; }
+/*
 
     public JLabel getCuentaLabel() { return this.cuentaLabel; }
 
     public void setCuentaLabel(JLabel cuentaLabel) { this.cuentaLabel = cuentaLabel; }
+*/
 
     public JLabel getDestinoLabel() { return this.destinoLabel; }
 
