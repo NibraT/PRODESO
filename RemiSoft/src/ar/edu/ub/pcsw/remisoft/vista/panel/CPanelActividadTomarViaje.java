@@ -2,6 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -120,7 +121,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getClienteLabel(), this.getGbc());
         this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
+        //this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferLabel(), this.getGbc());
         this.getGbc().gridy++;
@@ -141,7 +142,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
         this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
+        //this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferesLista(), this.getGbc());
         this.getGbc().gridy++;
@@ -201,10 +202,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setHoraDeInicio(getHoraTextField().getText());
             viaje.setPrecio(getPrecioTextField().getText());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            sucursal.getViajes().add(viaje);
-            new CInsertSQL().insertarViaje(viaje.getOrigen(), viaje.getDestino(), parseInt(viaje.getPrecio()),
-                    viaje.getHoraDeInicio(), viaje.getCliente().toString(), viaje.getRecepcionista().toString(),
-                    viaje.getAuto().toString(), parseInt(viaje.getSucursal().toString()));
+            //sucursal.getViajes().add(viaje);
+            new CInsertSQL().insertarViaje(getOrigenTextField().getText(), getDestinoTextField().getText()
+                    , parseInt(getPrecioTextField().getText()), getHoraTextField().getText(),
+                    getClienteTextField().getText(), getRecepcionistasLista().getSelectedItem().toString(),
+                    getAutosLista().getSelectedItem().toString(), 1);
+            new CUpdateSQL().updateDisponibleVehiculo(0, getAutosLista().getSelectedItem().toString());
+            new CUpdateSQL().updateDisponibleEmpleado(0, getChoferesLista().getSelectedItem().toString());
         }
     }
 

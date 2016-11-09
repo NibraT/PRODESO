@@ -143,22 +143,21 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
         }
     }
 
-    public void insertarViaje (String origen, String destino, int distancia,int precio, String horaInicio,
+    public void insertarViaje (String origen, String destino, int precio, String horaInicio,
                                String identificacion, String dni, String patente, int idSucursal) {
-        String sql = "INSERT INTO Viaje(origen, destino, distancia, precio, fecha, horaInicio, identificacion, dni," +
-                " patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Viaje(origen, destino, precio, fecha, horaInicio, identificacion, dni," +
+                " patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, origen);
             pstmt.setString(2, destino);
-            pstmt.setDouble(3, distancia);
-            pstmt.setDouble(4, precio);
-            pstmt.setString(5, setFechaString(Calendar.getInstance()));
-            pstmt.setString(6, horaInicio);
-            pstmt.setString(7, identificacion);
-            pstmt.setString(8, dni);
-            pstmt.setString(9, patente);
-            pstmt.setInt(10, idSucursal);
+            pstmt.setInt(3, precio);
+            pstmt.setString(4, setFechaString(Calendar.getInstance()));
+            pstmt.setString(5, horaInicio);
+            pstmt.setString(6, identificacion);
+            pstmt.setString(7, dni);
+            pstmt.setString(8, patente);
+            pstmt.setInt(9, idSucursal);
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
@@ -167,12 +166,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     }
 
     public void insertarViajeMotivoCancelacion (String motivo) {
-<<<<<<< HEAD
         String sql = "INSERT INTO Viaje (motivoCancelacion) VALUES(?)";
-
-=======
-        String sql = "INSERT INTO Viaje(motivoCancelacion) VALUES(?)";
->>>>>>> master
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, motivo);
@@ -184,12 +178,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     }
 
     public void insertarClienteCuenta (String identificacion, int idCuenta) {
-<<<<<<< HEAD
         String sql = "INSERT INTO ClienteCuenta (Identificacion, IdCuenta) VALUES(?,?)";
-
-=======
-        String sql = "INSERT INTO ClienteCuenta(Identificacion, IdCuenta) VALUES(?,?)";
->>>>>>> master
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, identificacion);
@@ -221,7 +210,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
      */
     public static void main(String[] args) {
         CInsertSQL db = new CInsertSQL();
-        db.insertarCliente("Juan Tarallo", "88888888", "Lacroze 6000", "0987654321");
+        //db.insertarCliente("Juan Tarallo", "88888888", "Lacroze 6000", "0987654321");
         //db.insertarArregloAuto("Arreglo paragolpes delantero", 5000, "AAA000");
         //db.insertarCuenta("Personal", 1000);
         //db.insertarFactura(200, 1);
