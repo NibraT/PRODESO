@@ -334,9 +334,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         CInsertSQL db = new CInsertSQL();
         //db.insertarCliente("Juan Tarallo", "88888888", "Lacroze 6000", "0987654321");
