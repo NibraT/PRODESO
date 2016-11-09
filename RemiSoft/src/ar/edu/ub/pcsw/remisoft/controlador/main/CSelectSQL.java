@@ -93,27 +93,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
-    public String[] selectAutoParaBaja() {
-        String sql = "SELECT Patente FROM Vehiculo where fechaBaja is null";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql))
-        {
-            while (rs.next()) {
-                result.add(rs.getString("Patente"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
     public String[] selectAtributoAuto(String atributo) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
