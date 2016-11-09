@@ -2,13 +2,38 @@ package ar.edu.ub.pcsw.remisoft.controlador.main;
 
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class CInsertSQL extends CDataBase implements ITemporizable{
+public class CInsertSQL extends CDataBase implements ITemporizable {
+
+    private static FileHandler archivoLog;
+    private static final Logger logger = Logger.getLogger(CInsertSQL.class.getName());
+
+    private static void setArchivoLog() {
+        try {
+            CInsertSQL.archivoLog = new FileHandler("RemiSoft1.0-" + CInsertSQL.class.getName() + "-log.%u.%g.txt",
+                    1024 * 1024, 10);
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static FileHandler getArchivoLog() {
+        setArchivoLog();
+        return archivoLog;
+    }
 
     public void insertarEmpleado(String dni, String apellido, String nombre, String domicilio, String telefono,
                                   String turno, String fechaDeAlta) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, turno, fechaAlta, disponible, " +
                 "turno) VALUES(?,?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -24,11 +49,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarCliente(String name, String identificacion, String domicilio, String telefono) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Cliente(identificacion, nombreORazonSocial, domicilio, telefono," +
                 " fechaAlta) VALUES(?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -41,12 +70,16 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarArregloAuto (String descripcion, int monto, String patente) {
+    public void insertarArregloAuto(String descripcion, int monto, String patente) {
         String sql = "INSERT INTO ArregloAuto(descripcion, monto, patente) VALUES(?,?,?)";
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, descripcion);
@@ -55,12 +88,16 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarCuenta (String tipoCuenta) {
+    public void insertarCuenta(String tipoCuenta) {
         String sql = "INSERT INTO Cuenta(tipoCuenta, fechaAlta) VALUES(?,?)";
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, tipoCuenta);
@@ -68,12 +105,16 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarFactura (int monto, int idTipoFactura) {
+    public void insertarFactura(int monto, int idTipoFactura) {
         String sql = "INSERT INTO Factura(fecha, monto, idTipoFactura) VALUES(?,?,?)";
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, setFechaString(Calendar.getInstance()));
@@ -82,11 +123,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarSucursal (String domicilio) {
+    public void insertarSucursal(String domicilio) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Sucursal(domicilio, fechaAlta) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -95,11 +140,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarTipoFactura (String descripcion) {
+    public void insertarTipoFactura(String descripcion) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO TipoFactura(descripcion) VALUES(?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -107,11 +156,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarUsuario (String nombre, String password) {
+    public void insertarUsuario(String nombre, String password) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Usuario(NombreUsuario, password) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -120,11 +173,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarVehiculo (String patente, String marca, String modelo, int consumo, int kilometraje) {
+    public void insertarVehiculo(String patente, String marca, String modelo, int consumo, int kilometraje) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Vehiculo(Patente, marca, modelo, fechaAlta, disponible, consumo," +
                 " kilometraje) VALUES(?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -139,12 +196,16 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarViaje (String origen, String destino, int precio, String horaInicio,
+    public void insertarViaje(String origen, String destino, int precio, String horaInicio,
                                String identificacion, String dni, String patente, int idSucursal) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
         String sql = "INSERT INTO Viaje(origen, destino, precio, fecha, horaInicio, identificacion, dni," +
                 " patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -161,24 +222,32 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarViajeMotivoCancelacion (String motivo) {
-        String sql = "INSERT INTO Viaje (motivoCancelacion) VALUES(?)";
+    public void insertarViajeMotivoCancelacion(String motivo) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        String sql = "INSERT INTO Viaje(motivoCancelacion) VALUES(?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, motivo);
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void insertarClienteCuenta (String identificacion, int idCuenta) {
-        String sql = "INSERT INTO ClienteCuenta (Identificacion, IdCuenta) VALUES(?,?)";
+    public void insertarClienteCuenta(String identificacion, int idCuenta) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        String sql = "INSERT INTO ClienteCuenta(Identificacion, IdCuenta) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, identificacion);
@@ -186,23 +255,10 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-    }
-
-    public void insertarViajeRendicion (int idViaje, int costoEfectivo, int costoTestigo, int idEmpleado) {
-        String sql = "INSERT INTO Rendicion (idViaje, costoEfectivo, costoTestigo, idEmpleado) VALUES(?,?,?,?)";
-
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, idViaje);
-            pstmt.setInt(2, costoEfectivo);
-            pstmt.setInt(3, costoTestigo);
-            pstmt.setInt(4, idEmpleado);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     /**
@@ -246,4 +302,5 @@ public class CInsertSQL extends CDataBase implements ITemporizable{
     public String setHoraString(Calendar hora) {
         return null;
     }
+
 }
