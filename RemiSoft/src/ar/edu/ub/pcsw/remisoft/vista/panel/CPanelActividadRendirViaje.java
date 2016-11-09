@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
@@ -15,6 +16,7 @@ import java.awt.event.*;
 import java.util.Calendar;
 
 import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 public class CPanelActividadRendirViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
@@ -28,6 +30,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     private JTextField costoTestigoTextField;
     private JTextField rendicionTextField;
     private JTextField viajeTextField;
+
 
     public CPanelActividadRendirViaje() {
         super(3.0);
@@ -124,6 +127,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             rendicion.setViajeNumero(getViajeTextField().getText());
             rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
             rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
+            new CInsertSQL().insertarViajeRendicion(parseInt(getViajeTextField().getText()), parseInt(getCostoEfectivoTextField().getText()),
+                    parseInt(getCostoTestigoTextField().getText()), parseInt(getRecepcionistasLista().getSelectedItem().toString()));
         }
     }
 
