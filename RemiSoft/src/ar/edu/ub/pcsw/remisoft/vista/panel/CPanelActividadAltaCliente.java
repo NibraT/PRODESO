@@ -127,7 +127,7 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
             // método default de ITemporizable
             cliente.setFechaDeAlta(setFechaString());
             new CInsertSQL().insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
-                    cliente.getDomicilio(), cliente.getTelefono(), cliente.getFechaDeAlta()); ///
+                    cliente.getDomicilio(), cliente.getTelefono());
         }
     }
 

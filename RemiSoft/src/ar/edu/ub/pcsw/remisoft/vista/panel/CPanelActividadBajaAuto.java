@@ -61,7 +61,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         // método default de IValidadorInput
         this.validadorInput(getModelosLista(), getModelosLista().getToolTipText(), getModeloLabel().getText());
         // método default de IJComboBoxFactory
-        this.setPatentesLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("Patente"), 333, 20, Color.WHITE,
+        this.setPatentesLista(this.crearComboBox(new CSelectSQL().selectAutoParaBaja(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getPatenteLabel().getText(), this)); ///
         // método default de IValidadorInput
         this.validadorInput(getPatentesLista(), getPatentesLista().getToolTipText(), getPatenteLabel().getText());

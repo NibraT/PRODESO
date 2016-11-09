@@ -1,6 +1,8 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -17,6 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
+import static java.lang.Double.parseDouble;
+import static java.lang.Integer.parseInt;
 
 public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
@@ -40,6 +44,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     //private String[] autos = new String[] {};
     //private String[] choferes = new String[] {};
     private String[] cuentas = new String[] {};
+
 
     public CPanelActividadTomarViaje() {
         super(3.0);
@@ -116,7 +121,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getClienteLabel(), this.getGbc());
         this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
+        //this.getPanelInput().add(this.getCuentaLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferLabel(), this.getGbc());
         this.getGbc().gridy++;
@@ -137,7 +142,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
         this.getGbc().gridy++;
-        this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
+        //this.getPanelInput().add(this.getCuentasLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferesLista(), this.getGbc());
         this.getGbc().gridy++;
@@ -188,7 +193,7 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setAuto(new CVehiculo());
             viaje.setRecepcionista(new CEmpleado());
             viaje.getCliente().setIdentificacion(getClienteTextField().getText());
-            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
+//            viaje.getCuenta().setNumero(getCuentasLista().getSelectedItem().toString());
             viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
             viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
             viaje.setOrigen(getOrigenTextField().getText());
@@ -197,7 +202,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
             viaje.setHoraDeInicio(getHoraTextField().getText());
             viaje.setPrecio(getPrecioTextField().getText());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            sucursal.getViajes().add(viaje);
+            //sucursal.getViajes().add(viaje);
+            new CInsertSQL().insertarViaje(getOrigenTextField().getText(), getDestinoTextField().getText()
+                    , parseInt(getPrecioTextField().getText()), getHoraTextField().getText(),
+                    getClienteTextField().getText(), getRecepcionistasLista().getSelectedItem().toString(),
+                    getAutosLista().getSelectedItem().toString(), 1);
+            new CUpdateSQL().updateDisponibleVehiculo(0, getAutosLista().getSelectedItem().toString());
+            new CUpdateSQL().updateDisponibleEmpleado(0, getChoferesLista().getSelectedItem().toString());
         }
     }
 
