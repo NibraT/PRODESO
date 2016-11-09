@@ -1,8 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -16,15 +14,14 @@ import java.util.Calendar;
 public class CPanelActividadBajaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
+    //private CUpdateSQL update = new CUpdateSQL();
+    //private CSelectSQL select = new CSelectSQL();
     private JComboBox<String> causasLista;
     private JLabel identificacionLabel;
     private JLabel nombreYApellidoORazonSocialLabel;
     private JTextField identificacionTextField;
     private JTextField nombreYApellidoORazonSocialTextField;
     private String[] causas = new String[] {" ", "Morosidad", "Incobrable", "Administración RSG"};
-
-    private CUpdateSQL update = new CUpdateSQL();
-    private CSelectSQL select = new CSelectSQL();
 
     public CPanelActividadBajaCliente() {
         super(2);
@@ -105,7 +102,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            update.updateFechaBajaCliente(getIdentificacionTextField().getText());
+            new CUpdateSQL().updateFechaBajaCliente(getIdentificacionTextField().getText()); ///
         }
     }
 
@@ -138,7 +135,6 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
     public String[] getCausas() { return this.causas; }
 
     public void setCausas(String[] causas) { this.causas = causas; }
-
 
     @Override
     public void keyReleased(KeyEvent e) {

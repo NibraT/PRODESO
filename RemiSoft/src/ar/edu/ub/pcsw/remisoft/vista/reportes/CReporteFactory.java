@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.reportes;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.reportes.CReporte;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
@@ -26,11 +27,19 @@ public class CReporteFactory {
     // TODO: eliminar este método y hacer lo que hay que hacer
     public HashMap<String, Integer> crearHashMapHardcodeado() {
         HashMap<String, Integer> hardcode = new HashMap<>();
-        String[] keys = new String[] {"Francisco", "Diego", "Andres", "Nacho", "Facundo", "Martin", "Brian"};
+        String[] keys = new String[] {"X", "Y", "Z"};
+        /*int cont = 0;
+        for (String s: new CSelectSQL().selectAutoDisponibles(1) ) {
+            keys[cont] = s;
+            cont ++;
+        }*/
         Random random = new Random();
         for(int i = 0; i < random.nextInt(8) + 2; i++) {
             hardcode.put(keys[random.nextInt(keys.length)], random.nextInt(50));
         }
+        /*for (String s:keys ) {
+            hardcode.put(s, 20);
+        }*/
         return hardcode;
     }
 
