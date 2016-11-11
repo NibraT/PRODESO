@@ -1,5 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -22,9 +24,9 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     private JLabel apellidoLabel;
     private JLabel identificacionLabel;
     private JLabel nombreLabel;
-    private String[] apellidos = new String[] {" ", "A", "B", "C", "D"};
-    private String[] identificaciones = new String[] {" ", "A", "B", "C", "D"};
-    private String[] nombres = new String[] {" ", "A", "B", "C", "D"};
+    private String[] apellidos = new String[] {};
+    private String[] identificaciones = new String[] {};
+    private String[] nombres = new String[] {};
     private String[] causas = new String[] {" ", "Licencia", "Renuncia", "Despido", "Incapacidad", "Fallecimiento"};
 
     public CPanelActividadBajaEmpleado() {
@@ -47,17 +49,17 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         this.setIdentificacionLabel(new JLabel("DNI"));
         this.getIdentificacionLabel().setForeground(Color.RED);
         // método default de IJComboBoxFactory
-        this.setNombresLista(this.crearComboBox(this.getNombres(), 333, 20, Color.WHITE,
+        this.setNombresLista(this.crearComboBox(new CSelectSQL().selectNombreEmpleadoParaBaja(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getNombreLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getNombresLista(), getNombresLista().getToolTipText(), getNombreLabel().getText());
         // método default de IJComboBoxFactory
-        this.setApellidosLista(this.crearComboBox(this.getApellidos(), 333, 20, Color.WHITE,
+        this.setApellidosLista(this.crearComboBox(new CSelectSQL().selectApellidoEmpleadoParaBaja(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getApellidoLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getApellidosLista(), getApellidosLista().getToolTipText(), getApellidoLabel().getText());
         // método default de IJComboBoxFactory
-        this.setIdentificacionesLista(this.crearComboBox(this.getIdentificaciones(), 333, 20, Color.WHITE,
+        this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectDniEmpleadoParaBaja(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() +
                 getIdentificacionLabel().getText(), this));
         // método default de IValidadorInput
@@ -120,6 +122,8 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
             empleado.setDni(getIdentificacionesLista().getSelectedItem().toString());
             empleado.setCausaBaja(getCausasLista().getSelectedItem().toString());
             empleado.setFechaDeBaja(getFechaTextField().getText());
+            new CUpdateSQL().updateFechaBajaEmpleado(getIdentificacionesLista().getSelectedItem().toString());
+            new CUpdateSQL().updateDisponibleEmpleado(0, getIdentificacionesLista().getSelectedItem().toString());
         }
     }
 

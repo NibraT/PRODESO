@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-11-10T22:57:52</date>
+  <millis>1478829472717</millis>
+  <sequence>1</sequence>
+  <logger>ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL</logger>
+  <level>SEVERE</level>
+  <class>ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL</class>
+  <method>selectViajesNumero</method>
+  <thread>17</thread>
+  <message>java.sql.SQLException</message>
+  <param>[SQLITE_ERROR] SQL error or missing database (unrecognized token: ":")</param>
+</record>
+</log>

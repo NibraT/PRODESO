@@ -150,7 +150,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
             viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
             new CUpdateSQL().updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
-                    getMotivosLista().getSelectedItem().toString()); ///
+                    getMotivosLista().getSelectedItem().toString());
+            new CUpdateSQL().updateDisponibleVehiculo(1, getAutoTextField().getText());
         }
     }
 
