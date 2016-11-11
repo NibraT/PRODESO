@@ -19,8 +19,10 @@ import java.util.Calendar;
 public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements ActionListener, IJComboBoxFactory,
         IJTextFieldFactory, IValidadorInput, KeyListener {
 
+    private JComboBox<String> categoriasLista;
     private JComboBox<String> turnosLista;
     private JLabel apellidoLabel;
+    private JLabel categoriaLabel;
     private JLabel claveLabel;
     private JLabel dniLabel;
     private JLabel nombreLabel;
@@ -31,6 +33,7 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     private JTextField dniTextField;
     private JTextField nombreTextField;
     private JTextField usuarioTextField;
+    private String[] categorias = new String[] {" ", "Chofer", "Recepcionista"};
     private String[] turnos = new String[] {" ", "6-15", "15-24"};
 
     public CPanelActividadAltaEmpleado() {
@@ -41,9 +44,9 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     private void inicializar() {
         this.setBackground(EColorPanel.EMPLEADOS.getColor());
         this.getNorteLabel().setText(ETextoButton.ALTAEMPLEADO.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 80));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 65));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 60));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 30));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
@@ -55,6 +58,8 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getApellidoLabel().setForeground(Color.RED);
         this.setDniLabel(new JLabel("DNI"));
         this.getDniLabel().setForeground(Color.RED);
+        this.setCategoriaLabel(new JLabel("Categoria"));
+        this.getCategoriaLabel().setForeground(Color.RED);
         this.setTurnoLabel(new JLabel("Turno"));
         this.getTurnoLabel().setForeground(Color.RED);
         this.setUsuarioLabel(new JLabel("Nombre de Usuario"));
@@ -75,6 +80,11 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         // método default de IValidadorInput
         this.getDniTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DNI.getTexto(),
                 getDniTextField().getToolTipText(), getDniLabel().getText()));
+        // método default de IJComboBoxFactory
+        this.setCategoriasLista((this.crearComboBox(this.getCategorias(), 333, 20, Color.WHITE, EToolTipTextTexto.
+                SELECCIONAR.getTexto() + getCategoriaLabel().getText(), this)));
+        // método default de IValidadorInput
+        this.validadorInput(getCategoriasLista(), getCategoriasLista().getToolTipText(), getCategoriaLabel().getText());
         // método default de IJComboBoxFactory
         this.setTurnosLista((this.crearComboBox(this.getTurnos(), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getTurnoLabel().getText(), this)));
@@ -105,6 +115,8 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getTelefonoLabel(), this.getGbc());
         this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCategoriaLabel(), this.getGbc());
+        this.getGbc().gridy++;
         this.getPanelInput().add(this.getTurnoLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getUsuarioLabel(), this.getGbc());
@@ -122,13 +134,15 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getTelefonoTextField(), this.getGbc());
         this.getGbc().gridy++;
+        this.getPanelInput().add(this.getCategoriasLista(), this.getGbc());
+        this.getGbc().gridy++;
         this.getPanelInput().add(this.getTurnosLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getUsuarioTextField(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getClaveTextField(), this.getGbc());
         this.getGbc().gridx = 1;
-        this.getGbc().gridy = 10;
+        this.getGbc().gridy = 11;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -148,16 +162,23 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             empleado.setDni(getDniTextField().getText());
             empleado.setDomicilio(getDomicilioTextField().getText());
             empleado.setTelefono(getTelefonoTextField().getText());
+            String categoria = getCategoriasLista().getSelectedItem().toString().equals("Chofer") ? "1" : "2";
+            empleado.setCategoria(categoria);
             empleado.setTurno(getTurnosLista().getSelectedItem().toString());
+            // método default de ITemporizable
             empleado.setFechaDeAlta(setFechaString());
             usuario.setNombre(getUsuarioTextField().getText());
             usuario.setClave(getClaveLabel().getText());
-            new CInsertSQL().insertarEmpleado(getDniTextField().getText(), getApellidoTextField().getText()
-                    , getNombreTextField().getText(), getDomicilioTextField().getText()
-                    , getTelefonoTextField().getText(), getTurnosLista().getSelectedItem().toString(), "1");
+            new CInsertSQL().insertarEmpleado(getDniTextField().getText(), getApellidoTextField().getText(),
+                    getNombreTextField().getText(), getDomicilioTextField().getText(), getTelefonoTextField().getText(),
+                    getTurnosLista().getSelectedItem().toString(), empleado.getCategoria());
             new CInsertSQL().insertarEmpleadoClavePass(getUsuarioTextField().getText(), getClaveTextField().getText());
         }
     }
+
+    public JComboBox<String> getCategoriasLista() { return this.categoriasLista; }
+
+    public void setCategoriasLista(JComboBox<String> categoriasLista) { this.categoriasLista = categoriasLista; }
 
     public JComboBox<String> getTurnosLista() { return this.turnosLista; }
 
@@ -166,6 +187,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     public JLabel getApellidoLabel() { return this.apellidoLabel; }
 
     public void setApellidoLabel(JLabel apellidoLabel) { this.apellidoLabel = apellidoLabel; }
+
+    public JLabel getCategoriaLabel() { return this.categoriaLabel; }
+
+    public void setCategoriaLabel(JLabel categoriaLabel) { this.categoriaLabel = categoriaLabel; }
 
     public JLabel getClaveLabel() { return this.claveLabel; }
 
@@ -206,6 +231,10 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     public JTextField getUsuarioTextField() { return this.usuarioTextField; }
 
     public void setUsuarioTextField(JTextField usuarioTextField) { this.usuarioTextField = usuarioTextField; }
+
+    public String[] getCategorias() { return this.categorias; }
+
+    public void setCategorias(String[] categorias) { this.categorias = categorias; }
 
     public String[] getTurnos() { return this.turnos; }
 

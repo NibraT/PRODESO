@@ -3,6 +3,7 @@ package ar.edu.ub.pcsw.remisoft.modelo.empleados;
 public class CEmpleado {
 
     private String apellido;
+    private String categoria;
     private String causaBaja;
     private String dni;
     private String domicilio;
@@ -16,19 +17,20 @@ public class CEmpleado {
     Constructor
      */
     public CEmpleado() {
-        this(null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null);
     }
 
     /*
     Constructor
      */
-    public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String turno,
-                     String fechaDeAlta, String fechaDeBaja) {
+    public CEmpleado(String nombre, String apellido, String dni, String domicilio, String telefono, String categoria,
+                     String turno, String fechaDeAlta, String fechaDeBaja) {
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
         this.setDomicilio(domicilio);
         this.setTelefono(telefono);
+        this.setCategoria(categoria);
         this.setTurno(turno);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
@@ -41,6 +43,10 @@ public class CEmpleado {
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
+
+    public String getCategoria() { return this.categoria; }
+
+    public void setCategoria(String categoria) { this.categoria = categoria; }
 
     public String getCausaBaja() { return this.causaBaja; }
 
@@ -100,8 +106,8 @@ public class CEmpleado {
 
     public String toString() {
         return "Empleado: " + "\n Nombre: " + this.getNombre() + "\n Apellido: " + this.getApellido() + "\n DNI: " +
-                this.getDni() + "\n Domicilio: " + this.getDomicilio() + "\n Tel.: " +
-                this.getTelefono() + "\n Turno: " + this.getTurno() + "\n Alta: " + this.getFechaDeAlta();
+                this.getDni() + "\n Domicilio: " + this.getDomicilio() + "\n Categoría: " + this.getCategoria() +
+                "\n Tel.: " + this.getTelefono() + "\n Turno: " + this.getTurno() + "\n Alta: " + this.getFechaDeAlta();
     }
 
 }

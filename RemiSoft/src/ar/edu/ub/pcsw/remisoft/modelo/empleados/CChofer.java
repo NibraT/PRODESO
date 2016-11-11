@@ -4,8 +4,8 @@ public abstract class CChofer extends CEmpleado {
 
 
     public CChofer(String nombre, String apellido, String dni, String domicilio, String telefono, String fechaDeAlta,
-                   String fechaDeBaja, String turno) {
-        super(nombre, apellido, dni, domicilio, telefono, turno, fechaDeAlta, fechaDeBaja);
+                   String fechaDeBaja, String categoria, String turno) {
+        super(nombre, apellido, dni, domicilio, telefono, categoria, turno, fechaDeAlta, fechaDeBaja);
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
