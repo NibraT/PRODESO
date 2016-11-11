@@ -127,8 +127,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             rendicion.setViajeNumero(getViajeTextField().getText());
             rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
             rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            new CInsertSQL().insertarViajeRendicion(parseInt(getViajeTextField().getText()), parseInt(getCostoEfectivoTextField().getText()),
-                    parseInt(getCostoTestigoTextField().getText()), parseInt(getRecepcionistasLista().getSelectedItem().toString()));
         }
     }
 
