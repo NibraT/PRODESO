@@ -1,7 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.controlador.main;
 
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
-import ar.edu.ub.pcsw.remisoft.tests.CTestPerformance;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,13 +31,11 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     }
 
     public void insertarEmpleado(String dni, String apellido, String nombre, String domicilio, String telefono,
-                                  String turno, String fechaDeAlta) {
+                                  String turno, String tipoEmpleado) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, turno, fechaAlta, disponible, " +
-                "turno) VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Empleado(Dni, apellido, nombre, domicilio, telefono, fechaAlta, disponible, turno, TipoEmpleado) " +
+                "VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, dni);
@@ -46,18 +43,15 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             pstmt.setString(3, nombre);
             pstmt.setString(4, domicilio);
             pstmt.setString(5, telefono);
-            pstmt.setString(6, fechaDeAlta);
+            pstmt.setString(6, setFechaString(Calendar.getInstance()));
             pstmt.setInt(7, 1);
             pstmt.setString(8, turno);
+            pstmt.setString(9, tipoEmpleado);
             pstmt.executeUpdate();
         }
         catch (SQLException e) {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
         }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
@@ -65,8 +59,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarCliente(String name, String identificacion, String domicilio, String telefono) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Cliente(identificacion, nombreORazonSocial, domicilio, telefono," +
                 " fechaAlta) VALUES(?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -82,10 +74,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
@@ -93,8 +81,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
         String sql = "INSERT INTO ArregloAuto(descripcion, monto, patente) VALUES(?,?,?)";
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, descripcion);
@@ -106,10 +92,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
@@ -117,8 +99,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
         String sql = "INSERT INTO Cuenta(tipoCuenta, fechaAlta) VALUES(?,?)";
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, tipoCuenta);
@@ -129,10 +109,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
@@ -140,8 +116,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
         String sql = "INSERT INTO Factura(fecha, monto, idTipoFactura) VALUES(?,?,?)";
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, setFechaString(Calendar.getInstance()));
@@ -153,18 +127,12 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarSucursal(String domicilio) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Sucursal(domicilio, fechaAlta) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -176,18 +144,12 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarTipoFactura(String descripcion) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO TipoFactura(descripcion) VALUES(?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -198,18 +160,12 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarUsuario(String nombre, String password) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Usuario(NombreUsuario, password) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -221,18 +177,12 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarVehiculo(String patente, String marca, String modelo, int consumo, int kilometraje) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Vehiculo(Patente, marca, modelo, fechaAlta, disponible, consumo," +
                 " kilometraje) VALUES(?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -250,10 +200,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
@@ -261,8 +207,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
                                String identificacion, String dni, String patente, int idSucursal) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Viaje(origen, destino, precio, fecha, horaInicio, identificacion, dni," +
                 " patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?)";
         try (Connection conn = super.connect();
@@ -282,18 +226,12 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
     public void insertarViajeMotivoCancelacion(String motivo) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO Viaje(motivoCancelacion) VALUES(?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -304,9 +242,24 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+        logger.exiting(getClass().getName(), getNombreMetodo());
+    }
+
+    public void insertarViajeRendicion(int numeroViaje, int costoEfectivo, int costoTestigo, int idEmpleado) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        String sql = "INSERT INTO Rendicion(IdViaje, costoEfectivo, costoTestigo, IdEmpleado) VALUES(?,?,?,?)";
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, numeroViaje);
+            pstmt.setInt(2, costoEfectivo);
+            pstmt.setInt(3, costoTestigo);
+            pstmt.setInt(4, idEmpleado);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e) {
             logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
@@ -314,8 +267,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarClienteCuenta(String identificacion, int idCuenta) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
         String sql = "INSERT INTO ClienteCuenta(Identificacion, IdCuenta) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -327,13 +278,29 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.addHandler(getArchivoLog());
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+        logger.exiting(getClass().getName(), getNombreMetodo());
+    }
+
+    public void insertarEmpleadoClavePass(String nombreUsuario, String password) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        String sql = "INSERT INTO Usuario(NombreUsuario, password) VALUES(?,?)";
+        try (Connection conn = super.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nombreUsuario);
+            pstmt.setString(2, password);
+            pstmt.executeUpdate();
+        }
+        catch (SQLException e) {
             logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) {
         CInsertSQL db = new CInsertSQL();
         //db.insertarCliente("Juan Tarallo", "88888888", "Lacroze 6000", "0987654321");
@@ -346,6 +313,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
         //db.insertarVehiculo("CCC000", "Ford", "focus", 15, 30000);
         //db.insertarViaje("Lacroze 1000, caba", "Juramento 2000, caba", 200, 50, "09:00", "33444555", "doaho", "CCC000", 1);
         //db.insertarClienteCuenta("11222333", 1);
+        //db.insertarEmpleado("12341234", "Carmona", "Facundo", "Que se yo", "No tiene", "15-24", "1");
     }
 
     @Override
