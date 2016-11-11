@@ -169,8 +169,9 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             empleado.setFechaDeAlta(setFechaString());
             usuario.setNombre(getUsuarioTextField().getText());
             usuario.setClave(getClaveLabel().getText());
-            new CInsertSQL().insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
-                    empleado.getDomicilio(), empleado.getTelefono(), empleado.getTurno(), empleado.getCategoria());
+            new CInsertSQL().insertarEmpleado(getDniTextField().getText(), getApellidoTextField().getText(),
+                    getNombreTextField().getText(), getDomicilioTextField().getText(), getTelefonoTextField().getText(),
+                    getTurnosLista().getSelectedItem().toString(), empleado.getCategoria());
             new CInsertSQL().insertarEmpleadoClavePass(getUsuarioTextField().getText(), getClaveTextField().getText());
         }
     }
