@@ -7,12 +7,12 @@ public class CChoferConVehiculo extends CChofer {
     private CVehiculo vehiculo;
 
     public CChoferConVehiculo() {
-        this(null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null);
     }
 
     public CChoferConVehiculo(String nombre, String apellido, String dni, String domicilio, String telefono,
-                              String turno, String fechaDeAlta, String fechaDeBaja, CVehiculo vehiculo) {
-        super(nombre, apellido, dni, domicilio, telefono, turno, fechaDeAlta, fechaDeBaja);
+                              String categoria, String turno, String fechaDeAlta, String fechaDeBaja, CVehiculo vehiculo) {
+        super(nombre, apellido, dni, domicilio, telefono, categoria, turno, fechaDeAlta, fechaDeBaja);
         this.setNombre(nombre);
         this.setApellido(apellido);
         this.setDni(dni);
