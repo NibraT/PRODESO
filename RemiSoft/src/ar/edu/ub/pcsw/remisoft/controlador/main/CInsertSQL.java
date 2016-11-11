@@ -284,7 +284,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarEmpleadoClavePass(String nombreUsuario, String password) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO Usuario(NombreUsuario, password) VALUES(?,?)";
+        String sql = "INSERT INTO Usuario (NombreUsuario, password) VALUES(?,?)";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, nombreUsuario);

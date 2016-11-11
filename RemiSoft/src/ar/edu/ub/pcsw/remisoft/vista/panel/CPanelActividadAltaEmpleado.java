@@ -149,12 +149,12 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
             empleado.setDomicilio(getDomicilioTextField().getText());
             empleado.setTelefono(getTelefonoTextField().getText());
             empleado.setTurno(getTurnosLista().getSelectedItem().toString());
-            // método default de ITemporizable
             empleado.setFechaDeAlta(setFechaString());
             usuario.setNombre(getUsuarioTextField().getText());
             usuario.setClave(getClaveLabel().getText());
-            new CInsertSQL().insertarEmpleado(empleado.getDni(), empleado.getApellido(), empleado.getNombre(),
-                    empleado.getDomicilio(), empleado.getTelefono(), empleado.getTurno(), "1");
+            new CInsertSQL().insertarEmpleado(getDniTextField().getText(), getApellidoTextField().getText()
+                    , getNombreTextField().getText(), getDomicilioTextField().getText()
+                    , getTelefonoTextField().getText(), getTurnosLista().getSelectedItem().toString(), "1");
             new CInsertSQL().insertarEmpleadoClavePass(getUsuarioTextField().getText(), getClaveTextField().getText());
         }
     }
