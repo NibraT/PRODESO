@@ -112,7 +112,7 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getGuardarButton())) {
             new CInsertSQL().insertarVehiculo(getPatenteTextField().getText(), getMarcaTextField().getText(),
-                    getModeloTextField().getText(), 0, 0); ///
+                    getModeloTextField().getText(), 10, 12000); ///
         }
     }
 

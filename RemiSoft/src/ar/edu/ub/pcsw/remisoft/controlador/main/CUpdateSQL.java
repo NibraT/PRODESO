@@ -471,7 +471,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
 
     public static void main (String[] args){
         CUpdateSQL u = new CUpdateSQL();
-        //u.updateCanceladoViaje(4, "No llego el remis");
+        //u.updateDisponibleVehiculo(1, "ZZ 111 ZZ");
     }
 
     @Override

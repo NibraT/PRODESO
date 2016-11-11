@@ -63,6 +63,33 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
+    public String selectAutoDeViaje(int numero) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT patente FROM Viaje where Numero = " + numero;
+        String result;
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result = rs.getString("patente");
+                return result;
+            }
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
     public String[] selectAutoParaBaja() {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
@@ -130,6 +157,96 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         testPerformance.startPerformanceTest();
         String sql = "SELECT Dni FROM Empleado where disponible = " + disponible + " and tipoEmpleado = " +
                 tipoEmpleado;
+        ArrayList<String> result = new ArrayList<String>();
+        result.add(" ");
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result.add(rs.getString("Dni"));
+            }
+            String[] resultString = new String[result.size()];
+            resultString = result.toArray(resultString);
+            return resultString;
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
+    public String[] selectNombreEmpleadoParaBaja() {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT nombre FROM Empleado where fechaBaja is null";
+        ArrayList<String> result = new ArrayList<String>();
+        result.add(" ");
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result.add(rs.getString("nombre"));
+            }
+            String[] resultString = new String[result.size()];
+            resultString = result.toArray(resultString);
+            return resultString;
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
+    public String[] selectApellidoEmpleadoParaBaja() {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT apellido FROM Empleado where fechaBaja is null";
+        ArrayList<String> result = new ArrayList<String>();
+        result.add(" ");
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result.add(rs.getString("apellido"));
+            }
+            String[] resultString = new String[result.size()];
+            resultString = result.toArray(resultString);
+            return resultString;
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
+    public String[] selectDniEmpleadoParaBaja() {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT Dni FROM Empleado where fechaBaja is null";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -456,6 +573,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         CSelectSQL s = new CSelectSQL();
         //s.selectAutoParaBaja();
         //s.verArray(s.selectAutoParaBaja());
+        //System.out.println(s.selectAutoDeViaje(2));
     }
 
     @Override
