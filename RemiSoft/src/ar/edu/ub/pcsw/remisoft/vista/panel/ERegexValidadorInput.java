@@ -123,6 +123,12 @@ public enum ERegexValidadorInput {
             "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
             "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
             "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25})"),
+    /*Explicación de la regex NumeroRendicion
+      ([1-9])  # sólo numeros
+      \d}         # 1 o más dígitos
+      ([^\.]|[^\s]) # sin puntos ni espacios en blanco
+    */
+    NUMERORENDICION("((\\d))"),
     /*Explicación de la regex PATENTE
       ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
