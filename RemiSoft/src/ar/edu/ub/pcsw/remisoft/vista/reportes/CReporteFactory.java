@@ -24,36 +24,38 @@ public class CReporteFactory {
         return null;
     }
 
-    // TODO: eliminar este método y hacer lo que hay que hacer
-    public HashMap<String, Integer> crearHashMapHardcodeado() {
-        HashMap<String, Integer> hardcode = new HashMap<>();
-        String[] keys = new String[] {"X", "Y", "Z"};
-        /*int cont = 0;
-        for (String s: new CSelectSQL().selectAutoDisponibles(1) ) {
-            keys[cont] = s;
-            cont ++;
-        }*/
-        Random random = new Random();
-        for(int i = 0; i < random.nextInt(8) + 2; i++) {
-            hardcode.put(keys[random.nextInt(keys.length)], random.nextInt(50));
-        }
-        /*for (String s:keys ) {
-            hardcode.put(s, 20);
-        }*/
-        return hardcode;
+    public HashMap<String, Integer> crearHashMap() {
+        return new CSelectSQL().selectViajesPorAutoReportes();
     }
 
     public ChartFrame crear(String tituloReporte) {
         // TODO: Aca va la magia de pulpo
         // Hay que crear un CReporte a partir de un HashMap llenado por una consulta SQL,
         // que variará de acuerdo al reporte solicitado.
-        /*HashMap<String, Integer> resultado = null;
-        if(tituloReporte.equals("Auto frula"))
+        HashMap<String, Integer> resultado = null;
+        if(tituloReporte.equals("Total viajes"))
         {
-            CSelectSQL a;
-            resultado = a.obtenerResultado();
-        }*/
-        return this.crearGrafico(new CReporte(tituloReporte, crearHashMapHardcodeado()/* resultado de la magia de pulpo */));
+            resultado = new CSelectSQL().selectViajesPorAutoReportes();
+        }
+        else if (tituloReporte.equals("Total viajes por chofer")){
+            resultado = new CSelectSQL().selectViajesPorChoferReportes();
+        }
+        else if (tituloReporte.equals("Total autos")){
+            resultado = new CSelectSQL().selectTodosAutosReportes();
+        }
+        else if (tituloReporte.equals("Autos disponibles hoy")){
+            resultado = new CSelectSQL().selectTodosAutosDisponiblesReportes();
+        }
+        else if (tituloReporte.equals("Autos no disponibles hoy")){
+            resultado = new CSelectSQL().selectTodosAutosNoDisponiblesReportes();
+        }
+        else if (tituloReporte.equals("Total clientes")){
+            resultado = new CSelectSQL().selectTotalClientesReportes();
+        }
+        else if (tituloReporte.equals("Antiguedad clientes")){
+            resultado = new CSelectSQL().selectAntiguedadClientesReportes();
+        }
+        return this.crearGrafico(new CReporte(tituloReporte, resultado));
     }
 
 }

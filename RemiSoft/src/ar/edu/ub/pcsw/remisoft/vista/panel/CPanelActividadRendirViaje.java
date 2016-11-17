@@ -63,7 +63,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         // método default de IJTextFieldFactory
         this.setViajeTextField(this.setTextField(ancho, "Ingrese número del viaje a rendir", this));
         // método default de IValidadorInput
-        this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CUENTA.getTexto(),
+        this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NUMERORENDICION.getTexto(),
                 getViajeTextField().getToolTipText(), getViajeLabel().getText()));
         // método default de IJTextFieldFactory
         this.setCostoEfectivoTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
@@ -129,7 +129,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
             rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
            new CInsertSQL().insertarViajeRendicion(parseInt(getViajeTextField().getText()), parseInt(getCostoEfectivoTextField().getText()),
-                   parseInt(getCostoTestigoTextField().getText()), parseInt(getRecepcionistasLista().getSelectedItem().toString()));
+                   (int) parseDouble(getCostoTestigoTextField().getText()), parseInt(getRecepcionistasLista().getSelectedItem().toString()));
             new CUpdateSQL().updateDisponibleVehiculo(1,
                     new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
         }
