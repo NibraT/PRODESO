@@ -37,6 +37,3 @@ public class CPanelViajes extends JPanel implements IFrameRemisoft {
     }
 
 }
-
-
-

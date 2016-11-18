@@ -31,7 +31,7 @@ public class CControlador {
     }
 
     public static void main(String[] args) {
-        String nombreClase = "CControlador";
+        String nombreClase = CControlador.class.getName();
         String nombreMetodo = new Object(){}.getClass().getEnclosingMethod().getName();
         logger.entering(nombreClase, nombreMetodo);
         CTest unitTest = new CTest();
@@ -55,6 +55,3 @@ public class CControlador {
     }
 
 }
-
-
-

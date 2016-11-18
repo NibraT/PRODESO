@@ -15,14 +15,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Calendar;
+import java.util.Random;
 
-import static java.lang.Double.parseDouble;
 import static java.lang.Integer.parseInt;
 
 public class CPanelActividadRendirViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
-    //private CSelectSQL select = new CSelectSQL();
     private JLabel costoEfectivoLabel;
     private JLabel costoTestigoLabel;
     private JLabel rendicionLabel;
@@ -31,7 +30,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     private JTextField costoTestigoTextField;
     private JTextField rendicionTextField;
     private JTextField viajeTextField;
-
 
     public CPanelActividadRendirViaje() {
         super(3.0);
@@ -128,8 +126,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             rendicion.setViajeNumero(getViajeTextField().getText());
             rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
             rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-           new CInsertSQL().insertarViajeRendicion(parseInt(getViajeTextField().getText()), parseInt(getCostoEfectivoTextField().getText()),
-                   (int) parseDouble(getCostoTestigoTextField().getText()), parseInt(getRecepcionistasLista().getSelectedItem().toString()));
+            new CInsertSQL().insertarViajeRendicion(rendicion);
             new CUpdateSQL().updateDisponibleVehiculo(1,
                     new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
         }
@@ -137,11 +134,27 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
 
     @Override
     public void focusGained(FocusEvent e) {
-        if (e.getSource().equals(getRendicionTextField())) { ///
-            getRendicionTextField().setText(new CSelectSQL().selectCantidadFilasRendicion()); ///
+        if (e.getSource().equals(getRendicionTextField())) {
+            getRendicionTextField().setText(new CSelectSQL().selectCantidadFilasRendicion());
         }
-        else if (e.getSource().equals(getCostoTestigoTextField())) { ///
-            getCostoTestigoTextField().setText(Double.toString(parseDouble(getCostoEfectivoTextField().getText()) * 0.8)); ///
+        else if (e.getSource().equals(getCostoTestigoTextField())) {
+            double costoEfectivo = Double.parseDouble(getCostoEfectivoTextField().getText());
+            if (costoEfectivo < 399) {
+                double costoTestigo = (Double.parseDouble(getCostoEfectivoTextField().getText()) * ((new Random().nextInt((100 - 90) + 1) + 90))) / 100;
+                getCostoTestigoTextField().setText(Double.toString(costoTestigo));
+            }
+            else if (costoEfectivo > 400 && costoEfectivo < 699) {
+                double costoTestigo = (Double.parseDouble(getCostoEfectivoTextField().getText()) * ((new Random().nextInt((100 - 80) + 1) + 80))) / 100;
+                getCostoTestigoTextField().setText(Double.toString(costoTestigo));
+            }
+            else if (costoEfectivo > 700 && costoEfectivo < 999) {
+                double costoTestigo = (Double.parseDouble(getCostoEfectivoTextField().getText()) * ((new Random().nextInt((90 - 70) + 1) + 70))) / 100;
+                getCostoTestigoTextField().setText(Double.toString(costoTestigo));
+            }
+            else {
+                double costoTestigo = (Double.parseDouble(getCostoEfectivoTextField().getText()) * ((new Random().nextInt((80 - 60) + 1) + 60))) / 100;
+                getCostoTestigoTextField().setText(Double.toString(costoTestigo));
+            }
         }
     }
 

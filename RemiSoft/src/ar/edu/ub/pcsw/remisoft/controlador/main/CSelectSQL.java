@@ -64,35 +64,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
-    public String[] selectAutoDisponiblesReportes() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Patente, marca, modelo FROM Vehiculo where disponible = 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Patente") + " - " + rs.getString("marca") + " - " + rs.getString("modelo"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
     public String selectAutoDeViaje(int numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
@@ -301,6 +272,36 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
+    public String[] selectDniRecepcionista(int tipoEmpleado) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT Dni FROM Empleado where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
+        ArrayList<String> result = new ArrayList<String>();
+        result.add(" ");
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result.add(rs.getString("Dni"));
+            }
+            String[] resultString = new String[result.size()];
+            resultString = result.toArray(resultString);
+            return resultString;
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
     public String[] selectViajesNumero(String identificacion) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
@@ -417,7 +418,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from Vehiculo where disponible = 1 and fechaBaja is nul group by Patente";
+        String sql = "select Patente, count(Patente) as count from Vehiculo where disponible = 1 and fechaBaja is null group by Patente";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -700,36 +701,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
-    public String[] selectCliente(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, Identificacion FROM Cliente where Identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Identificacion"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
     public String selectCantidadFilasRendicion() {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
@@ -756,45 +727,6 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
-    public String selectCostoTestigoViaje(String viaje) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, horaInicio FROM Viaje where Numero = " + viaje + " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                return Integer.toString(rs.getInt("cont") + 1);
-            }
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public void verArray(String[] a){
-        for (String i : a) {
-            System.out.println(i);
-        }
-    }
-
-    public static void main (String[] args){
-        CSelectSQL s = new CSelectSQL();
-        //s.selectAutoParaBaja();
-        //s.verArray(s.selectAutoDisponiblesReportes());
-        //System.out.println(s.selectAutoDeViaje(2));
-    }
-
     @Override
     public Calendar calcularTiempo() {
         return null;
@@ -806,22 +738,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     @Override
-    public Calendar setFechaCalendar(String fecha) {
-        return null;
-    }
-
-    @Override
-    public Calendar setHoraCalendar(String hora) {
-        return null;
-    }
-
-    @Override
     public String setFechaString(Calendar fecha) {
-        return null;
-    }
-
-    @Override
-    public String setHoraString(Calendar hora) {
         return null;
     }
 

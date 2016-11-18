@@ -9,7 +9,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CDataBase {
+public abstract class CDataBase {
 
     private String nombreMetodo;
     private static FileHandler archivoLog;
@@ -65,4 +65,3 @@ public class CDataBase {
     }
 
 }
-

@@ -20,8 +20,6 @@ import static java.lang.Integer.parseInt;
 public class CPanelActividadCancelarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
-    //private CSelectSQL select = new CSelectSQL();
-    //private CUpdateSQL update = new CUpdateSQL();
     private JComboBox<String> motivosLista;
     private JLabel motivoLabel;
     private JTextField fechaTextField;
@@ -157,14 +155,14 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     @Override
     public void focusLost(FocusEvent e) {
-        CSelectSQL select = new CSelectSQL(); ///
-        this.getNumeroTextField().setText(select.selectViajesNumero(getClienteTextField().getText())[0]); ///
-        this.getChoferTextField().setText(select.selectViajesChofer(getClienteTextField().getText())[0]); ///
-        this.getAutoTextField().setText(select.selectViajesAuto(getClienteTextField().getText())[0]); ///
-        this.getFechaTextField().setText(select.selectViajesFecha(getClienteTextField().getText())[0]); ///
-        this.getHoraTextField().setText(select.selectViajesHora(getClienteTextField().getText())[0]); ///
-        this.getOrigenTextField().setText(select.selectViajesOrigen(getClienteTextField().getText())[0]); ///
-        this.getDestinoTextField().setText(select.selectViajesDestino(getClienteTextField().getText())[0]); ///
+        CSelectSQL select = new CSelectSQL();
+        this.getNumeroTextField().setText(select.selectViajesNumero(getClienteTextField().getText())[0]);
+        this.getChoferTextField().setText(select.selectViajesChofer(getClienteTextField().getText())[0]);
+        this.getAutoTextField().setText(select.selectViajesAuto(getClienteTextField().getText())[0]);
+        this.getFechaTextField().setText(select.selectViajesFecha(getClienteTextField().getText())[0]);
+        this.getHoraTextField().setText(select.selectViajesHora(getClienteTextField().getText())[0]);
+        this.getOrigenTextField().setText(select.selectViajesOrigen(getClienteTextField().getText())[0]);
+        this.getDestinoTextField().setText(select.selectViajesDestino(getClienteTextField().getText())[0]);
     }
 
     public JComboBox<String> getMotivosLista() { return this.motivosLista; }
