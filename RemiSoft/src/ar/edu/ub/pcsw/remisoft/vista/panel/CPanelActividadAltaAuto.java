@@ -1,6 +1,7 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
+import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
@@ -16,12 +17,15 @@ import java.util.Calendar;
 public class CPanelActividadAltaAuto extends CPanelActividadBase implements ActionListener, IJTextFieldFactory,
         IValidadorInput, KeyListener {
 
-    //private CInsertSQL insert = new CInsertSQL();
     private JLabel aseguradoraLabel;
+    private JLabel consumoLabel;
+    private JLabel kilometrajeLabel;
     private JLabel marcaLabel;
     private JLabel modeloLabel;
     private JLabel patenteLabel;
     private JTextField aseguradoraTextField;
+    private JTextField consumoTextField;
+    private JTextField kilometrajeTextField;
     private JTextField marcaTextField;
     private JTextField modeloTextField;
     private JTextField patenteTextField;
@@ -33,9 +37,9 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     private void inicializar() {
         this.setBackground(EColorPanel.AUTOS.getColor());
         this.getNorteLabel().setText(ETextoButton.ALTAAUTO.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 85));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 125));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 65));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getReferenciasLabel().setText("<html><font color='red'>rojo</font> indica campo obligatorio</html>");
@@ -48,6 +52,10 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
         this.getPatenteLabel().setForeground(Color.RED);
         this.setAseguradoraLabel(new JLabel("Aseguradora"));
         this.getAseguradoraLabel().setForeground(Color.RED);
+        this.setKilometrajeLabel(new JLabel("Kilometraje"));
+        this.getKilometrajeLabel().setForeground(Color.RED);
+        this.setConsumoLabel(new JLabel("Consumo (l/km)"));
+        this.getConsumoLabel().setForeground(Color.RED);
         int ancho = 30;
         // método default de IJTextFieldFactory
         this.setMarcaTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(), this));
@@ -70,6 +78,16 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
         this.getAseguradoraTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
                         NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getAseguradoraTextField().getToolTipText(),
                 getAseguradoraLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setKilometrajeTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getKilometrajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.KILOMETRAJE.getTexto(),
+                getKilometrajeTextField().getToolTipText(), getKilometrajeLabel().getText()));
+        // método default de IJTextFieldFactory
+        this.setConsumoTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        // método default de IValidadorInput
+        this.getConsumoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CONSUMO.getTexto(),
+                getConsumoTextField().getToolTipText(), getConsumoLabel().getText()));
         this.getGuardarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
@@ -82,6 +100,10 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
         this.getPanelInput().add(this.getPatenteLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getAseguradoraLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getKilometrajeLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getConsumoLabel(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getMarcaTextField(), this.getGbc());
@@ -91,6 +113,10 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
         this.getPanelInput().add(this.getPatenteTextField(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getAseguradoraTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getKilometrajeTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getConsumoTextField(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
@@ -101,8 +127,8 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (e.getSource().equals(getAseguradoraTextField())) {
-            if ((getAseguradoraTextField().getText() != null) || (! getAseguradoraTextField().getText().isEmpty())) {
+        if (e.getSource().equals(getConsumoTextField())) {
+            if ((getConsumoTextField().getText() != null) || (! getAseguradoraTextField().getText().isEmpty())) {
                 getGuardarButton().setEnabled(true);
             }
         }
@@ -111,14 +137,28 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getGuardarButton())) {
-            new CInsertSQL().insertarVehiculo(getPatenteTextField().getText(), getMarcaTextField().getText(),
-                    getModeloTextField().getText(), 10, 12000); ///
+            CVehiculo vehiculo = new CVehiculo();
+            vehiculo.setPatente(getPatenteTextField().getText());
+            vehiculo.setMarca(getMarcaTextField().getText());
+            vehiculo.setModelo(getModeloTextField().getText());
+            vehiculo.setAseguradora(getAseguradoraTextField().getText());
+            vehiculo.setKilometraje(getKilometrajeTextField().getText());
+            vehiculo.setConsumo(getConsumoTextField().getText());
+            new CInsertSQL().insertarVehiculo(vehiculo);
         }
     }
 
     public JLabel getAseguradoraLabel() { return this.aseguradoraLabel; }
 
     public void setAseguradoraLabel(JLabel aseguradoraLabel) { this.aseguradoraLabel = aseguradoraLabel; }
+
+    public JLabel getConsumoLabel() { return this.consumoLabel; }
+
+    public void setConsumoLabel(JLabel consumoLabel) { this.consumoLabel = consumoLabel; }
+
+    public JLabel getKilometrajeLabel() { return this.kilometrajeLabel; }
+
+    public void setKilometrajeLabel(JLabel kilometrajeLabel) { this.kilometrajeLabel = kilometrajeLabel; }
 
     public JLabel getMarcaLabel() { return this.marcaLabel; }
 
@@ -136,6 +176,16 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
 
     public void setAseguradoraTextField(JTextField aseguradoraTextField) {
         this.aseguradoraTextField = aseguradoraTextField;
+    }
+
+    public JTextField getConsumoTextField() { return this.consumoTextField; }
+
+    public void setConsumoTextField(JTextField consumoTextField) { this.consumoTextField = consumoTextField; }
+
+    public JTextField getKilometrajeTextField() { return this.kilometrajeTextField; }
+
+    public void setKilometrajeTextField(JTextField kilometrajeTextField) {
+        this.kilometrajeTextField = kilometrajeTextField;
     }
 
     public JTextField getMarcaTextField() { return this.marcaTextField; }

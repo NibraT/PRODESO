@@ -24,9 +24,6 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     private JLabel apellidoLabel;
     private JLabel identificacionLabel;
     private JLabel nombreLabel;
-    private String[] apellidos = new String[] {};
-    private String[] identificaciones = new String[] {};
-    private String[] nombres = new String[] {};
     private String[] causas = new String[] {" ", "Licencia", "Renuncia", "Despido", "Incapacidad", "Fallecimiento"};
 
     public CPanelActividadBajaEmpleado() {
@@ -54,13 +51,13 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         // método default de IValidadorInput
         this.validadorInput(getNombresLista(), getNombresLista().getToolTipText(), getNombreLabel().getText());
         // método default de IJComboBoxFactory
-        this.setApellidosLista(this.crearComboBox(new CSelectSQL().selectApellidoEmpleadoParaBaja(), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getApellidoLabel().getText(), this));
+        this.setApellidosLista(this.crearComboBox(new CSelectSQL().selectApellidoEmpleadoParaBaja(), 333, 20,
+                Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getApellidoLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getApellidosLista(), getApellidosLista().getToolTipText(), getApellidoLabel().getText());
         // método default de IJComboBoxFactory
-        this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectDniEmpleadoParaBaja(), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() +
+        this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectDniEmpleadoParaBaja(), 333, 20,
+                Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() +
                 getIdentificacionLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getIdentificacionesLista(), getIdentificacionesLista().getToolTipText(),
@@ -157,21 +154,9 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
 
     public void setNombreLabel(JLabel nombreLabel) { this.nombreLabel = nombreLabel; }
 
-    public String[] getApellidos() { return this.apellidos; }
-
-    public void setApellidos(String[] apellidos) { this.apellidos = apellidos; }
-
     public String[] getCausas() { return this.causas; }
 
     public void setCausas(String[] causas) { this.causas = causas; }
-
-    public String[] getIdentificaciones() { return this.identificaciones; }
-
-    public void setIdentificaciones(String[] identificaciones) { this.identificaciones = identificaciones; }
-
-    public String[] getNombres() { return this.nombres; }
-
-    public void setNombres(String[] nombres) { this.nombres = nombres; }
 
     @Override
     public void keyReleased(KeyEvent e) {

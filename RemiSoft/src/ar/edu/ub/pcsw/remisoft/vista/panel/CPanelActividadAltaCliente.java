@@ -14,7 +14,6 @@ import java.util.Calendar;
 public class CPanelActividadAltaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
         IJTextFieldFactory, IValidadorInput, KeyListener {
 
-    //private CInsertSQL insert = new CInsertSQL();
     private int numeroCuentaAdicional;
     private JLabel cuentaAdicionalLabel;
     private JLabel identificacionLabel;
@@ -126,8 +125,7 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
             }
             // método default de ITemporizable
             cliente.setFechaDeAlta(setFechaString());
-            new CInsertSQL().insertarCliente(cliente.getNombreYApellidoORazonSocial(), cliente.getIdentificacion(),
-                    cliente.getDomicilio(), cliente.getTelefono()); ///
+            new CInsertSQL().insertarCliente(cliente);
         }
     }
 

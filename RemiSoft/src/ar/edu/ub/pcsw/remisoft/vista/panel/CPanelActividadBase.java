@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.button.CButtonSelectorPanel;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -33,8 +34,6 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     private JTextField telefonoTextField;
     private String domicilio;
     private String fecha;
-    private String telefono;
-    private String[] recepcionistas = new String[] {" ", "15733921", "39576117", "10944823"};
 
     public CPanelActividadBase() {
         this.setBorder(BorderFactory.createEtchedBorder());
@@ -119,8 +118,8 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getFechaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.FECHA.getTexto(),
                 getFechaTextField().getToolTipText(), getFechaLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setRecepcionistasLista(this.crearComboBox(this.getRecepcionistas(), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getRecepcionistaLabel().getText(), this));
+        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectDniRecepcionista(2), 333, 20,
+                Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getRecepcionistaLabel().getText(), this));
         // método default de IValidadorInput
         this.validadorInput(getRecepcionistasLista(), getRecepcionistasLista().getToolTipText(),
                 getRecepcionistaLabel().getText());
@@ -205,13 +204,5 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     public String getFecha() { return this.fecha; }
 
     public void setFecha(String fecha) { this.fecha = fecha; }
-
-    public String getTelefono() { return this.telefono; }
-
-    public void setTelefono(String telefono) { this.telefono = telefono; }
-
-    public String[] getRecepcionistas() { return this.recepcionistas; }
-
-    public void setRecepcionistas(String[] recepcionistas) { this.recepcionistas = recepcionistas; }
 
 }

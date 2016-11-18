@@ -8,7 +8,6 @@ import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
 import java.util.HashMap;
-import java.util.Random;
 
 public class CReporteFactory {
 
@@ -24,14 +23,7 @@ public class CReporteFactory {
         return null;
     }
 
-    public HashMap<String, Integer> crearHashMap() {
-        return new CSelectSQL().selectViajesPorAutoReportes();
-    }
-
     public ChartFrame crear(String tituloReporte) {
-        // TODO: Aca va la magia de pulpo
-        // Hay que crear un CReporte a partir de un HashMap llenado por una consulta SQL,
-        // que variará de acuerdo al reporte solicitado.
         HashMap<String, Integer> resultado = null;
         if(tituloReporte.equals("Total viajes"))
         {

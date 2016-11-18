@@ -14,8 +14,6 @@ import java.util.Calendar;
 public class CPanelActividadBajaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
-    //private CUpdateSQL update = new CUpdateSQL();
-    //private CSelectSQL select = new CSelectSQL();
     private JComboBox<String> causasLista;
     private JLabel identificacionLabel;
     private JLabel nombreYApellidoORazonSocialLabel;
@@ -102,7 +100,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            new CUpdateSQL().updateFechaBajaCliente(getIdentificacionTextField().getText()); ///
+            new CUpdateSQL().updateFechaBajaCliente(getIdentificacionTextField().getText());
         }
     }
 

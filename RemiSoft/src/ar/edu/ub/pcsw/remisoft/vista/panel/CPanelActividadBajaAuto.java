@@ -18,8 +18,6 @@ import java.util.Calendar;
 public class CPanelActividadBajaAuto extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput {
 
-    //private CSelectSQL select = new CSelectSQL();
-    //private CUpdateSQL update = new CUpdateSQL();
     private JComboBox<String> causasLista;
     private JComboBox<String> marcasLista;
     private JComboBox<String> modelosLista;
@@ -28,9 +26,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
     private JLabel modeloLabel;
     private JLabel patenteLabel;
     private String[] causas = new String[] {" ", "Venta", "Daño", "Robo"};
-    /*private String[] marcas = new String[] {};
-    private String[] modelos = new String[] {};
-    private String[] patentes = new String[] {};*/
 
     public CPanelActividadBajaAuto() {
         super(2);
@@ -116,7 +111,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CUpdateSQL update = new CUpdateSQL(); ///
+            CUpdateSQL update = new CUpdateSQL();
             update.updateDisponibleVehiculo(0, getPatentesLista().getSelectedItem().toString());
             update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
         }
@@ -161,18 +156,6 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
     public void setCausas(String[] causas) {
         this.causas = causas;
     }
-
-    /*public String[] getMarcas() { return this.marcas; }
-
-    public void setMarcas(String[] marcas) { this.marcas = marcas; }
-
-    public String[] getModelos() { return this.modelos; }
-
-    public void setModelos(String[] modelos) { this.modelos = modelos; }
-
-    public String[] getPatentes() { return this.patentes; }
-
-    public void setPatentes(String[] patentes) { this.patentes = patentes; }*/
 
     @Override
     public void focusLost(FocusEvent e) {

@@ -23,6 +23,12 @@ public enum ERegexValidadorInput {
       .{6,10}         # no menos de 8 ni más de 12 caracteres
     */
     CLAVE("((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[#$%_])[^\\.][^\\s].{6,10})"),
+    /*Explicación de la regex CONSUMO
+      ([1-9])       # sólo numeros entre 1 y 9
+      \d{0}         # sólo 2 caracteres
+      ([^\.]|[^\s]) # sin puntos ni espacios en blanco
+    */
+    CONSUMO("((([1-9])\\d{0})([^\\.]|[^\\s]))"),
     /*Explicación de la regex CUENTA
       ([1-9][0-9])  # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{0}         # sólo 3 caracteres
@@ -45,9 +51,9 @@ public enum ERegexValidadorInput {
       \d+                 # al menos uno o más caracteres numéricos
       \(?\)?              # paréntesis de apertura y cierre opcionales
       \s{2,5}             # no menos de 2 ni más de 5 espacios en blanco
-      {2,30})             # no menos de 2 ni más de 32 caracteres
+      {2,40})             # no menos de 2 ni más de 42 caracteres
     */
-    DOMICILIO("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d+\\(?\\)?\\s{2,5}]{2,30}"),
+    DOMICILIO("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d+\\(?\\)?\\s{2,5}]{2,40}"),
     /*Explicación de la regex FECHA
       (((([1-9][0-9])    # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{2}              # no menos de 7 caracteres
@@ -77,6 +83,12 @@ public enum ERegexValidadorInput {
     IDENTIFICACION("(((([1-9][0-9])\\d{2})[^\\.][^\\s][^a-z])|" +
             "((([1-9][0-9])\\d{3})[^\\.][^\\s][^a-z])|((([1-9][0-9])\\d{4})[^\\.][^\\s][^a-z])|" +
             "((([1-9][0-9])\\d{5})[^\\.][^\\s][^a-z])|((([1-9][0-9])\\d{6})[^\\.][^\\s][^a-z]))"),
+    /*Explicación de la regex KILOMETRAJE
+      ([0-9])       # sólo numeros entre 0 y 9
+      \d{0,4}       # hasta 6 caracteres
+      ([^\.]|[^\s]) # sin puntos ni espacios en blanco
+    */
+    KILOMETRAJE("((([0-9])|(([0-9])\\d{0,4})([^\\.]|[^\\s])))"),
     /*Explicación de la regex MARCA
       ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
@@ -124,8 +136,8 @@ public enum ERegexValidadorInput {
             "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
             "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25})"),
     /*Explicación de la regex NumeroRendicion
-      ([1-9])  # sólo numeros
-      \d}         # 1 o más dígitos
+      ([1-9])       # sólo numeros
+      \d}           # 1 o más dígitos
       ([^\.]|[^\s]) # sin puntos ni espacios en blanco
     */
     NUMERORENDICION("((\\d))"),
@@ -134,9 +146,11 @@ public enum ERegexValidadorInput {
                           #   excepto vocales con acento) del alfabeto latino
       \d                  # al menos uno o más caracteres numéricos
       \s{2,2}             # no menos de 2 ni más de 5 espacios en blanco
-      {9})                # 9 caracteres en tota
+      {9})                # 9 caracteres en total
+      |                   # disyunción no exclusiva
     */
-    PATENTE("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{2,2}]{9}"),
+    PATENTE("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{2,2}]{9})|" +
+            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{1,1}]{7})"),
     /*Explicación de la regex PRECIO
       ([1-9][0-9])  # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{0,1}       # no menos de 3 ni más de 4 caracteres

@@ -24,6 +24,7 @@ public enum EToolTipTextTexto {
     GUARDAR("Habilita Guardar la Actividad"),
     GUIATELEFONICA("Guía Telefónica"),
     HORA("Ingrese la hora con formato 00:00"),
+    MANUALTECNICO("Manual Técnico"),
     MAPAS("Mapas"),
     MENUAUTOS("Habilita Menú Autos"),
     MENUCLIENTES("Habilita Menú Clientes"),

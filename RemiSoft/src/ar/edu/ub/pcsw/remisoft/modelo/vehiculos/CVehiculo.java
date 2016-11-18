@@ -4,8 +4,10 @@ public class CVehiculo {
 
     private String aseguradora;
     private String causaBaja;
+    private String consumo;
     private String fechaDeAlta;
     private String fechaDeBaja;
+    private String kilometraje;
     private String marca;
     private String modelo;
     private String patente;
@@ -14,18 +16,20 @@ public class CVehiculo {
     Constructor
      */
     public CVehiculo() {
-        this(null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null);
     }
 
     /*
     Constructor
      */
-    public CVehiculo(String marca, String modelo, String patente, String aseguradora, String fechaDeAlta,
-                     String fechaDeBaja, String causaBaja) {
+    public CVehiculo(String marca, String modelo, String patente, String aseguradora, String kilometraje,
+                     String consumo, String fechaDeAlta, String fechaDeBaja, String causaBaja) {
         this.setMarca(marca);
         this.setModelo(modelo);
         this.setPatente(patente);
         this.setAseguradora(aseguradora);
+        this.setKilometraje(kilometraje);
+        this.setConsumo(consumo);
         this.setFechaDeAlta(fechaDeAlta);
         this.setFechaDeBaja(fechaDeBaja);
         this.setCausaBaja(causaBaja);
@@ -38,6 +42,10 @@ public class CVehiculo {
     public String getCausaBaja() { return this.causaBaja; }
 
     public void setCausaBaja(String causaBaja) { this.causaBaja = causaBaja; }
+
+    public String getConsumo() { return this.consumo; }
+
+    public void setConsumo(String consumo) { this.consumo = consumo; }
 
     public String getFechaDeAlta() {
         return this.fechaDeAlta;
@@ -54,6 +62,10 @@ public class CVehiculo {
     public void setFechaDeBaja(String fechaDeBaja) {
         this.fechaDeBaja = fechaDeBaja;
     }
+
+    public String getKilometraje() { return this.kilometraje; }
+
+    public void setKilometraje(String kilometraje) { this.kilometraje = kilometraje; }
 
     public String getMarca() {
         return this.marca;
@@ -81,8 +93,9 @@ public class CVehiculo {
 
     public String toString() {
         return "Marca: " + this.getMarca() + "\nModelo: " + this.getModelo() +
-                "\nPatente: " + this.getPatente() + "\nAseguradora: " + this.getAseguradora() + "\nFecha de alta: " +
-                this.getFechaDeAlta();
+                "\nPatente: " + this.getPatente() + "\nAseguradora: " + this.getAseguradora() +
+                "\nKilometraje: " + this.getKilometraje() + "\nConsumo: " + this.getConsumo() +
+                "\nFecha de alta: " + this.getFechaDeAlta();
     }
 
 }
