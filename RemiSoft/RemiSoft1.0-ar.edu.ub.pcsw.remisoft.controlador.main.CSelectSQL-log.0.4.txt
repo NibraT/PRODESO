@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2016-11-11T21:08:28</date>
+  <millis>1478909308044</millis>
+  <sequence>0</sequence>
+  <logger>ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL</logger>
+  <level>SEVERE</level>
+  <class>ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL</class>
+  <method>selectAutoDisponiblesReportes</method>
+  <thread>1</thread>
+  <message>java.sql.SQLException</message>
+  <param>[SQLITE_ERROR] SQL error or missing database (no such column: model)</param>
+</record>
+</log>

@@ -139,7 +139,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, Integer.parseInt(rendicion.getViajeNumero()));
             pstmt.setInt(2, Integer.parseInt(rendicion.getCostoEfectivo()));
-            pstmt.setInt(3, Integer.parseInt(rendicion.getCostoTestigo()));
+            pstmt.setDouble(3, Double.parseDouble((rendicion.getCostoTestigo())));
             pstmt.setInt(4, Integer.parseInt(rendicion.getRecepcionista().getDni()));
             pstmt.executeUpdate();
         }
