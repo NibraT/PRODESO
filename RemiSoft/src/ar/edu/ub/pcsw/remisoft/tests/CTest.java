@@ -588,6 +588,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("AB 123 CD");
         getListaCasos().add("yt 344 gg");
+        getListaCasos().add("ytr 344");
         for (String caso : getListaCasos()) {
             if (! caso.matches(ERegexValidadorInput.PATENTE.getTexto())) {
                 setTestCase(caso);
@@ -608,6 +609,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4");
         getListaCasos().add("#");
         getListaCasos().add("ab ");
+        getListaCasos().add("fgr 44");
         getListaCasos().add("9929 gghd 2222");
         for (String caso : getListaCasos()) {
             if (caso.matches(ERegexValidadorInput.PATENTE.getTexto())) {

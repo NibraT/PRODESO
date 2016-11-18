@@ -128,9 +128,11 @@ public enum ERegexValidadorInput {
                           #   excepto vocales con acento) del alfabeto latino
       \d                  # al menos uno o más caracteres numéricos
       \s{2,2}             # no menos de 2 ni más de 5 espacios en blanco
-      {9})                # 9 caracteres en tota
+      {9})                # 9 caracteres en total
+      |                   # disyunción no exclusiva
     */
-    PATENTE("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{2,2}]{9}"),
+    PATENTE("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{2,2}]{9})|" +
+            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{1,1}]{7})"),
     /*Explicación de la regex PRECIO
       ([1-9][0-9])  # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{0,1}       # no menos de 3 ni más de 4 caracteres
