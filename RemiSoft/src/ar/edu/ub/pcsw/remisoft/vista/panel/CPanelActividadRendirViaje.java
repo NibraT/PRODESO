@@ -130,6 +130,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             new CInsertSQL().insertarViajeRendicion(rendicion);
             new CUpdateSQL().updateDisponibleVehiculo(1,
                     new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
+            new CUpdateSQL().updateDisponibleEmpleado(1, new CSelectSQL().selectChoferDeViaje(parseInt(getViajeTextField().getText())));
         }
     }
 
