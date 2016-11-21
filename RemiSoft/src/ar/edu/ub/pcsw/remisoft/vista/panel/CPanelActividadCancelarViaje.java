@@ -150,6 +150,7 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             new CUpdateSQL().updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
                     getMotivosLista().getSelectedItem().toString());
             new CUpdateSQL().updateDisponibleVehiculo(1, getAutoTextField().getText());
+            new CUpdateSQL().updateDisponibleEmpleado(1, getChoferTextField().getText());
         }
     }
 

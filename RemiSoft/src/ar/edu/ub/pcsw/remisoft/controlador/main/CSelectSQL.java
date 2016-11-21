@@ -91,6 +91,33 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
+    public String selectChoferDeViaje(int numero) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT dni FROM Viaje where Numero = " + numero;
+        String result;
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result = rs.getString("dni");
+                return result;
+            }
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
     public String[] selectAutoParaBaja() {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
