@@ -36,7 +36,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Cliente SET fechaBaja = ? WHERE Identificacion = ?";
+        String sql = "UPDATE " + ETablas.CLIENTE + " SET fechaBaja = ? WHERE Identificacion = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, setFechaString(Calendar.getInstance()));
@@ -59,7 +59,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Empleado SET fechaBaja = ? WHERE Dni = ?";
+        String sql = "UPDATE " + ETablas.EMPLEADO + " SET fechaBaja = ? WHERE Dni = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, setFechaString(Calendar.getInstance()));
@@ -82,7 +82,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Empleado SET disponible = ? WHERE Dni = ?";
+        String sql = "UPDATE " + ETablas.EMPLEADO + " SET disponible = ? WHERE Dni = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, disponible);
@@ -105,7 +105,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Vehiculo SET fechaBaja = ? WHERE Patente = ?";
+        String sql = "UPDATE " + ETablas.VEHICULO + " SET fechaBaja = ? WHERE Patente = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, setFechaString(Calendar.getInstance()));
@@ -128,7 +128,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Vehiculo SET disponible = ? WHERE Patente = ?";
+        String sql = "UPDATE " + ETablas.VEHICULO + " SET disponible = ? WHERE Patente = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, disponible);
@@ -151,7 +151,7 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE Viaje SET cancelado = ?, motivoCancelacion = ? WHERE Numero = ?";
+        String sql = "UPDATE " + ETablas.VIAJE + " SET cancelado = ?, motivoCancelacion = ? WHERE Numero = ?";
         try (Connection conn = super.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, 1);

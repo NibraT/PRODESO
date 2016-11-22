@@ -2,7 +2,6 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
@@ -48,26 +47,31 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         // método default de IJComboBoxFactory
         this.setNombresLista(this.crearComboBox(new CSelectSQL().selectNombreEmpleadoParaBaja(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getNombreLabel().getText(), this));
+        this.getNombresLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getNombresLista(), getNombresLista().getToolTipText(), getNombreLabel().getText());
         // método default de IJComboBoxFactory
         this.setApellidosLista(this.crearComboBox(new CSelectSQL().selectApellidoEmpleadoParaBaja(), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getApellidoLabel().getText(), this));
+        this.getApellidosLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getApellidosLista(), getApellidosLista().getToolTipText(), getApellidoLabel().getText());
         // método default de IJComboBoxFactory
         this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectDniEmpleadoParaBaja(), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() +
                 getIdentificacionLabel().getText(), this));
+        this.getIdentificacionesLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getIdentificacionesLista(), getIdentificacionesLista().getToolTipText(),
                 getIdentificacionLabel().getText());
         // método default de IJComboBoxFactory
         this.setCausasLista(this.crearComboBox(this.getCausas(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getCausaLabel().getText(), this));
+        this.getCausasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
+        this.getHabilitarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -82,6 +86,10 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
         this.getGbc().gridx = 1;
+        this.getGbc().gridy = 0;
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        this.getPanelInput().add(getHabilitarButton(), this.getGbc());
+        this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getNombresLista(), this.getGbc());
         this.getGbc().gridy++;
@@ -94,6 +102,7 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -109,18 +118,37 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getCausasLista())) {
+        if (e.getSource().equals(getHabilitarButton())) {
+            getNombresLista().setEnabled(true);
+            getApellidosLista().setEnabled(true);
+            getIdentificacionesLista().setEnabled(true);
+            getCausasLista().setEnabled(true);
+            getFechaTextField().setEditable(true);
+        }
+        else if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CEmpleado empleado = new CEmpleado();
-            empleado.setNombre(getNombresLista().getSelectedItem().toString());
-            empleado.setApellido(getApellidosLista().getSelectedItem().toString());
-            empleado.setDni(getIdentificacionesLista().getSelectedItem().toString());
-            empleado.setCausaBaja(getCausasLista().getSelectedItem().toString());
-            empleado.setFechaDeBaja(getFechaTextField().getText());
-            new CUpdateSQL().updateFechaBajaEmpleado(getIdentificacionesLista().getSelectedItem().toString());
-            new CUpdateSQL().updateDisponibleEmpleado(0, getIdentificacionesLista().getSelectedItem().toString());
+            if ((getNombresLista().getSelectedItem().toString().isEmpty()) ||
+                    (getNombresLista().getSelectedItem().toString() == null) ||
+                    (getNombresLista().getSelectedItem().toString().equals(" ")) ||
+                    (getApellidosLista().getSelectedItem().toString().isEmpty()) ||
+                    (getApellidosLista().getSelectedItem().toString() == null) ||
+                    (getApellidosLista().getSelectedItem().toString().equals(" ")) ||
+                    (getIdentificacionesLista().getSelectedItem().toString().isEmpty()) ||
+                    (getIdentificacionesLista().getSelectedItem().toString() == null) ||
+                    (getIdentificacionesLista().getSelectedItem().toString().equals(" ")) ||
+                    (getCausasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getCausasLista().getSelectedItem().toString() == null) ||
+                    (getCausasLista().getSelectedItem().toString().equals(" "))) {
+                JOptionPane.showMessageDialog(null, getMensajeErrorActividad(),
+                        "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                CUpdateSQL update = new CUpdateSQL();
+                update.updateFechaBajaEmpleado(getIdentificacionesLista().getSelectedItem().toString());
+                update.updateDisponibleEmpleado(0, getIdentificacionesLista().getSelectedItem().toString());
+            }
         }
     }
 

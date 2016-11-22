@@ -39,7 +39,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Patente FROM Vehiculo where disponible = " + disponible;
+        String sql = "SELECT Patente FROM " + ETablas.VEHICULO + " where disponible = " + disponible;
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -69,7 +69,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT patente FROM Viaje where Numero = " + numero;
+        String sql = "SELECT patente FROM " + ETablas.VIAJE + " where Numero = " + numero;
         String result;
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -91,12 +91,39 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return null;
     }
 
+    public String selectChoferDeViaje(int numero) {
+        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
+        logger.entering(getClass().getName(), getNombreMetodo());
+        CTestPerformance testPerformance = CTestPerformance.getInstance();
+        testPerformance.startPerformanceTest();
+        String sql = "SELECT dni FROM " + ETablas.VIAJE + " where Numero = " + numero;
+        String result;
+        try (Connection conn = super.connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                result = rs.getString("dni");
+                return result;
+            }
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        }
+        logger.exiting(getClass().getName(), getNombreMetodo());
+        return null;
+    }
+
     public String[] selectAutoParaBaja() {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Patente FROM Vehiculo where fechaBaja is null";
+        String sql = "SELECT Patente FROM " + ETablas.VEHICULO + " where fechaBaja is null";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -126,7 +153,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT distinct " + atributo + " FROM Vehiculo where disponible = 1";
+        String sql = "SELECT distinct " + atributo + " FROM " + ETablas.VEHICULO +
+                " where disponible = 1";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -156,8 +184,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM Empleado where disponible = " + disponible + " and tipoEmpleado = " +
-                tipoEmpleado;
+        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where disponible = " + disponible +
+                " and tipoEmpleado = " + tipoEmpleado;
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -187,7 +215,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT nombre FROM Empleado where fechaBaja is null";
+        String sql = "SELECT nombre FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -217,7 +245,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT apellido FROM Empleado where fechaBaja is null";
+        String sql = "SELECT apellido FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -247,7 +275,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM Empleado where fechaBaja is null";
+        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -277,7 +305,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM Empleado where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
+        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
         ArrayList<String> result = new ArrayList<String>();
         result.add(" ");
         try (Connection conn = super.connect();
@@ -307,8 +335,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero FROM Viaje where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
+        String sql = "SELECT Numero FROM " + ETablas.VIAJE + " where identificacion = " +
+                identificacion + " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -337,7 +365,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select patente, count(patente) as count from Viaje inner join Rendicion on Numero = IdViaje group by patente";
+        String sql = "select patente, count(patente) as count from " + ETablas.VIAJE +
+                " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by patente";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -364,7 +393,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select dni, count(patente) as count from Viaje inner join Rendicion on Numero = IdViaje group by dni";
+        String sql = "select dni, count(patente) as count from " + ETablas.VIAJE +
+                " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by dni";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -391,7 +421,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from Vehiculo where fechaBaja is null group by Patente";
+        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+                " where fechaBaja is null group by Patente";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -418,7 +449,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from Vehiculo where disponible = 1 and fechaBaja is null group by Patente";
+        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+                " where disponible = 1 and fechaBaja is null group by Patente";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -445,7 +477,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from Vehiculo where disponible = 0 and fechaBaja is null group by Patente";
+        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+                " where disponible = 0 and fechaBaja is null group by Patente";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -472,7 +505,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Identificacion, nombreORazonSocial, count(Identificacion) as count from Cliente where fechaBaja is null group by Identificacion";
+        String sql = "select Identificacion, nombreORazonSocial, count(Identificacion) as count from " +
+                ETablas.CLIENTE + " where fechaBaja is null group by Identificacion";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -499,7 +533,8 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Identificacion, fechaAlta, count(Identificacion) as count from Cliente where fechaBaja is null group by Identificacion";
+        String sql = "select Identificacion, fechaAlta, count(Identificacion) as count from " + ETablas.CLIENTE +
+                " where fechaBaja is null group by Identificacion";
         HashMap<String, Integer> hashMap = new HashMap<>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();
@@ -526,7 +561,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, dni FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, dni FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -556,7 +591,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, patente FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, patente FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -586,7 +621,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, fecha FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, fecha FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -616,7 +651,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, horaInicio FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, horaInicio FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -646,7 +681,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, origen FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, origen FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -676,7 +711,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, destino FROM Viaje where identificacion = " + identificacion +
+        String sql = "SELECT Numero, destino FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
                 " order by Numero desc limit 1";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
@@ -706,7 +741,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT count() as cont from Rendicion";
+        String sql = "SELECT count() as cont from " + ETablas.RENDICION + "";
         ArrayList<String> result = new ArrayList<String>();
         try (Connection conn = super.connect();
              Statement stmt = conn.createStatement();

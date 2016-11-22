@@ -41,14 +41,16 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
         this.getIdentificacionLabel().setForeground(Color.RED);
         int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRAS.getTexto(),
-                this));
+        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho,
+                EToolTipTextTexto.NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), this));
+        this.getNombreYApellidoORazonSocialTextField().setEditable(false);
         // método default de IValidadorInput
         this.getNombreYApellidoORazonSocialTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
                         NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getNombreYApellidoORazonSocialTextField().
                 getToolTipText(), getNombreYApellidoORazonSocialLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setIdentificacionTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        this.setIdentificacionTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
+        this.getIdentificacionTextField().setEditable(false);
         // método default de IValidadorInput
         this.getIdentificacionTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
                         IDENTIFICACION.getTexto(),
@@ -56,9 +58,11 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
         // método default de IJComboBoxFactory
         this.setCausasLista(this.crearComboBox(this.getCausas(), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getCausaLabel().getText(), this));
+        this.getCausasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
+        this.getHabilitarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -71,6 +75,10 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
         this.getGbc().gridx = 1;
+        this.getGbc().gridy = 0;
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        this.getPanelInput().add(getHabilitarButton(), this.getGbc());
+        this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getNombreYApellidoORazonSocialTextField(), this.getGbc());
         this.getGbc().gridy++;
@@ -81,6 +89,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
         this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -96,11 +105,31 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getCausasLista())) {
+        if (e.getSource().equals(getHabilitarButton())) {
+            getNombreYApellidoORazonSocialTextField().setEditable(true);
+            getIdentificacionTextField().setEditable(true);
+            getCausasLista().setEnabled(true);
+            getFechaTextField().setEditable(true);
+        }
+        else if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            new CUpdateSQL().updateFechaBajaCliente(getIdentificacionTextField().getText());
+            if ((getNombreYApellidoORazonSocialTextField().getText().isEmpty()) ||
+                    (getNombreYApellidoORazonSocialTextField().getText() == null) ||
+                    (getNombreYApellidoORazonSocialTextField().getText().equals(" ")) ||
+                    (getIdentificacionTextField().getText().isEmpty()) ||
+                    (getIdentificacionTextField().getText() == null) ||
+                    (getIdentificacionTextField().getText().equals(" ")) ||
+                    (getCausasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getCausasLista().getSelectedItem().toString() == null) ||
+                    (getCausasLista().getSelectedItem().toString().equals(" "))) {
+                JOptionPane.showMessageDialog(null, getMensajeErrorActividad(),
+                        "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                new CUpdateSQL().updateFechaBajaCliente(getIdentificacionTextField().getText());
+            }
         }
     }
 

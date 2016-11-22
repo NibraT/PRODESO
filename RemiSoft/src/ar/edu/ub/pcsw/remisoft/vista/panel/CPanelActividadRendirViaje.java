@@ -57,22 +57,27 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getFechaTextField().setToolTipText(getFechaLabel().getText());
         // método default de IJTextFieldFactory
         this.setRendicionTextField(this.setTextField(ancho, "Número de la rendición", this));
+        this.getRendicionTextField().setEditable(false);
         this.getRendicionTextField().addFocusListener(this);
         // método default de IJTextFieldFactory
-        this.setViajeTextField(this.setTextField(ancho, "Ingrese número del viaje a rendir", this));
+        this.setViajeTextField(this.setTextField(ancho, EToolTipTextTexto.NUMEROVIAJE.getTexto(), this));
+        this.getViajeTextField().setEditable(false);
         // método default de IValidadorInput
         this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NUMEROVIAJE.getTexto(),
                 getViajeTextField().getToolTipText(), getViajeLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setCostoEfectivoTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        this.setCostoEfectivoTextField(this.setTextField(ancho, EToolTipTextTexto.PRECIO.getTexto(), this));
+        this.getCostoEfectivoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getCostoEfectivoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PRECIO.getTexto(),
                 getCostoEfectivoTextField().getToolTipText(), getCostoEfectivoLabel().getText()));
         // método default de IJTextFieldFactory
         this.setCostoTestigoTextField(this.setTextField(ancho, "Costo testigo", this));
+        this.getCostoTestigoTextField().setEditable(false);
         this.getCostoTestigoTextField().addFocusListener(this);
         this.getGuardarButton().setText("Aceptar");
         this.getGuardarButton().addActionListener(this);
+        this.getHabilitarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -89,6 +94,10 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRecepcionistaLabel(), this.getGbc());
         this.getGbc().gridx = 1;
+        this.getGbc().gridy = 0;
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        this.getPanelInput().add(getHabilitarButton(), this.getGbc());
+        this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
         this.getGbc().gridy++;
@@ -103,6 +112,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getPanelInput().add(this.getRecepcionistasLista(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.CENTER;
         JButton rechazarButton = new JButton("Rechazar");
@@ -116,20 +126,46 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getRecepcionistasLista())) {
+        if (e.getSource().equals(getHabilitarButton())) {
+            getRendicionTextField().setEditable(true);
+            getViajeTextField().setEditable(true);
+            getCostoEfectivoTextField().setEditable(true);
+            getCostoTestigoTextField().setEditable(true);
+            getRecepcionistasLista().setEnabled(true);
+        }
+        else if (e.getSource().equals(getRecepcionistasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CRendicion rendicion = new CRendicion();
-            rendicion.setRecepcionista(new CEmpleado());
-            rendicion.setFecha(getFechaTextField().getText());
-            rendicion.setViajeNumero(getViajeTextField().getText());
-            rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
-            rendicion.setCostoTestigo(getCostoTestigoTextField().getText());
-            rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            new CInsertSQL().insertarViajeRendicion(rendicion);
-            new CUpdateSQL().updateDisponibleVehiculo(1,
-                    new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
+            if ((getViajeTextField().getText().isEmpty()) ||
+                    (getViajeTextField().getText() == null) ||
+                    (getViajeTextField().getText().equals(" ")) ||
+                    (getCostoEfectivoTextField().getText().isEmpty()) ||
+                    (getCostoEfectivoTextField().getText() == null) ||
+                    (getCostoEfectivoTextField().getText().equals(" ")) ||
+                    (getCostoTestigoTextField().getText().isEmpty()) ||
+                    (getCostoTestigoTextField().getText() == null) ||
+                    (getCostoTestigoTextField().getText().equals(" ")) ||
+                    (getRecepcionistasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getRecepcionistasLista().getSelectedItem().toString() == null) ||
+                    (getRecepcionistasLista().getSelectedItem().toString().equals(" "))) {
+                JOptionPane.showMessageDialog(null, getMensajeErrorActividad(),
+                        "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                CRendicion rendicion = new CRendicion();
+                rendicion.setRecepcionista(new CEmpleado());
+                rendicion.setFecha(getFechaTextField().getText());
+                rendicion.setViajeNumero(getViajeTextField().getText());
+                rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
+                rendicion.setCostoTestigo(getCostoTestigoTextField().getText());
+                rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
+                new CInsertSQL().insertarViajeRendicion(rendicion);
+                new CUpdateSQL().updateDisponibleVehiculo(1,
+                        new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
+                new CUpdateSQL().updateDisponibleEmpleado(1,
+                        new CSelectSQL().selectChoferDeViaje(parseInt(getViajeTextField().getText())));
+            }
         }
     }
 

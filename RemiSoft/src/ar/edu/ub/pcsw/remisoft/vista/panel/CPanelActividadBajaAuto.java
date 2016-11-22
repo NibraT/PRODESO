@@ -47,25 +47,30 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.getPatenteLabel().setForeground(Color.RED);
         // método default de IJComboBoxFactory
         this.setMarcasLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("marca"), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getMarcaLabel().getText(), this)); ///
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getMarcaLabel().getText(), this));
+        this.getMarcasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getMarcasLista(), getMarcasLista().getToolTipText(), getMarcaLabel().getText());
         // método default de IJComboBoxFactory
         this.setModelosLista(this.crearComboBox(new CSelectSQL().selectAtributoAuto("modelo"), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getModeloLabel().getText(), this)); ///
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getModeloLabel().getText(), this));
+        this.getModelosLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getModelosLista(), getModelosLista().getToolTipText(), getModeloLabel().getText());
         // método default de IJComboBoxFactory
         this.setPatentesLista(this.crearComboBox(new CSelectSQL().selectAutoParaBaja(), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getPatenteLabel().getText(), this)); ///
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getPatenteLabel().getText(), this));
+        this.getPatentesLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getPatentesLista(), getPatentesLista().getToolTipText(), getPatenteLabel().getText());
         // método default de IJComboBoxFactory
         this.setCausasLista(this.crearComboBox(this.getCausas(), 333, 20, Color.WHITE, EToolTipTextTexto.
                 SELECCIONAR.getTexto() + getCausaLabel().getText(), this));
+        this.getCausasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getCausasLista(), getCausasLista().getToolTipText(), getCausaLabel().getText());
         this.getGuardarButton().addActionListener(this);
+        this.getHabilitarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -80,6 +85,10 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
         this.getGbc().gridx = 1;
+        this.getGbc().gridy = 0;
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        this.getPanelInput().add(getHabilitarButton(), this.getGbc());
+        this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getMarcasLista(), this.getGbc());
         this.getGbc().gridy++;
@@ -92,6 +101,7 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
         this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 10;
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -107,13 +117,37 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getCausasLista())) {
+        if (e.getSource().equals(getHabilitarButton())) {
+            getMarcasLista().setEnabled(true);
+            getModelosLista().setEnabled(true);
+            getPatentesLista().setEnabled(true);
+            getCausasLista().setEnabled(true);
+            getFechaTextField().setEditable(true);
+        }
+        else if (e.getSource().equals(getCausasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CUpdateSQL update = new CUpdateSQL();
-            update.updateDisponibleVehiculo(0, getPatentesLista().getSelectedItem().toString());
-            update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
+            if ((getMarcasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getMarcasLista().getSelectedItem().toString() == null) ||
+                    (getMarcasLista().getSelectedItem().toString().equals(" ")) ||
+                    (getModelosLista().getSelectedItem().toString().isEmpty()) ||
+                    (getModelosLista().getSelectedItem().toString() == null) ||
+                    (getModelosLista().getSelectedItem().toString().equals(" ")) ||
+                    (getPatentesLista().getSelectedItem().toString().isEmpty()) ||
+                    (getPatentesLista().getSelectedItem().toString() == null) ||
+                    (getPatentesLista().getSelectedItem().toString().equals(" ")) ||
+                    (getCausasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getCausasLista().getSelectedItem().toString() == null) ||
+                    (getCausasLista().getSelectedItem().toString().equals(" "))) {
+                JOptionPane.showMessageDialog(null, getMensajeErrorActividad(),
+                        "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                CUpdateSQL update = new CUpdateSQL();
+                update.updateDisponibleVehiculo(0, getPatentesLista().getSelectedItem().toString());
+                update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
+            }
         }
     }
 

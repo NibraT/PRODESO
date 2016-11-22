@@ -2,9 +2,6 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
-import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
-import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -57,30 +54,39 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getMotivoLabel().setForeground(Color.RED);
         int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
+        this.getClienteTextField().setEditable(false);
         this.getClienteTextField().addFocusListener(this);
         // método default de IValidadorInput
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
         // método default de IJTextFieldFactory
         this.setNumeroTextField(this.setTextField(ancho, "Número del Viaje a cancelar", this));
+        this.getNumeroTextField().setEditable(false);
         // método default de IJTextFieldFactory
         this.setChoferTextField(this.setTextField(ancho, "Chofer del Viaje a cancelar", this));
+        this.getChoferTextField().setEditable(false);
         // método default de IJTextFieldFactory
         this.setAutoTextField(this.setTextField(ancho, "Auto del Viaje a cancelar", this));
+        this.getAutoTextField().setEditable(false);
         this.getFechaTextField().setToolTipText("Fecha del Viaje a cancelar");
         // método default de IJTextFieldFactory
         this.setHoraTextField(this.setTextField(ancho, "Hora del Viaje a cancelar", this));
+        this.getHoraTextField().setEditable(false);
         // método default de IJTextFieldFactory
         this.setOrigenTextField(this.setTextField(ancho, "Origen del Viaje a cancelar", this));
+        this.getOrigenTextField().setEditable(false);
         // método default de IJTextFieldFactory
         this.setDestinoTextField(this.setTextField(ancho, "Destino del Viaje a cancelar", this));
+        this.getDestinoTextField().setEditable(false);
         // método default de IJComboBoxFactory
         this.setMotivosLista(this.crearComboBox(this.getMotivos(), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getMotivoLabel().getText(), this));
+        this.getMotivosLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getMotivosLista(), getMotivosLista().getToolTipText(), getMotivoLabel().getText());
         this.getGuardarButton().addActionListener(this);
+        this.getHabilitarButton().addActionListener(this);
         this.getGbc().gridx = 0;
         this.getGbc().gridy = 0;
         this.getPanelInput().add(this.getReferenciasLabel(), this.getGbc());
@@ -105,6 +111,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRecepcionistaLabel(), this.getGbc());
         this.getGbc().gridx = 1;
+        this.getGbc().gridy = 0;
+        this.getGbc().anchor = GridBagConstraints.CENTER;
+        this.getPanelInput().add(getHabilitarButton(), this.getGbc());
+        this.getGbc().gridx = 1;
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
         this.getGbc().gridy++;
@@ -127,6 +137,7 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getPanelInput().add(this.getRecepcionistasLista(), this.getGbc());
         this.getGbc().gridx = 1;
         this.getGbc().gridy = 15;
+        this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getPanelInput().add(this.getGuardarButton(), this.getGbc());
         this.getGbc().anchor = GridBagConstraints.LINE_END;
         this.getPanelInput().add(this.getSalirButton(), this.getGbc());
@@ -135,21 +146,41 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource().equals(getRecepcionistasLista())) {
+        if (e.getSource().equals(getHabilitarButton())) {
+            getClienteTextField().setEditable(true);
+            getNumeroTextField().setEditable(true);
+            getChoferTextField().setEditable(true);
+            getAutoTextField().setEditable(true);
+            getFechaTextField().setEditable(true);
+            getHoraTextField().setEditable(true);
+            getOrigenTextField().setEditable(true);
+            getDestinoTextField().setEditable(true);
+            getMotivosLista().setEnabled(true);
+            getRecepcionistasLista().setEnabled(true);
+        }
+        else if (e.getSource().equals(getRecepcionistasLista())) {
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            CViaje viaje = new CViaje();
-            viaje.setCliente(new CCliente());
-            viaje.setRecepcionista(new CEmpleado());
-            viaje.getCliente().setIdentificacion(getClienteTextField().getText());
-            viaje.setOrigen(getOrigenTextField().getText());
-            viaje.setDestino(getDestinoTextField().getText());
-            viaje.setMotivoCancelacion(getMotivosLista().getSelectedItem().toString());
-            viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
-            new CUpdateSQL().updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
-                    getMotivosLista().getSelectedItem().toString());
-            new CUpdateSQL().updateDisponibleVehiculo(1, getAutoTextField().getText());
+            if ((getClienteTextField().getText().isEmpty()) ||
+                    (getClienteTextField().getText() == null) ||
+                    (getClienteTextField().getText().equals(" ")) ||
+                    (getMotivosLista().getSelectedItem().toString().isEmpty()) ||
+                    (getMotivosLista().getSelectedItem().toString() == null) ||
+                    (getMotivosLista().getSelectedItem().toString().equals(" ")) ||
+                    (getRecepcionistasLista().getSelectedItem().toString().isEmpty()) ||
+                    (getRecepcionistasLista().getSelectedItem().toString() == null) ||
+                    (getRecepcionistasLista().getSelectedItem().toString().equals(" "))) {
+                JOptionPane.showMessageDialog(null, getMensajeErrorActividad(),
+                        "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                CUpdateSQL update = new CUpdateSQL();
+                update.updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
+                        getMotivosLista().getSelectedItem().toString());
+                update.updateDisponibleVehiculo(1, getAutoTextField().getText());
+                update.updateDisponibleEmpleado(1, getChoferTextField().getText());
+            }
         }
     }
 
