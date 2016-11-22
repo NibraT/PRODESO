@@ -119,7 +119,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             pstmt.setString(4, setFechaString(Calendar.getInstance()));
             pstmt.setString(5, viaje.getHoraDeInicio());
             pstmt.setString(6, viaje.getCliente().getIdentificacion());
-            pstmt.setString(7, viaje.getRecepcionista().getDni());
+            pstmt.setString(7, viaje.getChofer().getDni());
             pstmt.setString(8, viaje.getAuto().getPatente());
             pstmt.setInt(9, Integer.parseInt(viaje.getSucursal().getNumero()));
             pstmt.executeUpdate();
