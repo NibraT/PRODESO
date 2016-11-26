@@ -127,10 +127,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getHabilitarButton())) {
-            getRendicionTextField().setEditable(true);
             getViajeTextField().setEditable(true);
             getCostoEfectivoTextField().setEditable(true);
-            getCostoTestigoTextField().setEditable(true);
             getRecepcionistasLista().setEnabled(true);
         }
         else if (e.getSource().equals(getRecepcionistasLista())) {
@@ -161,10 +159,13 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
                 rendicion.setCostoTestigo(getCostoTestigoTextField().getText());
                 rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
                 new CInsertSQL().insertarViajeRendicion(rendicion);
-                new CUpdateSQL().updateDisponibleVehiculo(1,
-                        new CSelectSQL().selectAutoDeViaje(parseInt(getViajeTextField().getText())));
-                new CUpdateSQL().updateDisponibleEmpleado(1,
-                        new CSelectSQL().selectChoferDeViaje(parseInt(getViajeTextField().getText())));
+                CUpdateSQL updateSQL = new CUpdateSQL();
+                updateSQL.updateDisponibleVehiculo(1,
+                        new CSelectSQL().selectRecurso("viaje", null, "patente",
+                                parseInt(getViajeTextField().getText())));
+                updateSQL.updateDisponibleEmpleado(1,
+                        new CSelectSQL().selectRecurso("empleado", null, "dni",
+                                parseInt(getViajeTextField().getText())));
             }
         }
     }

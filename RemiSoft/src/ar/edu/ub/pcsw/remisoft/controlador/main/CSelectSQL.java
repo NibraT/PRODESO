@@ -34,330 +34,93 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return archivoLog;
     }
 
-    public String[] selectAutoDisponibles(int disponible) {
+    public String[] selectRecursoAuto(String atributo, int disponible) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Patente FROM " + ETablas.VEHICULO + " where disponible = " + disponible;
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Patente"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        String sql = atributo.equals("Patente") ? "SELECT " + atributo + " FROM " + ETablas.VEHICULO +
+                " where disponible = " + disponible : "SELECT distinct " + atributo + " FROM " + ETablas.VEHICULO +
+                " where disponible = " + disponible;
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return registros;
     }
 
-    public String selectAutoDeViaje(int numero) {
+    public String[] selectRecursoEmpleado(int disponible, int tipoEmpleado) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT patente FROM " + ETablas.VIAJE + " where Numero = " + numero;
-        String result;
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result = rs.getString("patente");
-                return result;
-            }
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        String atributo = "Dni";
+        String sql = disponible == 1 ? "SELECT " + atributo + " FROM " + ETablas.EMPLEADO +
+                " where disponible = " + disponible + " and tipoEmpleado = " + tipoEmpleado : "SELECT " + atributo +
+                " FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return registros;
     }
 
-    public String selectChoferDeViaje(int numero) {
+    public String[] selectRecursoParaBaja(String atributo, String identificacion) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT dni FROM " + ETablas.VIAJE + " where Numero = " + numero;
-        String result;
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result = rs.getString("dni");
-                return result;
-            }
+        String sql = " ";
+        if (atributo.equals("Dni")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
         }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        else if (atributo.equals("identificacion")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where fechaBaja is null";
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        else if (atributo.equalsIgnoreCase("Patente")){
+            sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where fechaBaja is null";
         }
+        else if (atributo.equalsIgnoreCase("Numero")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE +
+                    " where identificacion = '" + identificacion + "' and cancelado is null order by " +
+                    atributo + " desc";
+        }
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return registros;
     }
 
-    public String[] selectAutoParaBaja() {
+    public String[] selectViajes(String identificacion, String atributo) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT Patente FROM " + ETablas.VEHICULO + " where fechaBaja is null";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Patente"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        String sql = atributo.equals("Numero") ? "SELECT " + atributo + " FROM " + ETablas.VIAJE +
+                " where identificacion = " + identificacion + " order by Numero desc limit 1" : "SELECT Numero, " +
+                atributo + " FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
+                " order by Numero desc limit 1";
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), "no");
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return registros;
     }
 
-    public String[] selectAtributoAuto(String atributo) {
+    public String selectRecurso(String recurso, String identificacion, String atributo, int numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "SELECT distinct " + atributo + " FROM " + ETablas.VEHICULO +
-                " where disponible = 1";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString(atributo));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
+        String sql = " ";
+        if (recurso.equals("empleado")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where dni = '" + identificacion + "'";
         }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        else if (recurso.equals("cliente")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where identificacion = '" + identificacion + "'";
         }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
+        else if (recurso.equals("viaje")) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where Numero = " + numero;
         }
+        else if (recurso.equals("auto")){
+            sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where patente = '" + identificacion + "'";
+        }
+        String result = getAtributoTabla(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectEmpleadoDisponibles(int disponible, int tipoEmpleado) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where disponible = " + disponible +
-                " and tipoEmpleado = " + tipoEmpleado;
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Dni"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectNombreEmpleadoParaBaja() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT nombre FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("nombre"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectApellidoEmpleadoParaBaja() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT apellido FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("apellido"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectDniEmpleadoParaBaja() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Dni"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectDniRecepcionista(int tipoEmpleado) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Dni FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
-        ArrayList<String> result = new ArrayList<String>();
-        result.add(" ");
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Dni"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesNumero(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero FROM " + ETablas.VIAJE + " where identificacion = " +
-                identificacion + " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("Numero"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return result;
     }
 
     public HashMap<String, Integer> selectViajesPorAutoReportes() {
@@ -365,27 +128,12 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select patente, count(patente) as count from " + ETablas.VIAJE +
+        String atributo = "patente";
+        String sql = "select " + atributo + ", count(patente) as count from " + ETablas.VIAJE +
                 " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by patente";
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                hashMap.put(rs.getString("patente"), rs.getInt("count"));
-            }
-            return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return hashMap;
     }
 
     public HashMap<String, Integer> selectViajesPorChoferReportes() {
@@ -393,27 +141,12 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select dni, count(patente) as count from " + ETablas.VIAJE +
+        String atributo = "dni";
+        String sql = "select " + atributo + ", count(patente) as count from " + ETablas.VIAJE +
                 " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by dni";
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                hashMap.put(rs.getString("dni"), rs.getInt("count"));
-            }
-            return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return hashMap;
     }
 
     public HashMap<String, Integer> selectTodosAutosReportes() {
@@ -421,27 +154,12 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+        String atributo = "Patente";
+        String sql = "select " + atributo + ", count(Patente) as count from " + ETablas.VEHICULO +
                 " where fechaBaja is null group by Patente";
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                hashMap.put(rs.getString("Patente"), rs.getInt("count"));
-            }
-            return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return hashMap;
     }
 
     public HashMap<String, Integer> selectTodosAutosDisponiblesReportes() {
@@ -449,27 +167,12 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+        String atributo = "Patente";
+        String sql = "select " + atributo + ", count(Patente) as count from " + ETablas.VEHICULO +
                 " where disponible = 1 and fechaBaja is null group by Patente";
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                hashMap.put(rs.getString("Patente"), rs.getInt("count"));
-            }
-            return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return hashMap;
     }
 
     public HashMap<String, Integer> selectTodosAutosNoDisponiblesReportes() {
@@ -477,27 +180,12 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "select Patente, count(Patente) as count from " + ETablas.VEHICULO +
+        String atributo = "Patente";
+        String sql = "select " + atributo + ", count(Patente) as count from " + ETablas.VEHICULO +
                 " where disponible = 0 and fechaBaja is null group by Patente";
-        HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                hashMap.put(rs.getString("Patente"), rs.getInt("count"));
-            }
-            return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
+        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
+        return hashMap;
     }
 
     public HashMap<String, Integer> selectTotalClientesReportes() {
@@ -508,11 +196,10 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         String sql = "select Identificacion, nombreORazonSocial, count(Identificacion) as count from " +
                 ETablas.CLIENTE + " where fechaBaja is null group by Identificacion";
         HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (ResultSet rs = getResultSet(sql)) {
             while (rs.next()) {
-                hashMap.put(rs.getString("Identificacion") + " - " + rs.getString("nombreORazonSocial"), rs.getInt("count"));
+                hashMap.put(rs.getString("Identificacion") + " - " +
+                        rs.getString("nombreORazonSocial"), rs.getInt("count"));
             }
             return hashMap;
         }
@@ -536,193 +223,11 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         String sql = "select Identificacion, fechaAlta, count(Identificacion) as count from " + ETablas.CLIENTE +
                 " where fechaBaja is null group by Identificacion";
         HashMap<String, Integer> hashMap = new HashMap<>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (ResultSet rs = getResultSet(sql)) {
             while (rs.next()) {
                 hashMap.put(rs.getString("Identificacion" ) + " - " + rs.getString("fechaAlta"), rs.getInt("count"));
             }
             return hashMap;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesChofer(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, dni FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("dni"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesAuto(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, patente FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("patente"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesFecha(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, fecha FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("fecha"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesHora(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, horaInicio FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("horaInicio"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesOrigen(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, origen FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("origen"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return null;
-    }
-
-    public String[] selectViajesDestino(String identificacion) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "SELECT Numero, destino FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                result.add(rs.getString("destino"));
-            }
-            String[] resultString = new String[result.size()];
-            resultString = result.toArray(resultString);
-            return resultString;
         }
         catch (SQLException e) {
             logger.addHandler(getArchivoLog());
@@ -742,10 +247,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
         String sql = "SELECT count() as cont from " + ETablas.RENDICION + "";
-        ArrayList<String> result = new ArrayList<String>();
-        try (Connection conn = super.connect();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (ResultSet rs = getResultSet(sql)) {
             while (rs.next()) {
                 return Integer.toString(rs.getInt("cont") + 1);
             }
@@ -760,6 +262,82 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         }
         logger.exiting(getClass().getName(), getNombreMetodo());
         return null;
+    }
+
+    private String getAtributoTabla(String sql, String atributo, CTestPerformance testPerformance,
+                                    String nombreMetodo) {
+        try (ResultSet rs = getResultSet(sql)) {
+            while (rs.next()) {
+                return rs.getString(atributo);
+            }
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(nombreMetodo));
+        }
+        return null;
+    }
+
+    private String[] getRegistrosTabla(String sql, String atributo,
+                                       CTestPerformance testPerformance, String nombreMetodo, String primerElemento) {
+        ArrayList<String> result = new ArrayList<String>();
+        try (ResultSet rs = getResultSet(sql)) {
+            if (primerElemento.equals(" ")) {
+                result.add(primerElemento);
+                while (rs.next()) {
+                    result.add(rs.getString(atributo));
+                }
+                String[] resultString = new String[result.size()];
+                return result.toArray(resultString);
+            }
+            else {
+                while (rs.next()) {
+                    result.add(rs.getString(atributo));
+                }
+                String[] resultString = new String[result.size()];
+                return result.toArray(resultString);
+            }
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(nombreMetodo));
+        }
+        return null;
+    }
+
+    private HashMap<String, Integer> getHashMap(String sql, String atributo, CTestPerformance testPerformance,
+                                                String nombreMetodo) {
+        HashMap<String, Integer> hashMap = new HashMap<>();
+        try (ResultSet rs = getResultSet(sql)) {
+            while (rs.next()) {
+                hashMap.put(rs.getString(atributo), rs.getInt("count"));
+            }
+            return hashMap;
+        }
+        catch (SQLException e) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
+        }
+        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
+            logger.addHandler(getArchivoLog());
+            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(nombreMetodo));
+        }
+        return null;
+    }
+
+    private ResultSet getResultSet(String sql) throws SQLException {
+        Connection conn = super.connect();
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        return rs;
     }
 
     @Override

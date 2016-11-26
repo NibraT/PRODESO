@@ -441,6 +441,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
         getListaCasos().add("de la Huerta");
+        getListaCasos().add("Miguel José García Rodríguez");
         return testerInputEsperado(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto());
     }
 

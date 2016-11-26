@@ -127,7 +127,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getFechaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.FECHA.getTexto(),
                 getFechaTextField().getToolTipText(), getFechaLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectDniRecepcionista(2), 333, 20,
+        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado(3, 2), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getRecepcionistaLabel().getText(), this));
         this.getRecepcionistasLista().setEnabled(false);
         // método default de IValidadorInput

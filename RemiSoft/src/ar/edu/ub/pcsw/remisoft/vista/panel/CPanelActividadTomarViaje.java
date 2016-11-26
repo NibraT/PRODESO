@@ -70,13 +70,13 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectEmpleadoDisponibles(1, 1), 333, 20, Color.WHITE,
+        this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado(1, 1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
         this.getChoferesLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
         // método default de IJComboBoxFactory
-        this.setAutosLista(this.crearComboBox(new CSelectSQL().selectAutoDisponibles(1), 333, 20, Color.WHITE,
+        this.setAutosLista(this.crearComboBox(new CSelectSQL().selectRecursoAuto("Patente", 1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this));
         this.getAutosLista().setEnabled(false);
         // método default de IValidadorInput

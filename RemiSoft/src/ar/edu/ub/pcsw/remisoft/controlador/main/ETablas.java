@@ -18,10 +18,16 @@ public enum ETablas {
 
     private String nombreTabla;
 
+    /*
+    Constructor
+     */
     ETablas(String nombreTabla) {
         this.nombreTabla = nombreTabla;
     }
 
+    /*
+    Constructor
+     */
     ETablas() {
         for (int i = 0; i < CDataBase.getListaTablas().size() - 1; i++) {
             for (ETablas tabla : ETablas.values()) {

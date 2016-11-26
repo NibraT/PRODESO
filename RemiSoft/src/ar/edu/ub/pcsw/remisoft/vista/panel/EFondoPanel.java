@@ -2,8 +2,8 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 public enum EFondoPanel {
 
-    MAPAGARIN("src/data/mapaGarin.jpg", 1100, 587),
-    MAPAZONAGARIN("src/data/mapaZonaGarin.jpg", 200, 587);
+    MAPAGARIN("RemiSoft/src/data/mapaGarin.jpg", 1100, 587),
+    MAPAZONAGARIN("RemiSoft/src/data/mapaZonaGarin.jpg", 200, 587);
 
     private int alto;
     private int ancho;

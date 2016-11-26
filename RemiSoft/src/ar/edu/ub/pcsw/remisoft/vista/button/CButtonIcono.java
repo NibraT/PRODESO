@@ -42,11 +42,10 @@ public class CButtonIcono extends JButton {
         ImageIcon iconoTamañoDeseado = new ImageIcon(iconoTamañoOriginal.getUbicacion());
         Image imagen = iconoTamañoDeseado.getImage();
         imagen = imagen.getScaledInstance(imagen.getWidth(null)/reduc, imagen.getHeight(null)/reduc,
-                Image.SCALE_SMOOTH);
+                    Image.SCALE_SMOOTH);
         iconoTamañoDeseado.setImage(imagen);
         return iconoTamañoDeseado;
     }
-
 
     public static void abrirPaginaWeb(URI uri) {
         Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;

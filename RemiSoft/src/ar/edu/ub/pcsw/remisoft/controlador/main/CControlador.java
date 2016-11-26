@@ -17,8 +17,8 @@ public class CControlador {
 
     private static void setArchivoLog() {
         try {
-            CControlador.archivoLog = new FileHandler("RemiSoft1.0-" + CControlador.class.getName() + "-log.%u.%g.txt",
-                    1024 * 1024, 10);
+            CControlador.archivoLog = new FileHandler("RemiSoft1.0-" + CControlador.class.getName() +
+                    "-log.%u.%g.txt", 1024 * 1024, 10);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());

@@ -18,14 +18,26 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
 
     private JComboBox<String> motivosLista;
+
+    public JComboBox<String> getViajesLista() { return this.viajesLista; }
+
+    public void setViajesLista(JComboBox<String> viajesLista) { this.viajesLista = viajesLista; }
+
+    private JComboBox<String> viajesLista;
     private JLabel motivoLabel;
+
+    public JLabel getNumeroLabel() { return this.numeroLabel; }
+
+    public void setNumeroLabel(JLabel numeroLabel) { this.numeroLabel = numeroLabel; }
+
+    private JLabel numeroLabel;
     private JTextField fechaTextField;
     private JTextField autoTextField;
     private JTextField choferTextField;
     private JTextField clienteTextField;
     private JTextField destinoTextField;
     private JTextField horaTextField;
-    private JTextField numeroTextField;
+    //private JTextField numeroTextField;
     private JTextField origenTextField;
     private String[] motivos = new String[] {" ", "Cliente desistió de viajar", "Sin auto disponible",
             "Sin chofer disponible"};
@@ -43,7 +55,11 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
-        JLabel numeroLabel = new JLabel("Viaje Reservado");
+
+        //JLabel numeroLabel = new JLabel("Viaje Reservado");
+        this.setNumeroLabel(new JLabel("Viaje Reservado"));
+        this.getNumeroLabel().setForeground(Color.RED);
+
         JLabel choferLabel = new JLabel("Chofer Asignado");
         JLabel autoLabel = new JLabel("Auto Asignado");
         this.getFechaLabel().setForeground(Color.BLACK);
@@ -56,13 +72,24 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         // método default de IJTextFieldFactory
         this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
         this.getClienteTextField().setEditable(false);
-        this.getClienteTextField().addFocusListener(this);
+        //this.getClienteTextField().addFocusListener(this);
         // método default de IValidadorInput
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
+
         // método default de IJTextFieldFactory
-        this.setNumeroTextField(this.setTextField(ancho, "Número del Viaje a cancelar", this));
-        this.getNumeroTextField().setEditable(false);
+//        this.setNumeroTextField(this.setTextField(ancho, "Número del Viaje a cancelar", this));
+//        this.getNumeroTextField().setEditable(false);
+
+        // método default de IJComboBoxFactory
+        this.setViajesLista(this.crearComboBox(new CSelectSQL().selectRecursoParaBaja("Numero",
+                getClienteTextField().getText()), 333, 20, Color.WHITE,
+                EToolTipTextTexto.SELECCIONAR.getTexto() + getNumeroLabel().getText(), this));
+        this.getViajesLista().setEnabled(false);
+        this.getViajesLista().addFocusListener(this);
+        // método default de IValidadorInput
+        this.validadorInput(getViajesLista(), getViajesLista().getToolTipText(), getNumeroLabel().getText());
+
         // método default de IJTextFieldFactory
         this.setChoferTextField(this.setTextField(ancho, "Chofer del Viaje a cancelar", this));
         this.getChoferTextField().setEditable(false);
@@ -118,7 +145,10 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         this.getGbc().gridy = 1;
         this.getPanelInput().add(this.getClienteTextField(), this.getGbc());
         this.getGbc().gridy++;
-        this.getPanelInput().add(this.getNumeroTextField(), this.getGbc());
+
+        //this.getPanelInput().add(this.getNumeroTextField(), this.getGbc());
+        this.getPanelInput().add(this.getViajesLista(), this.getGbc());
+
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getChoferTextField(), this.getGbc());
         this.getGbc().gridy++;
@@ -148,13 +178,7 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getHabilitarButton())) {
             getClienteTextField().setEditable(true);
-            getNumeroTextField().setEditable(true);
-            getChoferTextField().setEditable(true);
-            getAutoTextField().setEditable(true);
-            getFechaTextField().setEditable(true);
-            getHoraTextField().setEditable(true);
-            getOrigenTextField().setEditable(true);
-            getDestinoTextField().setEditable(true);
+            getViajesLista().setEnabled(true);
             getMotivosLista().setEnabled(true);
             getRecepcionistasLista().setEnabled(true);
         }
@@ -165,6 +189,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             if ((getClienteTextField().getText().isEmpty()) ||
                     (getClienteTextField().getText() == null) ||
                     (getClienteTextField().getText().equals(" ")) ||
+                    (getViajesLista().getSelectedItem().toString().isEmpty()) ||
+                    (getViajesLista().getSelectedItem().toString() == null) ||
+                    (getViajesLista().getSelectedItem().toString().equals(" ")) ||
                     (getMotivosLista().getSelectedItem().toString().isEmpty()) ||
                     (getMotivosLista().getSelectedItem().toString() == null) ||
                     (getMotivosLista().getSelectedItem().toString().equals(" ")) ||
@@ -176,7 +203,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
             }
             else {
                 CUpdateSQL update = new CUpdateSQL();
-                update.updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
+//                update.updateCanceladoViaje(parseInt(getNumeroTextField().getText()),
+//                        getMotivosLista().getSelectedItem().toString());
+                update.updateCanceladoViaje(parseInt(getViajesLista().getSelectedItem().toString()),
                         getMotivosLista().getSelectedItem().toString());
                 update.updateDisponibleVehiculo(1, getAutoTextField().getText());
                 update.updateDisponibleEmpleado(1, getChoferTextField().getText());
@@ -187,13 +216,29 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     @Override
     public void focusLost(FocusEvent e) {
         CSelectSQL select = new CSelectSQL();
-        this.getNumeroTextField().setText(select.selectViajesNumero(getClienteTextField().getText())[0]);
-        this.getChoferTextField().setText(select.selectViajesChofer(getClienteTextField().getText())[0]);
-        this.getAutoTextField().setText(select.selectViajesAuto(getClienteTextField().getText())[0]);
-        this.getFechaTextField().setText(select.selectViajesFecha(getClienteTextField().getText())[0]);
-        this.getHoraTextField().setText(select.selectViajesHora(getClienteTextField().getText())[0]);
-        this.getOrigenTextField().setText(select.selectViajesOrigen(getClienteTextField().getText())[0]);
-        this.getDestinoTextField().setText(select.selectViajesDestino(getClienteTextField().getText())[0]);
+        if (! getClienteTextField().getText().equals(" ")) {
+            this.getViajesLista().removeAllItems();
+            for (String numero : new CSelectSQL().selectRecursoParaBaja("Numero",
+                    getClienteTextField().getText())) {
+                this.getViajesLista().addItem(numero);
+            }
+        }
+        /*this.getNumeroTextField().setText(select.selectViajes(getClienteTextField().getText(), "Numero")[0]);
+        this.getChoferTextField().setText(select.selectViajes(getClienteTextField().getText(), "dni")[0]);
+        this.getAutoTextField().setText(select.selectViajes(getClienteTextField().getText(), "Patente")[0]);
+        this.getFechaTextField().setText(select.selectViajes(getClienteTextField().getText(), "fecha")[0]);
+        this.getHoraTextField().setText(select.selectViajes(getClienteTextField().getText(), "horaInicio")[0]);
+        this.getOrigenTextField().setText(select.selectViajes(getClienteTextField().getText(), "origen")[0]);
+        this.getDestinoTextField().setText(select.selectViajes(getClienteTextField().getText(), "destino")[0]);*/
+
+
+
+//        this.getChoferTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "dni")[0]);
+//        this.getAutoTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "Patente")[0]);
+//        this.getFechaTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "fecha")[0]);
+//        this.getHoraTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "horaInicio")[0]);
+//        this.getOrigenTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "origen")[0]);
+//        this.getDestinoTextField().setText(select.selectViajes(getViajesLista().getSelectedItem().toString(), "destino")[0]);
     }
 
     public JComboBox<String> getMotivosLista() { return this.motivosLista; }
@@ -224,9 +269,9 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
 
     public void setHoraTextField(JTextField horaTextField) { this.horaTextField = horaTextField; }
 
-    public JTextField getNumeroTextField() { return this.numeroTextField; }
+    /*public JTextField getNumeroTextField() { return this.numeroTextField; }
 
-    public void setNumeroTextField(JTextField numeroTextField) { this.numeroTextField = numeroTextField; }
+    public void setNumeroTextField(JTextField numeroTextField) { this.numeroTextField = numeroTextField; }*/
 
     public JTextField getOrigenTextField() { return this.origenTextField; }
 

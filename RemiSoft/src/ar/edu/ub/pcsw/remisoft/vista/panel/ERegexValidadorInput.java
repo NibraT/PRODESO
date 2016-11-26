@@ -126,15 +126,19 @@ public enum ERegexValidadorInput {
       ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       (?!\.)              # con/sin uno o más puntos
-      {2,25})             # no menos de 2 ni más de 30 caracteres
+      {2,30})             # no menos de 2 ni más de 40 caracteres
       |                   # disyunción no exclusiva
     */
-    NOMBREYAPELLIDOORAZONSOCIAL("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
-            "{1,2}(?!\\.)[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC.]{2,25})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,25})"),
+    NOMBREYAPELLIDOORAZONSOCIAL("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})|" +
+            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}(?!\\.)[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC.]{2,30})|" +
+            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})|" +
+            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})"),
     /*Explicación de la regex NUMEROVIAJE
       ([1-9])       # sólo numeros
       \d{1,5}       # 1 a 5 dígitos

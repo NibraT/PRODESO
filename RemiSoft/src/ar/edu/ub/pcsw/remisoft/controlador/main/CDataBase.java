@@ -19,7 +19,7 @@ public class CDataBase {
 
     /*
     Constructor
-     */
+    */
     protected CDataBase() {
         this.setListadoTablas();
         CDataBase.setListaTablas(this.getListadoTablas());
@@ -47,7 +47,7 @@ public class CDataBase {
         testPerformance.startPerformanceTest();
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection("jdbc:sqlite:src/BaseDatos/RemiSoftDB");
+            conn = DriverManager.getConnection("jdbc:sqlite:RemiSoft/src/BaseDatos/RemiSoftDB");
         }
         catch (SQLException e) {
             logger.addHandler(getArchivoLog());
