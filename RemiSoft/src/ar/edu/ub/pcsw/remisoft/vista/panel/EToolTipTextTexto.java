@@ -22,7 +22,6 @@ public enum EToolTipTextTexto {
     CONSUMO("Completar 2 posiciones ingresando sólo un número entre 10 y 99"),
     CORREOELECTRONICO("Email"),
     CORREOPOSTAL("Correo"),
-    //CUENTA("Completar 3 posiciones ingresando sólo un número entre 100 y 999"),
     CUENTAADICIONAL("Aceptar 0 o completar 1 posición ingresando sólo un número entre 1 y 4"),
     EMERGENCIAMEDICA("Emergencia Médica"),
     DNI("Completar 8 posiciones ingresando sólo un número entre 10000000 y 99999999"),
@@ -66,4 +65,3 @@ public enum EToolTipTextTexto {
     public void setTexto(String texto) { this.texto = texto; }
 
 }
-

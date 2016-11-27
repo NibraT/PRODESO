@@ -3,6 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -238,8 +239,10 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
                 viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
                 new CInsertSQL().insertarViaje(viaje);
                 CUpdateSQL update = new CUpdateSQL();
-                update.updateDisponibleVehiculo(0, getAutosLista().getSelectedItem().toString());
-                update.updateDisponibleEmpleado(0, getChoferesLista().getSelectedItem().toString());
+                update.updateTabla(ETablas.VEHICULO, "disponible", "Patente",
+                        getAutosLista().getSelectedItem().toString(), 0);
+                update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
+                        getChoferesLista().getSelectedItem().toString(), 0);
             }
         }
     }

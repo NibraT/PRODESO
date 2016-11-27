@@ -3,6 +3,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.modelo.rendiciones.CRendicion;
@@ -159,13 +160,13 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
                 rendicion.setCostoTestigo(getCostoTestigoTextField().getText());
                 rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
                 new CInsertSQL().insertarViajeRendicion(rendicion);
-                CUpdateSQL updateSQL = new CUpdateSQL();
-                updateSQL.updateDisponibleVehiculo(1,
+                CUpdateSQL update = new CUpdateSQL();
+                update.updateTabla(ETablas.VEHICULO, "disponible", "Patente",
                         new CSelectSQL().selectRecurso("viaje", null, "patente",
-                                parseInt(getViajeTextField().getText())));
-                updateSQL.updateDisponibleEmpleado(1,
-                        new CSelectSQL().selectRecurso("empleado", null, "dni",
-                                parseInt(getViajeTextField().getText())));
+                                parseInt(getViajeTextField().getText())), 1);
+                update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
+                        new CSelectSQL().selectRecurso("viaje", null, "dni",
+                                parseInt(getViajeTextField().getText())), 1);
             }
         }
     }

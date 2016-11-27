@@ -39,10 +39,9 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarEmpleado(CEmpleado empleado) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.EMPLEADO + "(Dni, apellido, nombre, domicilio," +
-                " telefono, fechaAlta, disponible, turno, TipoEmpleado) VALUES(?,?,?,?,?,?,?,?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.EMPLEADO +
+                "(Dni, apellido, nombre, domicilio," +
+                " telefono, fechaAlta, disponible, turno, TipoEmpleado) VALUES(?,?,?,?,?,?,?,?,?)")) {
             pstmt.setString(1, empleado.getDni());
             pstmt.setString(2, empleado.getApellido());
             pstmt.setString(3, empleado.getNombre());
@@ -64,10 +63,9 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarCliente(CCliente cliente) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.CLIENTE + "(identificacion, nombreORazonSocial," +
-                " domicilio, telefono, fechaAlta) VALUES(?,?,?,?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.CLIENTE +
+                "(identificacion, nombreORazonSocial," +
+                " domicilio, telefono, fechaAlta) VALUES(?,?,?,?,?)")) {
             pstmt.setString(1, cliente.getIdentificacion());
             pstmt.setString(2, cliente.getNombreYApellidoORazonSocial());
             pstmt.setString(3, cliente.getDomicilio());
@@ -85,10 +83,9 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarVehiculo(CVehiculo vehiculo) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.VEHICULO + "(Patente, marca, modelo, aseguradora," +
-                " fechaAlta, disponible, consumo, kilometraje) VALUES(?,?,?,?,?,?,?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.VEHICULO +
+                "(Patente, marca, modelo, aseguradora," +
+                " fechaAlta, disponible, consumo, kilometraje) VALUES(?,?,?,?,?,?,?,?)")) {
             pstmt.setString(1, vehiculo.getPatente());
             pstmt.setString(2, vehiculo.getMarca());
             pstmt.setString(3, vehiculo.getModelo());
@@ -109,10 +106,9 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarViaje(CViaje viaje) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.VIAJE + "(origen, destino, precio, fecha," +
-                " horaInicio, identificacion, dni, patente, idSucursal) VALUES(?,?,?,?,?,?,?,?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.VIAJE +
+                "(origen, destino, precio, fecha, horaInicio, identificacion, dni, patente, idSucursal) " +
+                "VALUES(?,?,?,?,?,?,?,?,?)")) {
             pstmt.setString(1, viaje.getOrigen());
             pstmt.setString(2, viaje.getDestino());
             pstmt.setInt(3, Integer.parseInt(viaje.getPrecio()));
@@ -134,10 +130,8 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarViajeRendicion(CRendicion rendicion) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.RENDICION + "(IdViaje, costoEfectivo, costoTestigo," +
-                " IdEmpleado) VALUES(?,?,?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.RENDICION +
+                "(IdViaje, costoEfectivo, costoTestigo, IdEmpleado) VALUES(?,?,?,?)")) {
             pstmt.setInt(1, Integer.parseInt(rendicion.getViajeNumero()));
             pstmt.setInt(2, Integer.parseInt(rendicion.getCostoEfectivo()));
             pstmt.setDouble(3, Double.parseDouble((rendicion.getCostoTestigo())));
@@ -154,9 +148,8 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     public void insertarEmpleadoClavePass(CUsuario usuario) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
-        String sql = "INSERT INTO " + ETablas.USUARIO + "(NombreUsuario, password) VALUES(?,?)";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getPreparedStatement("INSERT INTO " + ETablas.USUARIO +
+                "(NombreUsuario, password) VALUES(?,?)")) {
             pstmt.setString(1, usuario.getNombre());
             pstmt.setString(2, usuario.getClave());
             pstmt.executeUpdate();
@@ -166,6 +159,11 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
         }
         logger.exiting(getClass().getName(), getNombreMetodo());
+    }
+
+    private PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        Connection conn = super.connect();
+        return conn.prepareStatement(sql);
     }
 
     @Override

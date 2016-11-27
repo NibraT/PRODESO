@@ -2,6 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -123,7 +124,8 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
                         "Error en " + getNorteLabel().getText(), JOptionPane.ERROR_MESSAGE);
             }
             else {
-                new CUpdateSQL().updateFechaBajaCliente(getIdentificacionesLista().getSelectedItem().toString());
+                new CUpdateSQL().updateTabla(ETablas.CLIENTE, "fechaBaja", "Identificacion",
+                        getIdentificacionesLista().getSelectedItem().toString(), 0);
             }
         }
     }

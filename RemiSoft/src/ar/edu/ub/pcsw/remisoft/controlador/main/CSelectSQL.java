@@ -39,7 +39,7 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = atributo.equals("Patente") ? "SELECT " + atributo + " FROM " + ETablas.VEHICULO +
+        String sql = atributo.equalsIgnoreCase("Patente") ? "SELECT " + atributo + " FROM " + ETablas.VEHICULO +
                 " where disponible = " + disponible : "SELECT distinct " + atributo + " FROM " + ETablas.VEHICULO +
                 " where disponible = " + disponible;
         String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
@@ -67,10 +67,10 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
         String sql = " ";
-        if (atributo.equals("Dni")) {
+        if (atributo.equalsIgnoreCase("Dni")) {
             sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
         }
-        else if (atributo.equals("identificacion")) {
+        else if (atributo.equalsIgnoreCase("identificacion")) {
             sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where fechaBaja is null";
         }
         else if (atributo.equalsIgnoreCase("Patente")){
@@ -86,36 +86,22 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return registros;
     }
 
-    public String[] selectViajes(String identificacion, String atributo) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = atributo.equals("Numero") ? "SELECT " + atributo + " FROM " + ETablas.VIAJE +
-                " where identificacion = " + identificacion + " order by Numero desc limit 1" : "SELECT Numero, " +
-                atributo + " FROM " + ETablas.VIAJE + " where identificacion = " + identificacion +
-                " order by Numero desc limit 1";
-        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), "no");
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return registros;
-    }
-
     public String selectRecurso(String recurso, String identificacion, String atributo, int numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
         String sql = " ";
-        if (recurso.equals("empleado")) {
+        if (recurso.equalsIgnoreCase("empleado")) {
             sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where dni = '" + identificacion + "'";
         }
-        else if (recurso.equals("cliente")) {
+        else if (recurso.equalsIgnoreCase("cliente")) {
             sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where identificacion = '" + identificacion + "'";
         }
-        else if (recurso.equals("viaje")) {
+        else if (recurso.equalsIgnoreCase("viaje")) {
             sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where Numero = " + numero;
         }
-        else if (recurso.equals("auto")){
+        else if (recurso.equalsIgnoreCase("auto")){
             sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where patente = '" + identificacion + "'";
         }
         String result = getAtributoTabla(sql, atributo, testPerformance, getNombreMetodo());
@@ -123,27 +109,13 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return result;
     }
 
-    public HashMap<String, Integer> selectViajesPorAutoReportes() {
+    public HashMap<String, Integer> selectViajesPorAutoOChoferReportes(String atributo) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String atributo = "patente";
         String sql = "select " + atributo + ", count(patente) as count from " + ETablas.VIAJE +
-                " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by patente";
-        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return hashMap;
-    }
-
-    public HashMap<String, Integer> selectViajesPorChoferReportes() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String atributo = "dni";
-        String sql = "select " + atributo + ", count(patente) as count from " + ETablas.VIAJE +
-                " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by dni";
+                " inner join " + ETablas.RENDICION + " on Numero = IdViaje group by " + atributo;
         HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
         return hashMap;
@@ -162,27 +134,14 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         return hashMap;
     }
 
-    public HashMap<String, Integer> selectTodosAutosDisponiblesReportes() {
+    public HashMap<String, Integer> selectTodosAutosDisponiblesNoDisponiblesReportes(String numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
         String atributo = "Patente";
         String sql = "select " + atributo + ", count(Patente) as count from " + ETablas.VEHICULO +
-                " where disponible = 1 and fechaBaja is null group by Patente";
-        HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
-        logger.exiting(getClass().getName(), getNombreMetodo());
-        return hashMap;
-    }
-
-    public HashMap<String, Integer> selectTodosAutosNoDisponiblesReportes() {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String atributo = "Patente";
-        String sql = "select " + atributo + ", count(Patente) as count from " + ETablas.VEHICULO +
-                " where disponible = 0 and fechaBaja is null group by Patente";
+                " where disponible = " + numero + " and fechaBaja is null group by Patente";
         HashMap<String, Integer> hashMap = getHashMap(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
         return hashMap;

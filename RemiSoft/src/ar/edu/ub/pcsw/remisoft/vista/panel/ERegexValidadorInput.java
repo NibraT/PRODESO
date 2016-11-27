@@ -3,17 +3,17 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 public enum ERegexValidadorInput {
 
     /*Explicación de la regex APELLIDO
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
-                          #   excepto vocales con acento) del alfabeto latino
-      {2,20})             # no menos de 2 ni más de 27 caracteres
-      |                   # disyunción no exclusiva
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+                       #   excepto vocales con acento) del alfabeto latino
+      {1,20})          # no menos de 2 ni más de 27 caracteres
+      |                # disyunción no exclusiva
     */
-    APELLIDO("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{1,20})"),
+    APELLIDO("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)([^0-9!#$%&/()=?¡)\\.,;:-][a-zA-Z\\p{L}]{1,20})|" +
+            "([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20})|" +
+            "([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{1,20})|" +
+            "([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20}[\\s]" +
+            "{1,2}[a-zA-Z\\p{L}]{1,20})"),
     /*Explicación de la regex CLAVE
       (?=.*[a-z])     # al menos 1 letra minúscula
       (?=.*[A-Z])     # al menos 1 letra mayúscula
@@ -34,7 +34,7 @@ public enum ERegexValidadorInput {
       \d{0}         # sólo 3 caracteres
       ([^\.]|[^\s]) # sin puntos ni espacios en blanco
     */
-    CUENTA("((([1-9][0-9])\\d{0})([^\\.]|[^\\s]))"),
+    CUENTA("(([1-9][0-9])\\d{0})([^\\.]|[^\\s])"),
     /*Explicación de la regex CUENTAADICIONAL
       0|1|2|3|4  # sólo 0 y números enteros entre 1 y 4
     */
@@ -46,14 +46,15 @@ public enum ERegexValidadorInput {
     */
     DNI("((([1-9][0-9])\\d{2})[^\\.][^\\s][^a-zA-Z][^,])"),
     /*Explicación de la regex DOMICILIO
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]     # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       \d+                 # al menos uno o más caracteres numéricos
       \(?\)?              # paréntesis de apertura y cierre opcionales
       \s{2,5}             # no menos de 2 ni más de 5 espacios en blanco
       {2,45})             # no menos de 2 ni más de 47 caracteres
     */
-    DOMICILIO("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d+\\(?\\)?\\s{2,5}]{2,45}"),
+    DOMICILIO("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)[a-zA-Z\\p{L}\\d+\\(?\\)?\\s{2,5}]{2,45}"),
     /*Explicación de la regex FECHA
       (((([1-9][0-9])    # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{2}              # no menos de 7 caracteres
@@ -88,57 +89,47 @@ public enum ERegexValidadorInput {
       \d{0,4}       # hasta 6 caracteres
       ([^\.]|[^\s]) # sin puntos ni espacios en blanco
     */
-    KILOMETRAJE("((([0-9])|(([0-9])\\d{0,4})([^\\.]|[^\\s])))"),
+    KILOMETRAJE("([0-9])|(([0-9])\\d{0,4})([^\\.]|[^\\s])"),
     /*Explicación de la regex MARCA
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]     # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       {2,20})             # no menos de 2 ni más de 27 caracteres
       |                   # disyunción no exclusiva
     */
-    MARCA("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{1,20})"),
+    MARCA("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)([a-zA-Z\\p{L}]{2,20})|([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20})|" +
+            "([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{1,20})"),
     /*Explicación de la regex MODELO
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]     # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       \d+                 # al menos uno o más caracteres numéricos
       \-?                 # un guión medio opcional
       \s{2,5}             # no menos de 2 ni más de 5 espacios en blanco
       {2,30})             # no menos de 2 ni más de 32 caracteres
     */
-    MODELO("[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d+\\-?\\s{2,5}]{2,30}"),
+    MODELO("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)[a-zA-Z\\p{L}\\d+\\-?\\s{2,5}]{2,30}"),
     /*Explicación de la regex NOMBRE
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]     # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       {2,20})             # no menos de 2 ni más de 27 caracteres
       |                   # disyunción no exclusiva
     */
-    NOMBRE("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,20}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{1,20})"),
+    NOMBRE("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)([a-zA-Z\\p{L}]{2,20})|([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20})|" +
+            "([a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{2,20}[\\s]{1,2}[a-zA-Z\\p{L}]{1,20})"),
     /*Explicación de la regex NOMBREYAPELLIDOORAZONSOCIAL
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
+      (?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y]) # excluye 2 letras consecutivas iguales salvo c, g, l, m, n, p, r, s, t, z
+      ([a-zA-Z\\p{L}]     # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
                           #   excepto vocales con acento) del alfabeto latino
       (?!\.)              # con/sin uno o más puntos
       {2,30})             # no menos de 2 ni más de 40 caracteres
       |                   # disyunción no exclusiva
     */
-    NOMBREYAPELLIDOORAZONSOCIAL("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}(?!\\.)[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC.]{2,30})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30}[\\s]" +
-            "{1,2}[a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC]{2,30})"),
+    NOMBREYAPELLIDOORAZONSOCIAL("(?!.*([a-bd-fh-koqu-yA-BD-FH-KOQU-Y])\\1)([a-zA-Z\\p{L}]{2,30})|([a-zA-Z\\p{L}]{2,30}[\\s]" +
+            "{1,2}(?!\\.)[a-zA-Z\\p{L}.]{2,30})|([a-zA-Z\\p{L}]{2,30}[\\s]{1,2}[a-zA-Z\\p{L}]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\\p{L}]{2,30})|([a-zA-Z\\p{L}]{2,30}[\\s]{1,2}[a-zA-Z\\p{L}]{2,30}[\\s]" +
+            "{1,2}[a-zA-Z\\p{L}]{2,30}[\\s]{1,2}[a-zA-Z\\p{L}]{2,30})"),
     /*Explicación de la regex NUMEROVIAJE
       ([1-9])       # sólo numeros
       \d{1,5}       # 1 a 5 dígitos
@@ -146,21 +137,19 @@ public enum ERegexValidadorInput {
     */
     NUMEROVIAJE("((\\d){1,5})"),
     /*Explicación de la regex PATENTE
-      ([a-zA-ZáéíóúñÑüÜ]  # sólo consonantes y/o vocales (con/sin acento) mayúsculas y/o minúsculas (éstas últimas
-                          #   excepto vocales con acento) del alfabeto latino
-      \d                  # al menos uno o más caracteres numéricos
-      \s{2,2}             # no menos de 2 ni más de 5 espacios en blanco
-      {9})                # 9 caracteres en total
-      |                   # disyunción no exclusiva
+      ([a-zA-Z]     # sólo consonantes y/o vocales mayúsculas y/o minúsculas sin acento del alfabeto latino
+      \d            # al menos uno o más caracteres numéricos
+      \s{2,2}       # no menos de 2 ni más de 5 espacios en blanco
+      {9})          # 9 caracteres en total
+      |             # disyunción no exclusiva
     */
-    PATENTE("([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{2,2}]{9})|" +
-            "([a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\d\\s{1,1}]{7})"),
+    PATENTE("((?!.*([0])\\2)([a-zA-Z\\d\\s{1,1}]{7}))|((?!.*([0])\\2)[a-zA-Z\\d\\s{2,2}]{9})"),
     /*Explicación de la regex PRECIO
       ([1-9][0-9])  # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{0,1}       # no menos de 3 ni más de 4 caracteres
       [^\\.]        # sin puntos
     */
-    PRECIO("(([1-9][0-9])\\d{0,1}[^a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\.!#$%&/()?¡¿¨-])"),
+    PRECIO("([1-9][0-9])\\d{0,1}[^a-zA-Z\\p{L}\\.!#$%&/()?¡¿¨-]"),
     /*Explicación de la regex TELEFONO
       ([1-9][0-9])  # sólo numeros entre 1 y 9 (primer dígito) y 0 y 9 (demás dígitos)
       \d{4}         # sólo 8 caracteres numéricos
@@ -168,8 +157,8 @@ public enum ERegexValidadorInput {
       [^\.][^\s]    # sin puntos ni espacios en blanco
       |             # disyunción no exclusiva
     */
-    TELEFONO("(((([1-9][0-9])\\d{5})[^a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\.\\s!#$%&/()?¡¿¨-])|" +
-            "((([1-9][0-9])\\d{7})[^a-zA-Z\u00E1\u00E9\u00ED\u00F3\u00FA\u00F1\u00D1\u00FC\u00DC\\.\\s!#$%&/()?¡¿¨-]))");
+    TELEFONO("((([1-9][0-9])\\d{5})[^a-zA-Z\\p{L}\\.\\s!#$%&/()?¡¿¨-])|" +
+            "((([1-9][0-9])\\d{7})[^a-zA-Z\\p{L}\\.\\s!#$%&/()?¡¿¨-])");
 
     private String texto;
 

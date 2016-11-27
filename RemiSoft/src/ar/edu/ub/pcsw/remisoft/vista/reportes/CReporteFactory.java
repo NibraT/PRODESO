@@ -27,19 +27,19 @@ public class CReporteFactory {
         HashMap<String, Integer> resultado = null;
         if(tituloReporte.equals("Total viajes"))
         {
-            resultado = new CSelectSQL().selectViajesPorAutoReportes();
+            resultado = new CSelectSQL().selectViajesPorAutoOChoferReportes("patente");
         }
         else if (tituloReporte.equals("Total viajes por chofer")){
-            resultado = new CSelectSQL().selectViajesPorChoferReportes();
+            resultado = new CSelectSQL().selectViajesPorAutoOChoferReportes("dni");
         }
         else if (tituloReporte.equals("Total autos")){
             resultado = new CSelectSQL().selectTodosAutosReportes();
         }
         else if (tituloReporte.equals("Autos disponibles hoy")){
-            resultado = new CSelectSQL().selectTodosAutosDisponiblesReportes();
+            resultado = new CSelectSQL().selectTodosAutosDisponiblesNoDisponiblesReportes("1");
         }
         else if (tituloReporte.equals("Autos no disponibles hoy")){
-            resultado = new CSelectSQL().selectTodosAutosNoDisponiblesReportes();
+            resultado = new CSelectSQL().selectTodosAutosDisponiblesNoDisponiblesReportes("0");
         }
         else if (tituloReporte.equals("Total clientes")){
             resultado = new CSelectSQL().selectTotalClientesReportes();

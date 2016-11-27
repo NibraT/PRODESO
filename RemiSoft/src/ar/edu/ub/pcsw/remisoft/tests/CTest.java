@@ -35,20 +35,22 @@ public class CTest implements ITemporizable {
         getTestPerformance().startPerformanceTest();
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
-        getListaCasos().add("brandini");
-        getListaCasos().add("Brandini");
-        getListaCasos().add("ramírez");
+        getListaCasos().add("braunedoni");
+        getListaCasos().add("Braunedoni");
+        getListaCasos().add("BrAuNEdOni");
         getListaCasos().add("Suárez");
         getListaCasos().add("Pérez");
+        getListaCasos().add("ramírez");
         getListaCasos().add("martínez giménez");
         getListaCasos().add("Gómez");
         getListaCasos().add("Cúspide");
         getListaCasos().add("Ma");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldes");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
-        getListaCasos().add("de la Huerta");
+        getListaCasos().add("de la Huerta Pos");
         return testerInputEsperado(ERegexValidadorInput.APELLIDO.getTexto());
     }
 
@@ -59,14 +61,19 @@ public class CTest implements ITemporizable {
         getListaCasos().add(" "); // ningún caracter
         getListaCasos().add("\n"); // line-break
         getListaCasos().add("d");
-        getListaCasos().add("4");
-        getListaCasos().add("#");
+        getListaCasos().add("0123456789");
+        getListaCasos().add("°!#$%&/()=");
+        getListaCasos().add("?¡¿'*+@");
         getListaCasos().add("9chimo");
-        getListaCasos().add("martínez costa estebecorena del río");
+        getListaCasos().add("martínez costa estebecorena federomatti galliannini");
         getListaCasos().add("% chimo");
-        getListaCasos().add("pérez-benítez");
         getListaCasos().add("martínez, gimenéz");
-        getListaCasos().add("díaz.");
+        getListaCasos().add("pérez-benítez");
+        getListaCasos().add("martínez:gimenéz");
+        getListaCasos().add("martínez;gimenéz");
+        getListaCasos().add("díaz.garcía");
+        getListaCasos().add("díaz@garcía");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.APELLIDO.getTexto());
     }
 
@@ -123,6 +130,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("-12");
         getListaCasos().add("k");
         getListaCasos().add("$");
+        getListaCasos().add("aa");
         return testerInputInesperado(ERegexValidadorInput.CONSUMO.getTexto());
     }
 
@@ -147,6 +155,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("1000");
         getListaCasos().add("5.47");
         getListaCasos().add("3 00");
+        getListaCasos().add("aaa");
         return testerInputInesperado(ERegexValidadorInput.CUENTA.getTexto());
     }
 
@@ -171,6 +180,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("-1");
         getListaCasos().add("5");
         getListaCasos().add("10");
+        getListaCasos().add("a");
+        getListaCasos().add("#");
         return testerInputInesperado(ERegexValidadorInput.CUENTAADICIONAL.getTexto());
     }
 
@@ -196,6 +207,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("10 000 000");
         getListaCasos().add("100000000");
         getListaCasos().add("-12000000");
+        getListaCasos().add("00000000");
         getListaCasos().add("abcdefgh");
         return testerInputInesperado(ERegexValidadorInput.DNI.getTexto());
     }
@@ -222,6 +234,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("#");
         getListaCasos().add("vera 1020 -1425- CABA");
         getListaCasos().add("boulevard ejercito de los andes liberatador san martín 1040");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.DOMICILIO.getTexto());
     }
 
@@ -254,6 +267,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("31/4/2017");
         getListaCasos().add("32/5/2017");
         getListaCasos().add("29/13/2018");
+        getListaCasos().add("2222222222");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.FECHA.getTexto());
     }
 
@@ -283,6 +298,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("-14:56");
         getListaCasos().add("a:56");
         getListaCasos().add("8:$");
+        getListaCasos().add("aaaaa");
         return testerInputInesperado(ERegexValidadorInput.HORA.getTexto());
     }
 
@@ -309,6 +325,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("2 3 3 3 "); // caracteres numéricos y espacio
         getListaCasos().add("a"); // caracter alfabético
         getListaCasos().add("2a3b2c3"); // caracter alfanumérico
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.IDENTIFICACION.getTexto());
     }
 
@@ -332,6 +349,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("12.000");
         getListaCasos().add("1,000");
         getListaCasos().add("a");
+        getListaCasos().add("1000 km");
         return testerInputInesperado(ERegexValidadorInput.KILOMETRAJE.getTexto());
     }
 
@@ -356,6 +374,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4ford");
         getListaCasos().add("#");
         getListaCasos().add("chevrolet ford renault citroen honda");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.MARCA.getTexto());
     }
 
@@ -383,6 +402,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4");
         getListaCasos().add("#");
         getListaCasos().add("ford fiesta kinetic suran bora classic");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.MODELO.getTexto());
     }
 
@@ -400,6 +420,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Li");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldo");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
         getListaCasos().add("alfredo darío");
@@ -417,6 +438,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("#");
         getListaCasos().add("9fernando");
         getListaCasos().add("marcela fernanda micaela luisa");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.NOMBRE.getTexto());
     }
 
@@ -438,9 +460,10 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Ma");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldes");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
-        getListaCasos().add("de la Huerta");
+        getListaCasos().add("de la Huerta Pos");
         getListaCasos().add("Miguel José García Rodríguez");
         return testerInputEsperado(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto());
     }
@@ -457,6 +480,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("9chimo");
         getListaCasos().add("martínez costa estebecorena del río");
         getListaCasos().add("Servicios Empresarios S,A,");
+        getListaCasos().add("aaaaaaaaaa");
         return testerInputInesperado(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto());
     }
 
@@ -480,8 +504,11 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4");
         getListaCasos().add("#");
         getListaCasos().add("ab ");
+        getListaCasos().add("000 agb");
+        getListaCasos().add("00 agb 00");
         getListaCasos().add("fgr 44");
         getListaCasos().add("9929 gghd 2222");
+        getListaCasos().add("áéí 440");
         return testerInputInesperado(ERegexValidadorInput.PATENTE.getTexto());
     }
 
@@ -507,8 +534,11 @@ public class CTest implements ITemporizable {
         getListaCasos().add("2.33");
         getListaCasos().add("24a");
         getListaCasos().add("$");
-        getListaCasos().add("732#");
+        getListaCasos().add("$732");
         getListaCasos().add("-732");
+        getListaCasos().add("(732)");
+        getListaCasos().add("000");
+        getListaCasos().add("aaaa");
         return testerInputInesperado(ERegexValidadorInput.PRECIO.getTexto());
     }
 
@@ -532,14 +562,18 @@ public class CTest implements ITemporizable {
         getListaCasos().add("15567890232");
         getListaCasos().add("15 5678 4355");
         getListaCasos().add("4788.5699");
+        getListaCasos().add("4788,5699");
         getListaCasos().add("4788-5699");
+        getListaCasos().add("4788:5699");
         getListaCasos().add("15-5678-9023");
         getListaCasos().add("a15567890232");
         getListaCasos().add("a 15567890232");
         getListaCasos().add("-15567890232");
-        getListaCasos().add("498%02345#");
+        getListaCasos().add("498%23045#");
         getListaCasos().add("tel");
         getListaCasos().add("cel.");
+        getListaCasos().add("aaaaaaaaa");
+        getListaCasos().add("@49003200");
         return testerInputInesperado(ERegexValidadorInput.TELEFONO.getTexto());
     }
 

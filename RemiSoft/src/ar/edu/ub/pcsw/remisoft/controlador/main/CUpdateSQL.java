@@ -31,17 +31,31 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         return archivoLog;
     }
 
-    public void updateFechaBajaCliente(String identificacion) {
+    public void updateTabla(ETablas tabla, String atributo1, String atributo2, String registro, int numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.CLIENTE + " SET fechaBaja = ? WHERE Identificacion = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, setFechaString(Calendar.getInstance()));
-            pstmt.setString(2, identificacion);
-            pstmt.executeUpdate();
+        String sql = tabla.equals(ETablas.VIAJE) ? "UPDATE " + tabla +
+                " SET " + atributo1 + " = ?, " + atributo2 + " = ? WHERE Numero = ?" : "UPDATE " + tabla + " SET " +
+                atributo1 + " = ? WHERE " + atributo2 + " = ?";
+        try (PreparedStatement pstmt = getPreparedStatement(sql)) {
+            if (atributo1.equals("cancelado")) {
+                pstmt.setInt(1, 1);
+                pstmt.setString(2, registro);
+                pstmt.setInt(3, numero);
+                pstmt.executeUpdate();
+            }
+            else if (atributo1.equals("disponible")) {
+                pstmt.setInt(1, numero);
+                pstmt.setString(2, registro);
+                pstmt.executeUpdate();
+            }
+            else if (atributo1.equals("fechaBaja")) {
+                pstmt.setString(1, setFechaString(Calendar.getInstance()));
+                pstmt.setString(2, registro);
+                pstmt.executeUpdate();
+            }
         }
         catch (SQLException e) {
             logger.addHandler(getArchivoLog());
@@ -54,120 +68,9 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
         logger.exiting(getClass().getName(), getNombreMetodo());
     }
 
-    public void updateFechaBajaEmpleado(String dni) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.EMPLEADO + " SET fechaBaja = ? WHERE Dni = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, setFechaString(Calendar.getInstance()));
-            pstmt.setString(2, dni);
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-    }
-
-    public void updateDisponibleEmpleado(int disponible, String dni) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.EMPLEADO + " SET disponible = ? WHERE Dni = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, disponible);
-            pstmt.setString(2, dni);
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-    }
-
-    public void updateFechaBajaVehiculo(String patente) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.VEHICULO + " SET fechaBaja = ? WHERE Patente = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, setFechaString(Calendar.getInstance()));
-            pstmt.setString(2, patente);
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-    }
-
-    public void updateDisponibleVehiculo(int disponible, String patente) {
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.VEHICULO + " SET disponible = ? WHERE Patente = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, disponible);
-            pstmt.setString(2, patente);
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
-    }
-
-    public void updateCanceladoViaje(int numeroViaje, String motivo){
-        setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
-        logger.entering(getClass().getName(), getNombreMetodo());
-        CTestPerformance testPerformance = CTestPerformance.getInstance();
-        testPerformance.startPerformanceTest();
-        String sql = "UPDATE " + ETablas.VIAJE + " SET cancelado = ?, motivoCancelacion = ? WHERE Numero = ?";
-        try (Connection conn = super.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, 1);
-            pstmt.setString(2, motivo);
-            pstmt.setInt(3, numeroViaje);
-            pstmt.executeUpdate();
-        }
-        catch (SQLException e) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.SEVERE, SQLException.class.getName(), e.getMessage());
-        }
-        if (testPerformance.setPerformanceTestResult() > getLimiteMaximo()) {
-            logger.addHandler(getArchivoLog());
-            logger.log(Level.INFO, testPerformance.getPerformanceTestResult(getNombreMetodo()));
-        }
-        logger.exiting(getClass().getName(), getNombreMetodo());
+    private PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        Connection conn = super.connect();
+        return conn.prepareStatement(sql);
     }
 
     @Override

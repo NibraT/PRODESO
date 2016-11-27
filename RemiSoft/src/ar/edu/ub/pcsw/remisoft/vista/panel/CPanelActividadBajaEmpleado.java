@@ -2,6 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
@@ -148,8 +149,10 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
             }
             else {
                 CUpdateSQL update = new CUpdateSQL();
-                update.updateFechaBajaEmpleado(getIdentificacionesLista().getSelectedItem().toString());
-                update.updateDisponibleEmpleado(0, getIdentificacionesLista().getSelectedItem().toString());
+                update.updateTabla(ETablas.EMPLEADO, "fechaBaja", "Dni",
+                        getIdentificacionesLista().getSelectedItem().toString(), 0);
+                update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
+                        getIdentificacionesLista().getSelectedItem().toString(), 0);
             }
         }
     }

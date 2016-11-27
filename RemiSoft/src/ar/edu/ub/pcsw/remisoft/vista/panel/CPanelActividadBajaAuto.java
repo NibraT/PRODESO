@@ -2,6 +2,7 @@ package ar.edu.ub.pcsw.remisoft.vista.panel;
 
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
+import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -130,8 +131,10 @@ public class CPanelActividadBajaAuto extends CPanelActividadBase implements Acti
             }
             else {
                 CUpdateSQL update = new CUpdateSQL();
-                update.updateDisponibleVehiculo(0, getPatentesLista().getSelectedItem().toString());
-                update.updateFechaBajaVehiculo(getPatentesLista().getSelectedItem().toString());
+                update.updateTabla(ETablas.VEHICULO, "fechaBaja", "Patente",
+                        getPatentesLista().getSelectedItem().toString(), 0);
+                update.updateTabla(ETablas.VEHICULO, "disponible", "Patente",
+                        getPatentesLista().getSelectedItem().toString(), 0);
             }
         }
     }
