@@ -26,7 +26,7 @@ public class CFrameRemisoft extends JFrame {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         this.setMaximizedBounds(env.getMaximumWindowBounds());
-        this.setIconImage(new ImageIcon("src/data/software-icon.png").getImage());
+        this.setIconImage(new ImageIcon("RemiSoft/src/data/software-icon.png").getImage());
         this.setTitle("RemiSoft 1.0");
         this.add(new CPanelSuperior(), BorderLayout.NORTH);
         CPanelPrincipal panelPrincipal = new CPanelPrincipal();

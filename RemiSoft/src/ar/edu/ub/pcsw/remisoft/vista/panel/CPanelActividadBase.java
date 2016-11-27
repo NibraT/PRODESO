@@ -18,6 +18,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     private CButtonSelectorPanel salirButton;
     private GridBagConstraints gbc;
     private JButton guardarButton;
+    private JButton habilitarButton;
     private JComboBox<String> recepcionistasLista;
     private JLabel causaLabel;
     private JLabel clienteLabel;
@@ -34,6 +35,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     private JTextField telefonoTextField;
     private String domicilio;
     private String fecha;
+    private String mensajeErrorActividad;
 
     public CPanelActividadBase() {
         this.setBorder(BorderFactory.createEtchedBorder());
@@ -55,6 +57,8 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getGuardarButton().setPreferredSize(new Dimension(100, 30));
         this.getGuardarButton().setToolTipText(EToolTipTextTexto.GUARDAR.getTexto());
         this.getGuardarButton().setEnabled(false);
+        this.setHabilitarButton(new JButton("Habilitar Ingreso"));
+        this.getHabilitarButton().setToolTipText(EToolTipTextTexto.HABILITARINGRESO.getTexto());
         this.setSalirButton(new CButtonSelectorPanel(new IPanelFactory() {
             JPanel panelFondo = crearPanel();
         }, ETextoButton.SALIR.getTexto(), EToolTipTextTexto.SALIRACTIVIDAD.getTexto()));
@@ -67,6 +71,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
                 }
             }
         });
+        this.setMensajeErrorActividad("Ingresar campo/s incompleto/s");
     }
 
     public CPanelActividadBase(String uno) {
@@ -77,12 +82,14 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getTelefonoLabel().setForeground(Color.RED);
         int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setDomicilioTextField(this.setTextField(ancho, EToolTipTextTexto.SOLOLETRASYNUMEROS.getTexto(), this));
+        this.setDomicilioTextField(this.setTextField(ancho, EToolTipTextTexto.DOMICILIO.getTexto(), this));
+        this.getDomicilioTextField().setEditable(false);
         // método default de IValidadorInput
         this.getDomicilioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
                 getDomicilioTextField().getToolTipText(), getDomicilioLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setTelefonoTextField(this.setTextField(ancho, EToolTipTextTexto.SOLONUMEROS.getTexto(), this));
+        this.setTelefonoTextField(this.setTextField(ancho, EToolTipTextTexto.TELEFONO.getTexto(), this));
+        this.getTelefonoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getTelefonoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.TELEFONO.getTexto(),
                 getTelefonoTextField().getToolTipText(), getTelefonoLabel().getText()));
@@ -96,6 +103,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         // método default de IJTextFieldFactory
         this.setFechaTextField(this.setTextField(30, setFechaString(Calendar.getInstance()),
                 EToolTipTextTexto.FECHA.getTexto(), this));
+        this.getFechaTextField().setEditable(false);
         // método default de IValidadorInput
         this.getFechaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.FECHA.getTexto(),
                 getFechaTextField().getToolTipText(), getFechaLabel().getText()));
@@ -114,12 +122,14 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         // método default de IJTextFieldFactory
         this.setFechaTextField(this.setTextField(30, setFechaString(Calendar.getInstance()),
                 EToolTipTextTexto.FECHA.getTexto(), this));
+        this.getFechaTextField().setEditable(false);
         // método default de IValidadorInput
         this.getFechaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.FECHA.getTexto(),
                 getFechaTextField().getToolTipText(), getFechaLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectDniRecepcionista(2), 333, 20,
+        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado(3, 2), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getRecepcionistaLabel().getText(), this));
+        this.getRecepcionistasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getRecepcionistasLista(), getRecepcionistasLista().getToolTipText(),
                 getRecepcionistaLabel().getText());
@@ -136,6 +146,10 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     public JButton getGuardarButton() { return this.guardarButton; }
 
     public void setGuardarButton(JButton guardarButton) { this.guardarButton = guardarButton; }
+
+    public JButton getHabilitarButton() { return this.habilitarButton; }
+
+    public void setHabilitarButton(JButton habilitarButton) { this.habilitarButton = habilitarButton; }
 
     public JComboBox<String> getRecepcionistasLista() { return this.recepcionistasLista; }
 
@@ -180,6 +194,12 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     public JLabel getTelefonoLabel() { return this.telefonoLabel; }
 
     public void setTelefonoLabel(JLabel telefonoLabel) { this.telefonoLabel = telefonoLabel; }
+
+    public String getMensajeErrorActividad() { return this.mensajeErrorActividad; }
+
+    public void setMensajeErrorActividad(String mensajeErrorActividad) {
+        this.mensajeErrorActividad = mensajeErrorActividad;
+    }
 
     public JPanel getPanelInput() { return this.panelInput; }
 

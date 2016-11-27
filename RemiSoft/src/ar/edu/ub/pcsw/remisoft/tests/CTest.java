@@ -35,27 +35,23 @@ public class CTest implements ITemporizable {
         getTestPerformance().startPerformanceTest();
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
-        getListaCasos().add("brandini");
-        getListaCasos().add("Brandini");
+        getListaCasos().add("braunedoni");
+        getListaCasos().add("Braunedoni");
+        getListaCasos().add("BrAuNEdOni");
+        getListaCasos().add("Suárez");
+        getListaCasos().add("Pérez");
         getListaCasos().add("ramírez");
-        getListaCasos().add("Gómez");
-        getListaCasos().add("Pérez Suárez");
         getListaCasos().add("martínez giménez");
+        getListaCasos().add("Gómez");
         getListaCasos().add("Cúspide");
         getListaCasos().add("Ma");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldes");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
-        getListaCasos().add("de la Huerta");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.APELLIDO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        getListaCasos().add("de la Huerta Pos");
+        return testerInputEsperado(ERegexValidadorInput.APELLIDO.getTexto());
     }
 
     public String probarRegexApellido_InputInesperado() {
@@ -65,18 +61,20 @@ public class CTest implements ITemporizable {
         getListaCasos().add(" "); // ningún caracter
         getListaCasos().add("\n"); // line-break
         getListaCasos().add("d");
-        getListaCasos().add("4");
-        getListaCasos().add("#");
+        getListaCasos().add("0123456789");
+        getListaCasos().add("°!#$%&/()=");
+        getListaCasos().add("?¡¿'*+@");
         getListaCasos().add("9chimo");
-        getListaCasos().add("martínez costa estebecorena del río");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.APELLIDO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("martínez costa estebecorena federomatti galliannini");
+        getListaCasos().add("% chimo");
+        getListaCasos().add("martínez, gimenéz");
+        getListaCasos().add("pérez-benítez");
+        getListaCasos().add("martínez:gimenéz");
+        getListaCasos().add("martínez;gimenéz");
+        getListaCasos().add("díaz.garcía");
+        getListaCasos().add("díaz@garcía");
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.APELLIDO.getTexto());
     }
 
     public String probarRegexClave_InputEsperado() {
@@ -84,19 +82,13 @@ public class CTest implements ITemporizable {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("aaBB12$$");
+        getListaCasos().add("aB1!#$%&()?¿");
         getListaCasos().add("aafBB11$$");
         getListaCasos().add("aafBBF11$$");
         getListaCasos().add("a_B$f4J%n0");
         getListaCasos().add("aafBBF110$$");
         getListaCasos().add("aaFBBf110$$%");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.CLAVE.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.CLAVE.getTexto());
     }
 
     public String probarRegexClave_InputInesperado() {
@@ -109,14 +101,10 @@ public class CTest implements ITemporizable {
         getListaCasos().add("a1Bf4JnN");
         getListaCasos().add("a B$f4J%n0");
         getListaCasos().add("a1B$f4J%n0R&8");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.CLAVE.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("12345678");
+        getListaCasos().add("0");
+        getListaCasos().add("-12345678");
+        return testerInputInesperado(ERegexValidadorInput.CLAVE.getTexto());
     }
 
     public String probarRegexConsumo_InputEsperado() {
@@ -125,14 +113,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("10");
         getListaCasos().add("99");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.CONSUMO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.CONSUMO.getTexto());
     }
 
     public String probarRegexConsumo_InputInesperado() {
@@ -147,14 +128,10 @@ public class CTest implements ITemporizable {
         getListaCasos().add("10,25");
         getListaCasos().add("3 00");
         getListaCasos().add("-12");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.CONSUMO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("k");
+        getListaCasos().add("$");
+        getListaCasos().add("aa");
+        return testerInputInesperado(ERegexValidadorInput.CONSUMO.getTexto());
     }
 
     public String probarRegexCuenta_InputEsperado() {
@@ -164,14 +141,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("100");
         getListaCasos().add("547");
         getListaCasos().add("999");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.CUENTA.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.CUENTA.getTexto());
     }
 
     public String probarRegexCuenta_InputInesperado() {
@@ -185,14 +155,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("1000");
         getListaCasos().add("5.47");
         getListaCasos().add("3 00");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.CUENTA.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaa");
+        return testerInputInesperado(ERegexValidadorInput.CUENTA.getTexto());
     }
 
     public String probarRegexCuentaAdicional_InputEsperado() {
@@ -204,14 +168,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("2");
         getListaCasos().add("3");
         getListaCasos().add("4");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.CUENTAADICIONAL.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.CUENTAADICIONAL.getTexto());
     }
 
     public String probarRegexCuentaAdicional_InputInesperado() {
@@ -223,14 +180,9 @@ public class CTest implements ITemporizable {
         getListaCasos().add("-1");
         getListaCasos().add("5");
         getListaCasos().add("10");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.CUENTAADICIONAL.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("a");
+        getListaCasos().add("#");
+        return testerInputInesperado(ERegexValidadorInput.CUENTAADICIONAL.getTexto());
     }
 
     public String probarRegexDNI_InputEsperado() {
@@ -239,14 +191,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("10000000");
         getListaCasos().add("99999999");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.DNI.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.DNI.getTexto());
     }
 
     public String probarRegexDNI_InputInesperado() {
@@ -262,15 +207,9 @@ public class CTest implements ITemporizable {
         getListaCasos().add("10 000 000");
         getListaCasos().add("100000000");
         getListaCasos().add("-12000000");
+        getListaCasos().add("00000000");
         getListaCasos().add("abcdefgh");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.DNI.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        return testerInputInesperado(ERegexValidadorInput.DNI.getTexto());
     }
 
     public String probarRegexDomicilio_InputEsperado() {
@@ -281,14 +220,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("vera 1020 (C1425rgt) buenos aires");
         getListaCasos().add("calle 15 número 2071 Garín");
         getListaCasos().add("20 de Noviembre 688 CABA");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.DOMICILIO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.DOMICILIO.getTexto());
     }
 
     public String probarRegexDomicilio_InputInesperado() {
@@ -302,14 +234,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("#");
         getListaCasos().add("vera 1020 -1425- CABA");
         getListaCasos().add("boulevard ejercito de los andes liberatador san martín 1040");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.DOMICILIO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.DOMICILIO.getTexto());
     }
 
     public String probarRegexFecha_InputEsperado() {
@@ -324,14 +250,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("30/04/2018");
         getListaCasos().add("29/2/2016");
         getListaCasos().add("29/02/2020");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.FECHA.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.FECHA.getTexto());
     }
 
     public String probarRegexFecha_InputInesperado() {
@@ -348,14 +267,9 @@ public class CTest implements ITemporizable {
         getListaCasos().add("31/4/2017");
         getListaCasos().add("32/5/2017");
         getListaCasos().add("29/13/2018");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.FECHA.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("2222222222");
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.FECHA.getTexto());
     }
 
     public String probarRegexHora_InputEsperado() {
@@ -367,14 +281,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("23:59");
         getListaCasos().add("0:00");
         getListaCasos().add("00:00");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.HORA.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.HORA.getTexto());
     }
 
     public String probarRegexHora_InputInesperado() {
@@ -391,14 +298,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("-14:56");
         getListaCasos().add("a:56");
         getListaCasos().add("8:$");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.HORA.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaa");
+        return testerInputInesperado(ERegexValidadorInput.HORA.getTexto());
     }
 
     public String probarRegexIdentificacion_InputEsperado() {
@@ -410,14 +311,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("232323232"); // 9 carateres numéricos
         getListaCasos().add("2323232323"); // 10 caracteres numéricos
         getListaCasos().add("23232323232"); // 11 caracteres numéricos
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.IDENTIFICACION.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.IDENTIFICACION.getTexto());
     }
 
     public String probarRegexIdentificacion_InputInesperado() {
@@ -431,14 +325,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("2 3 3 3 "); // caracteres numéricos y espacio
         getListaCasos().add("a"); // caracter alfabético
         getListaCasos().add("2a3b2c3"); // caracter alfanumérico
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.IDENTIFICACION.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.IDENTIFICACION.getTexto());
     }
 
     public String probarRegexKilometraje_InputEsperado() {
@@ -447,14 +335,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("0");
         getListaCasos().add("999999");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.KILOMETRAJE.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.KILOMETRAJE.getTexto());
     }
 
     public String probarRegexKilometraje_InputInesperado() {
@@ -468,14 +349,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("12.000");
         getListaCasos().add("1,000");
         getListaCasos().add("a");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.KILOMETRAJE.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("1000 km");
+        return testerInputInesperado(ERegexValidadorInput.KILOMETRAJE.getTexto());
     }
 
     public String probarRegexMarca_InputEsperado() {
@@ -486,14 +361,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Nissan");
         getListaCasos().add("Renault");
         getListaCasos().add("bmw");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.MARCA.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.MARCA.getTexto());
     }
 
     public String probarRegexMarca_InputInesperado() {
@@ -506,14 +374,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4ford");
         getListaCasos().add("#");
         getListaCasos().add("chevrolet ford renault citroen honda");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.MARCA.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.MARCA.getTexto());
     }
 
     public String probarRegexModelo_InputEsperado() {
@@ -527,14 +389,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("207 Compact");
         getListaCasos().add("307");
         getListaCasos().add("hr-v");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.MODELO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.MODELO.getTexto());
     }
 
     public String probarRegexModelo_InputInesperado() {
@@ -547,14 +402,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4");
         getListaCasos().add("#");
         getListaCasos().add("ford fiesta kinetic suran bora classic");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.MODELO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.MODELO.getTexto());
     }
 
     public String probarRegexNombre_InputEsperado() {
@@ -571,17 +420,11 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Li");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldo");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
         getListaCasos().add("alfredo darío");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.NOMBRE.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.NOMBRE.getTexto());
     }
 
     public String probarRegexNombre_InputInesperado() {
@@ -595,14 +438,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("#");
         getListaCasos().add("9fernando");
         getListaCasos().add("marcela fernanda micaela luisa");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.NOMBRE.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.NOMBRE.getTexto());
     }
 
     public String probarRegexNombreYApellidoORazonSocial_InputEsperado() {
@@ -623,17 +460,12 @@ public class CTest implements ITemporizable {
         getListaCasos().add("Ma");
         getListaCasos().add("malagaña");
         getListaCasos().add("Ñato");
+        getListaCasos().add("Güiraldes");
         getListaCasos().add("Güer");
         getListaCasos().add("Über");
-        getListaCasos().add("de la Huerta");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        getListaCasos().add("de la Huerta Pos");
+        getListaCasos().add("Miguel José García Rodríguez");
+        return testerInputEsperado(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto());
     }
 
     public String probarRegexNombreYApellidoORazonSocial_InputInesperado() {
@@ -648,14 +480,8 @@ public class CTest implements ITemporizable {
         getListaCasos().add("9chimo");
         getListaCasos().add("martínez costa estebecorena del río");
         getListaCasos().add("Servicios Empresarios S,A,");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("aaaaaaaaaa");
+        return testerInputInesperado(ERegexValidadorInput.NOMBREYAPELLIDOORAZONSOCIAL.getTexto());
     }
 
     public String probarRegexPatente_InputEsperado() {
@@ -665,14 +491,7 @@ public class CTest implements ITemporizable {
         getListaCasos().add("AB 123 CD");
         getListaCasos().add("yt 344 gg");
         getListaCasos().add("ytr 344");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.PATENTE.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.PATENTE.getTexto());
     }
 
     public String probarRegexPatente_InputInesperado() {
@@ -685,16 +504,12 @@ public class CTest implements ITemporizable {
         getListaCasos().add("4");
         getListaCasos().add("#");
         getListaCasos().add("ab ");
+        getListaCasos().add("000 agb");
+        getListaCasos().add("00 agb 00");
         getListaCasos().add("fgr 44");
         getListaCasos().add("9929 gghd 2222");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.PATENTE.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("áéí 440");
+        return testerInputInesperado(ERegexValidadorInput.PATENTE.getTexto());
     }
 
     public String probarRegexPrecio_InputEsperado() {
@@ -703,14 +518,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("100");
         getListaCasos().add("9999");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.PRECIO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.PRECIO.getTexto());
     }
 
     public String probarRegexPrecio_InputInesperado() {
@@ -724,14 +532,14 @@ public class CTest implements ITemporizable {
         getListaCasos().add("10000");
         getListaCasos().add("2 3 3");
         getListaCasos().add("2.33");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.PRECIO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("24a");
+        getListaCasos().add("$");
+        getListaCasos().add("$732");
+        getListaCasos().add("-732");
+        getListaCasos().add("(732)");
+        getListaCasos().add("000");
+        getListaCasos().add("aaaa");
+        return testerInputInesperado(ERegexValidadorInput.PRECIO.getTexto());
     }
 
     public String probarRegexTelefono_InputEsperado() {
@@ -740,14 +548,7 @@ public class CTest implements ITemporizable {
         setNombreRegex(getNombreMetodo().substring(11, getNombreMetodo().length() - 14).toUpperCase());
         getListaCasos().add("1589762345");
         getListaCasos().add("47762345");
-        for (String caso : getListaCasos()) {
-            if (! caso.matches(ERegexValidadorInput.TELEFONO.getTexto())) {
-                setTestCase(caso);
-                setReporteNoValidaInputEsperado();
-                return getReporteNoValidaInputEsperado();
-            }
-        }
-        return null;
+        return testerInputEsperado(ERegexValidadorInput.TELEFONO.getTexto());
     }
 
     public String probarRegexTelefono_InputInesperado() {
@@ -761,14 +562,19 @@ public class CTest implements ITemporizable {
         getListaCasos().add("15567890232");
         getListaCasos().add("15 5678 4355");
         getListaCasos().add("4788.5699");
-        for (String caso : getListaCasos()) {
-            if (caso.matches(ERegexValidadorInput.TELEFONO.getTexto())) {
-                setTestCase(caso);
-                setReporteValidaInputInesperado();
-                return getReporteValidaInputInesperado();
-            }
-        }
-        return null;
+        getListaCasos().add("4788,5699");
+        getListaCasos().add("4788-5699");
+        getListaCasos().add("4788:5699");
+        getListaCasos().add("15-5678-9023");
+        getListaCasos().add("a15567890232");
+        getListaCasos().add("a 15567890232");
+        getListaCasos().add("-15567890232");
+        getListaCasos().add("498%23045#");
+        getListaCasos().add("tel");
+        getListaCasos().add("cel.");
+        getListaCasos().add("aaaaaaaaa");
+        getListaCasos().add("@49003200");
+        return testerInputInesperado(ERegexValidadorInput.TELEFONO.getTexto());
     }
 
     public List<String> runUnitTests() {
@@ -816,6 +622,28 @@ public class CTest implements ITemporizable {
         if (error != null) {
             errores.add(error);
         }
+    }
+
+    private String testerInputEsperado(String regex) {
+        for (String caso : getListaCasos()) {
+            if (! caso.matches(regex)) {
+                setTestCase(caso);
+                setReporteNoValidaInputEsperado();
+                return getReporteNoValidaInputEsperado();
+            }
+        }
+        return null;
+    }
+
+    private String testerInputInesperado(String regex) {
+        for (String caso : getListaCasos()) {
+            if (caso.matches(regex)) {
+                setTestCase(caso);
+                setReporteValidaInputInesperado();
+                return getReporteValidaInputInesperado();
+            }
+        }
+        return null;
     }
 
     public CTestPerformance getTestPerformance() { return this.testPerformance; }
