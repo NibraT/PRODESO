@@ -74,11 +74,6 @@ public class CUpdateSQL extends CDataBase implements ITemporizable {
     }
 
     @Override
-    public Calendar calcularTiempo() {
-        return null;
-    }
-
-    @Override
     public String setFechaYHora() {
         return null;
     }

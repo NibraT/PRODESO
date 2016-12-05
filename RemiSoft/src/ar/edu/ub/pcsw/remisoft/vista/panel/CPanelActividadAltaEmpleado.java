@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.usuarios.CUsuario;
@@ -14,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Calendar;
 
 public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements ActionListener, IJComboBoxFactory,
         IJTextFieldFactory, IValidadorInput, KeyListener {
@@ -64,21 +64,21 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         this.getTurnoLabel().setForeground(Color.RED);
         this.setUsuarioLabel(new JLabel("Nombre de Usuario"));
         this.setClaveLabel(new JLabel("Clave de Usuario"));
-        int ancho = 30;
+        //int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setNombreTextField(this.setTextField(ancho, EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
+        this.setNombreTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
         this.getNombreTextField().setEditable(false);
         // método default de IValidadorInput
         this.getNombreTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NOMBRE.getTexto(),
                 getNombreTextField().getToolTipText(), getNombreLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setApellidoTextField(this.setTextField(ancho, EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
+        this.setApellidoTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
         this.getApellidoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getApellidoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.APELLIDO.getTexto(),
                 getApellidoTextField().getToolTipText(), getApellidoLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setDniTextField(this.setTextField(ancho, EToolTipTextTexto.DNI.getTexto(), this));
+        this.setDniTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.DNI.getTexto(), this));
         this.getDniTextField().setEditable(false);
         // método default de IValidadorInput
         this.getDniTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DNI.getTexto(),
@@ -96,13 +96,13 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
         // método default de IValidadorInput
         this.validadorInput(getTurnosLista(), getTurnosLista().getToolTipText(), getTurnoLabel().getText());
         // método default de IJTextFieldFactory
-        this.setUsuarioTextField(this.setTextField(ancho, EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
+        this.setUsuarioTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.APELLIDOONOMBRE.getTexto(), this));
         this.getUsuarioTextField().setEditable(false);
         // método default de IValidadorInput
         this.getUsuarioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NOMBRE.getTexto(),
                 getUsuarioTextField().getToolTipText(), getUsuarioLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setClaveTextField(this.setTextField(ancho, EToolTipTextTexto.CLAVE.getTexto(), this));
+        this.setClaveTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.CLAVE.getTexto(), this));
         this.getClaveTextField().setEditable(false);
         // método default de IValidadorInput
         this.getClaveTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CLAVE.getTexto(),
@@ -216,6 +216,7 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
                 // método default de ITemporizable
                 empleado.setFechaDeAlta(setFechaString());
                 new CInsertSQL().insertarEmpleado(empleado);
+                CDataBase.hacerBackUpBaseDatos();
             }
             if ((getUsuarioTextField().getText().isEmpty()) ||
                     (getUsuarioTextField().getText() == null) ||
@@ -226,12 +227,14 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
                 CUsuario usuario = new CUsuario();
                 usuario.setNombre(null);
                 usuario.setClave(null);
+                CDataBase.hacerBackUpBaseDatos();
             }
             else {
                 CUsuario usuario = new CUsuario();
                 usuario.setNombre(getUsuarioTextField().getText());
                 usuario.setClave(getClaveTextField().getText());
                 new CInsertSQL().insertarEmpleadoClavePass(usuario);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -299,11 +302,6 @@ public class CPanelActividadAltaEmpleado extends CPanelActividadBase implements 
     public String[] getTurnos() { return this.turnos; }
 
     public void setTurnos(String[] turnos) { this.turnos = turnos; }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
-    }
 
     @Override
     public void keyTyped(KeyEvent e) {

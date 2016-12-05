@@ -4,7 +4,6 @@ public class CEmpleado {
 
     private String apellido;
     private String categoria;
-    private String causaBaja;
     private String dni;
     private String domicilio;
     private String fechaDeAlta;
@@ -47,10 +46,6 @@ public class CEmpleado {
     public String getCategoria() { return this.categoria; }
 
     public void setCategoria(String categoria) { this.categoria = categoria; }
-
-    public String getCausaBaja() { return this.causaBaja; }
-
-    public void setCausaBaja(String causaBaja) { this.causaBaja = causaBaja; }
 
     public String getDni() {
         return this.dni;

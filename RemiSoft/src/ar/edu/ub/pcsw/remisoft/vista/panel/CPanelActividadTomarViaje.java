@@ -1,9 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
+import ar.edu.ub.pcsw.remisoft.controlador.main.*;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CChoferSinVehiculo;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
@@ -19,10 +16,11 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class CPanelActividadTomarViaje extends CPanelActividadBase implements ActionListener, FocusListener,
-        IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
+        IJComboBoxFactory, IJTextFieldFactory, ItemListener, ITemporizable, IValidadorInput, KeyListener {
 
     private JComboBox<String> autosLista;
     private JComboBox<String> choferesLista;
@@ -63,45 +61,47 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
         this.getHoraLabel().setForeground(Color.RED);
         this.setPrecioLabel(new JLabel("Precio"));
         this.getPrecioLabel().setForeground(Color.RED);
-        int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
+        this.setClienteTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
         this.getClienteTextField().setEditable(false);
         // método default de IValidadorInput
         this.getClienteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.IDENTIFICACION.getTexto(),
                 getClienteTextField().getToolTipText(), getClienteLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado(1, 1), 333, 20, Color.WHITE,
-                EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
+        this.setChoferesLista(this.crearComboBox(getListadoEmpleados(1, 1), 333, 20,
+                Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
         this.getChoferesLista().setEnabled(false);
+        this.getChoferesLista().addItemListener(this);
         // método default de IValidadorInput
         this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
         // método default de IJComboBoxFactory
-        this.setAutosLista(this.crearComboBox(new CSelectSQL().selectRecursoAuto("Patente", 1), 333, 20, Color.WHITE,
+        this.setAutosLista(this.crearComboBox(getListadoAutos(1), 333, 20, Color.WHITE,
                 EToolTipTextTexto.SELECCIONAR.getTexto() + getAutoLabel().getText(), this));
         this.getAutosLista().setEnabled(false);
+        this.getAutosLista().addItemListener(this);
         // método default de IValidadorInput
         this.validadorInput(getAutosLista(), getAutosLista().getToolTipText(), getAutoLabel().getText());
         // método default de IJTextFieldFactory
-        this.setOrigenTextField(this.setTextField(ancho, EToolTipTextTexto.DOMICILIO.getTexto(), this));
+        this.setOrigenTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.DOMICILIO.getTexto(), this));
         this.getOrigenTextField().setEditable(false);
         // método default de IValidadorInput
         this.getOrigenTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
                 getOrigenTextField().getToolTipText(), getOrigenLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setDestinoTextField(this.setTextField(ancho, EToolTipTextTexto.DOMICILIO.getTexto(), this));
+        this.setDestinoTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.DOMICILIO.getTexto(), this));
         this.getDestinoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getDestinoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.DOMICILIO.getTexto(),
                 getDestinoTextField().getToolTipText(), getDestinoLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setHoraTextField(this.setTextField(ancho, "00:00", EToolTipTextTexto.HORA.getTexto(), this));
+        this.setHoraTextField(this.setTextField(getAnchoTextField(),
+                setHoraString(Calendar.getInstance()).substring(0,5), EToolTipTextTexto.HORA.getTexto(), this));
         this.getHoraTextField().setEditable(false);
         // método default de IValidadorInput
         this.getHoraTextField().setInputVerifier(validadorInput(ERegexValidadorInput.HORA.getTexto(),
                 getHoraTextField().getToolTipText(), getHoraLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setPrecioTextField(this.setTextField(ancho, EToolTipTextTexto.PRECIO.getTexto(), this));
+        this.setPrecioTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.PRECIO.getTexto(), this));
         this.getPrecioTextField().setEditable(false);
         // método default de IValidadorInput
         this.getPrecioTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PRECIO.getTexto(),
@@ -162,12 +162,40 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     }
 
     @Override
-    public void focusGained(FocusEvent e) {
-        if (e.getSource().equals(getFechaTextField())) {
+    public void keyReleased(KeyEvent e) {
+        if (e.getSource().equals(getClienteTextField())) {
+            getChoferesLista().setEnabled(true);
+        }
+        else if (e.getSource().equals(getOrigenTextField())) {
+            getDestinoTextField().setEditable(true);
+        }
+        else if (e.getSource().equals(getDestinoTextField())) {
+            getFechaTextField().setEditable(true);
             getFechaTextField().selectAll();
         }
-        else if (e.getSource().equals(getHoraTextField())) {
+        else if (e.getSource().equals(getPrecioTextField())) {
+            getRecepcionistasLista().setEnabled(true);
+        }
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        if (e.getSource().equals(getFechaTextField())) {
+            getHoraTextField().setEditable(true);
             getHoraTextField().selectAll();
+        }
+        else if (e.getSource().equals(getHoraTextField())) {
+            getPrecioTextField().setEditable(true);
+        }
+    }
+
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+        if (e.getSource().equals(getChoferesLista())) {
+            getAutosLista().setEnabled(true);
+        }
+        else if (e.getSource().equals(getAutosLista())) {
+            getOrigenTextField().setEditable(true);
         }
     }
 
@@ -175,14 +203,6 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getHabilitarButton())) {
             getClienteTextField().setEditable(true);
-            getChoferesLista().setEnabled(true);
-            getAutosLista().setEnabled(true);
-            getOrigenTextField().setEditable(true);
-            getDestinoTextField().setEditable(true);
-            getFechaTextField().setEditable(true);
-            getHoraTextField().setEditable(true);
-            getPrecioTextField().setEditable(true);
-            getRecepcionistasLista().setEnabled(true);
         }
         else if (e.getSource().equals(getRecepcionistasLista())) {
             getGuardarButton().setEnabled(true);
@@ -229,21 +249,64 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
                 viaje.setAuto(new CVehiculo());
                 viaje.setRecepcionista(new CEmpleado());
                 viaje.getCliente().setIdentificacion(getClienteTextField().getText());
-                viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString());
-                viaje.getAuto().setPatente(getAutosLista().getSelectedItem().toString());
+                viaje.getChofer().setDni(getChoferesLista().getSelectedItem().toString().substring(0,8));
+                viaje.getAuto().setPatente(getSubstring(getAutosLista().getSelectedItem().toString()));
                 viaje.setOrigen(getOrigenTextField().getText());
                 viaje.setDestino(getDestinoTextField().getText());
                 viaje.setFecha(getFechaTextField().getText());
                 viaje.setHoraDeInicio(getHoraTextField().getText());
                 viaje.setPrecio(getPrecioTextField().getText());
-                viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
+                viaje.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString().substring(0,8));
                 new CInsertSQL().insertarViaje(viaje);
                 CUpdateSQL update = new CUpdateSQL();
                 update.updateTabla(ETablas.VEHICULO, "disponible", "Patente",
-                        getAutosLista().getSelectedItem().toString(), 0);
+                        getSubstring(getAutosLista().getSelectedItem().toString()), 0);
                 update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
-                        getChoferesLista().getSelectedItem().toString(), 0);
+                        getChoferesLista().getSelectedItem().toString().substring(0,8), 0);
+                CDataBase.hacerBackUpBaseDatos();
+                String[] viajes = new CSelectSQL().selectRecursoParaBaja("Numero", getClienteTextField().getText());
+                viaje.setNumero(viajes[viajes.length-1]);
+                if ((! viaje.getNumero().isEmpty()) || (viaje.getNumero() != null) || (! viaje.getNumero().equals(" "))) {
+                    JOptionPane.showMessageDialog(null, "Se registró el viaje N° " + viaje.getNumero(),
+                            "Acción Guardar", JOptionPane.INFORMATION_MESSAGE);
+                    getHabilitarButton().setEnabled(false);
+                    getClienteTextField().setEditable(false);
+                    getChoferesLista().setEnabled(false);
+                    getAutosLista().setEnabled(false);
+                    getOrigenTextField().setEditable(false);
+                    getDestinoTextField().setEditable(false);
+                    getFechaTextField().setEditable(false);
+                    getHoraTextField().setEditable(false);
+                    getPrecioTextField().setEditable(false);
+                    getRecepcionistasLista().setEnabled(false);
+                    getGuardarButton().setEnabled(false);
+                }
             }
+        }
+    }
+
+    private String[] getListadoAutos(int disponible) {
+        CSelectSQL selectSQL = new CSelectSQL();
+        String[] lista1 = selectSQL.selectRecursoAuto("Patente", disponible);
+        String[] lista2 = selectSQL.selectRecursoAuto("marca", disponible);
+        String[] lista3 = selectSQL.selectRecursoAuto("modelo", disponible);
+        ArrayList<String> lista4 = new ArrayList<>();
+        lista4.ensureCapacity(50);
+        lista4.add(" ");
+        int limite = lista1.length;
+        for (int i = 1; i < limite; i++) {
+            lista4.add(lista1[i] + " - " + lista2[i] + " " + lista3[i]);
+        }
+        String[] listaAutos = new String[lista4.size()];
+        return lista4.toArray(listaAutos);
+    }
+
+    private String getSubstring(String string) {
+        if (string.substring(2,3).equals(" ")) {
+            return string.substring(0, 9);
+        }
+        else {
+            return string.substring(0, 7);
         }
     }
 
@@ -332,15 +395,8 @@ public class CPanelActividadTomarViaje extends CPanelActividadBase implements Ac
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {
+    public void focusGained(FocusEvent e) {
 
     }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-
-    }
-
-    public Calendar calcularTiempo() { return null; }
 
 }

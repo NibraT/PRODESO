@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
 
 public class CPanelActividadReporteOperativo extends CPanelActividadBase implements ActionListener, IJComboBoxFactory {
 
@@ -252,10 +251,5 @@ public class CPanelActividadReporteOperativo extends CPanelActividadBase impleme
     public String[] getViajes() { return this.viajes; }
 
     public void setViajes(String[] viajes) { this.viajes = viajes; }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
-    }
 
 }

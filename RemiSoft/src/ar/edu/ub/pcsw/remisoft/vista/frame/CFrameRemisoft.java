@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.frame;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelActividad;
 import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelMenu;
 import ar.edu.ub.pcsw.remisoft.vista.panel.CPanelPrincipal;
@@ -45,6 +46,7 @@ public class CFrameRemisoft extends JFrame {
                         "¿Confirma que desea salir de la aplicación?", "Salir de la Aplicación",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 if (opcion == JOptionPane.YES_OPTION) {
+                    CDataBase.hacerBackUpBaseDatos();
                     System.exit(0);
                 }
             }
@@ -75,6 +77,3 @@ public class CFrameRemisoft extends JFrame {
     public void setPanelActividad(CPanelActividad panelActividad) { this.panelActividad = panelActividad; }
 
 }
-
-
-

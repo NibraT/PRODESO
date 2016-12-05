@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.vehiculos.CVehiculo;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -12,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Calendar;
 
 public class CPanelActividadAltaAuto extends CPanelActividadBase implements ActionListener, IJTextFieldFactory,
         IValidadorInput, KeyListener {
@@ -56,27 +56,26 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
         this.getKilometrajeLabel().setForeground(Color.RED);
         this.setConsumoLabel(new JLabel("Consumo (km/l)"));
         this.getConsumoLabel().setForeground(Color.RED);
-        int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setMarcaTextField(this.setTextField(ancho, EToolTipTextTexto.MARCA.getTexto(), this));
+        this.setMarcaTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.MARCA.getTexto(), this));
         this.getMarcaTextField().setEditable(false);
         // método default de IValidadorInput
         this.getMarcaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.MARCA.getTexto(),
                 getMarcaTextField().getToolTipText(), getMarcaLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setModeloTextField(this.setTextField(ancho, EToolTipTextTexto.MODELO.getTexto(), this));
+        this.setModeloTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.MODELO.getTexto(), this));
         this.getModeloTextField().setEditable(false);
         // método default de IValidadorInput
         this.getModeloTextField().setInputVerifier(validadorInput(ERegexValidadorInput.MODELO.getTexto(),
                 getModeloTextField().getToolTipText(), getModeloLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setPatenteTextField(this.setTextField(ancho, EToolTipTextTexto.PATENTE.getTexto(), this));
+        this.setPatenteTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.PATENTE.getTexto(), this));
         this.getPatenteTextField().setEditable(false);
         // método default de IValidadorInput
         this.getPatenteTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PATENTE.getTexto(),
                 getPatenteTextField().getToolTipText(), getPatenteLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setAseguradoraTextField(this.setTextField(ancho, EToolTipTextTexto.NOMBREYAPELLIDOORAZONSOCIAL.getTexto(),
+        this.setAseguradoraTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.NOMBREYAPELLIDOORAZONSOCIAL.getTexto(),
                 this));
         this.getAseguradoraTextField().setEditable(false);
         // método default de IValidadorInput
@@ -84,13 +83,13 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
                         NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getAseguradoraTextField().getToolTipText(),
                 getAseguradoraLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setKilometrajeTextField(this.setTextField(ancho, EToolTipTextTexto.KILOMETRAJE.getTexto(), this));
+        this.setKilometrajeTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.KILOMETRAJE.getTexto(), this));
         this.getKilometrajeTextField().setEditable(false);
         // método default de IValidadorInput
         this.getKilometrajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.KILOMETRAJE.getTexto(),
                 getKilometrajeTextField().getToolTipText(), getKilometrajeLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setConsumoTextField(this.setTextField(ancho, EToolTipTextTexto.CONSUMO.getTexto(), this));
+        this.setConsumoTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.CONSUMO.getTexto(), this));
         this.getConsumoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getConsumoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.CONSUMO.getTexto(),
@@ -188,6 +187,7 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
                 vehiculo.setKilometraje(getKilometrajeTextField().getText());
                 vehiculo.setConsumo(getConsumoTextField().getText());
                 new CInsertSQL().insertarVehiculo(vehiculo);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -252,11 +252,6 @@ public class CPanelActividadAltaAuto extends CPanelActividadBase implements Acti
     @Override
     public void keyTyped(KeyEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }

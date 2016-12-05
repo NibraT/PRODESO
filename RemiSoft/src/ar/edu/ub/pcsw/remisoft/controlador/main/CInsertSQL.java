@@ -112,7 +112,7 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
             pstmt.setString(1, viaje.getOrigen());
             pstmt.setString(2, viaje.getDestino());
             pstmt.setInt(3, Integer.parseInt(viaje.getPrecio()));
-            pstmt.setString(4, setFechaString(Calendar.getInstance()));
+            pstmt.setString(4, viaje.getFecha());
             pstmt.setString(5, viaje.getHoraDeInicio());
             pstmt.setString(6, viaje.getCliente().getIdentificacion());
             pstmt.setString(7, viaje.getChofer().getDni());
@@ -164,11 +164,6 @@ public class CInsertSQL extends CDataBase implements ITemporizable {
     private PreparedStatement getPreparedStatement(String sql) throws SQLException {
         Connection conn = super.connect();
         return conn.prepareStatement(sql);
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
     @Override

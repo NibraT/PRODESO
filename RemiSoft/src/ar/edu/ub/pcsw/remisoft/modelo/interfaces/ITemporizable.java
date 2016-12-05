@@ -7,8 +7,6 @@ import java.util.Locale;
 
 public interface ITemporizable {
 
-    Calendar calcularTiempo();
-
     default String setFechaYHora() {
         DateFormatSymbols simbolos = new DateFormatSymbols(new Locale("es", "ES"));
         String[] diasEnMayuscula = {"", "Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"};
@@ -25,6 +23,11 @@ public interface ITemporizable {
     default String setFechaString() {
         SimpleDateFormat sdf = new SimpleDateFormat("d/MM/yyyy");
         return sdf.format(Calendar.getInstance().getTime());
+    }
+
+    default String setHoraString(Calendar fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(fecha.getTime());
     }
 
 }

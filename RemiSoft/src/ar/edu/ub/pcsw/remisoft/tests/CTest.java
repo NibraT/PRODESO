@@ -4,7 +4,6 @@ import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.vista.panel.ERegexValidadorInput;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -689,10 +688,5 @@ public class CTest implements ITemporizable {
     public String getTestCase() { return this.testCase; }
 
     public void setTestCase(String testCase) { this.testCase = testCase; }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
-    }
 
 }

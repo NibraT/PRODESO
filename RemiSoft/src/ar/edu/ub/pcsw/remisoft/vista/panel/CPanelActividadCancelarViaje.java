@@ -1,8 +1,10 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
+import ar.edu.ub.pcsw.remisoft.modelo.viajes.CViaje;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJComboBoxFactory;
 import ar.edu.ub.pcsw.remisoft.vista.interfaces.IJTextFieldFactory;
@@ -11,7 +13,6 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Calendar;
 
 import static java.lang.Integer.parseInt;
 
@@ -55,9 +56,8 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         JLabel destinoLabel = new JLabel("Destino");
         this.setMotivoLabel(new JLabel("Motivo de la cancelación"));
         this.getMotivoLabel().setForeground(Color.RED);
-        int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setClienteTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
+        this.setClienteTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
         this.getClienteTextField().setEditable(false);
         this.getClienteTextField().addFocusListener(this);
         // método default de IValidadorInput
@@ -72,20 +72,20 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
         // método default de IValidadorInput
         this.validadorInput(getViajesLista(), getViajesLista().getToolTipText(), getNumeroLabel().getText());
         // método default de IJTextFieldFactory
-        this.setChoferTextField(this.setTextField(ancho, choferLabel.getText() + " del Viaje a cancelar", this));
+        this.setChoferTextField(this.setTextField(getAnchoTextField(), choferLabel.getText() + " del Viaje a cancelar", this));
         this.getChoferTextField().setEditable(false);
         // método default de IJTextFieldFactory
-        this.setAutoTextField(this.setTextField(ancho, autoLabel.getText() + " del Viaje a cancelar", this));
+        this.setAutoTextField(this.setTextField(getAnchoTextField(), autoLabel.getText() + " del Viaje a cancelar", this));
         this.getAutoTextField().setEditable(false);
         this.getFechaTextField().setToolTipText(getFechaLabel().getText() + " del Viaje a cancelar");
         // método default de IJTextFieldFactory
-        this.setHoraTextField(this.setTextField(ancho, horaLabel.getText() + " del Viaje a cancelar", this));
+        this.setHoraTextField(this.setTextField(getAnchoTextField(), horaLabel.getText() + " del Viaje a cancelar", this));
         this.getHoraTextField().setEditable(false);
         // método default de IJTextFieldFactory
-        this.setOrigenTextField(this.setTextField(ancho, origenLabel.getText() + " del Viaje a cancelar", this));
+        this.setOrigenTextField(this.setTextField(getAnchoTextField(), origenLabel.getText() + " del Viaje a cancelar", this));
         this.getOrigenTextField().setEditable(false);
         // método default de IJTextFieldFactory
-        this.setDestinoTextField(this.setTextField(ancho, destinoLabel.getText() + " del Viaje a cancelar", this));
+        this.setDestinoTextField(this.setTextField(getAnchoTextField(), destinoLabel.getText() + " del Viaje a cancelar", this));
         this.getDestinoTextField().setEditable(false);
         // método default de IJComboBoxFactory
         this.setMotivosLista(this.crearComboBox(this.getMotivos(), 333, 20, Color.WHITE,
@@ -186,6 +186,24 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
                         parseInt(getViajesLista().getSelectedItem().toString()));
                 update.updateTabla(ETablas.VEHICULO, "disponible", "Patente", getAutoTextField().getText(), 1);
                 update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni", getChoferTextField().getText(), 1);
+                CDataBase.hacerBackUpBaseDatos();
+                CViaje viajeCancelado = new CViaje();
+                viajeCancelado.setMotivoCancelacion(new CSelectSQL().selectRecurso("viaje",
+                        getClienteTextField().getText(), "motivoCancelacion", "not",
+                        parseInt(getViajesLista().getSelectedItem().toString())));
+                if ((! viajeCancelado.getMotivoCancelacion().isEmpty()) ||
+                        (viajeCancelado.getMotivoCancelacion() != null) ||
+                        (! viajeCancelado.getMotivoCancelacion().equals(" "))) {
+                    JOptionPane.showMessageDialog(null, "Se canceló el viaje N° " +
+                                    getViajesLista().getSelectedItem().toString(),
+                            "Acción Guardar", JOptionPane.INFORMATION_MESSAGE);
+                    getHabilitarButton().setEnabled(false);
+                    getClienteTextField().setEditable(false);
+                    getViajesLista().setEnabled(false);
+                    getMotivosLista().setEnabled(false);
+                    getRecepcionistasLista().setEnabled(false);
+                    getGuardarButton().setEnabled(false);
+                }
             }
         }
     }
@@ -214,18 +232,18 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
                 this.getAutoTextField().setText(" ");
             }
             else {
-                this.getChoferTextField().setText(select.selectRecurso("viaje", null,
-                        "dni", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
-                this.getAutoTextField().setText(select.selectRecurso("viaje", null,
-                        "patente", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
-                this.getFechaTextField().setText(select.selectRecurso("viaje", null,
-                        "fecha", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
-                this.getHoraTextField().setText(select.selectRecurso("viaje", null,
-                        "horaInicio", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
-                this.getOrigenTextField().setText(select.selectRecurso("viaje", null,
-                        "origen", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
-                this.getDestinoTextField().setText(select.selectRecurso("viaje", null,
-                        "destino", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getChoferTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "dni", "", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getAutoTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "patente", "", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getFechaTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "fecha", "", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getHoraTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "horaInicio", "", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getOrigenTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "origen", "",Integer.parseInt(getViajesLista().getSelectedItem().toString())));
+                this.getDestinoTextField().setText(select.selectRecurso("viaje", getClienteTextField().getText(),
+                        "destino", "", Integer.parseInt(getViajesLista().getSelectedItem().toString())));
             }
         }
     }
@@ -291,11 +309,6 @@ public class CPanelActividadCancelarViaje extends CPanelActividadBase implements
     @Override
     public void keyPressed(KeyEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
@@ -12,7 +13,6 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Calendar;
 
 public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
@@ -49,21 +49,20 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
         this.setIdentificacionLabel(new JLabel("DNI"));
         this.getIdentificacionLabel().setPreferredSize(new Dimension(160, 15));
         this.getIdentificacionLabel().setForeground(Color.RED);
-        int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setApellidoTextField(this.setTextField(ancho, getApellidoLabel().getText() +
+        this.setApellidoTextField(this.setTextField(getAnchoTextField(), getApellidoLabel().getText() +
                 " del empleado a dar de baja", this));
         this.getApellidoTextField().setEditable(false);
         // método default de IJTextFieldFactory
-        this.setNombreTextField(this.setTextField(ancho, getNombreLabel().getText() +
+        this.setNombreTextField(this.setTextField(getAnchoTextField(), getNombreLabel().getText() +
                 " del empleado a dar de baja", this));
         this.getNombreTextField().setEditable(false);
         // método default de IJTextFieldFactory
-        this.setCategoriaTextField(this.setTextField(ancho, getCategoriaLabel().getText() +
+        this.setCategoriaTextField(this.setTextField(getAnchoTextField(), getCategoriaLabel().getText() +
                 " del empleado a dar de baja", this));
         this.getCategoriaTextField().setEditable(false);
         // método default de IJComboBoxFactory
-        this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectRecursoParaBaja("Dni", null), 333, 20,
+        this.setIdentificacionesLista(this.crearComboBox(new CSelectSQL().selectRecursoParaBaja("Dni", " "), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() +
                 getIdentificacionLabel().getText(), this));
         this.getIdentificacionesLista().setEnabled(false);
@@ -153,6 +152,7 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
                         getIdentificacionesLista().getSelectedItem().toString(), 0);
                 update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
                         getIdentificacionesLista().getSelectedItem().toString(), 0);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -161,11 +161,11 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     public void focusLost(FocusEvent e) {
         CSelectSQL select = new CSelectSQL();
         this.getApellidoTextField().setText(select.selectRecurso("empleado",
-                getIdentificacionesLista().getSelectedItem().toString(), "apellido", 3));
+                getIdentificacionesLista().getSelectedItem().toString(), "apellido", "", 3));
         this.getNombreTextField().setText(select.selectRecurso("empleado",
-                getIdentificacionesLista().getSelectedItem().toString(), "nombre", 3));
+                getIdentificacionesLista().getSelectedItem().toString(), "nombre", "", 3));
         String categoria = select.selectRecurso("empleado", getIdentificacionesLista().getSelectedItem().toString(),
-                "TipoEmpleado", 3).equals("1") ? "chofer" : "recepcionista";
+                "TipoEmpleado", "", 3).equals("1") ? "chofer" : "recepcionista";
         this.getCategoriaTextField().setText(categoria);
     }
 
@@ -224,11 +224,6 @@ public class CPanelActividadBajaEmpleado extends CPanelActividadBase implements 
     @Override
     public void keyPressed(KeyEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }
