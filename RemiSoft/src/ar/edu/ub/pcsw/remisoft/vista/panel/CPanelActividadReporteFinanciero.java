@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Calendar;
 
 public class CPanelActividadReporteFinanciero extends CPanelActividadBase  implements ActionListener,
         IJComboBoxFactory {
@@ -165,10 +164,5 @@ public class CPanelActividadReporteFinanciero extends CPanelActividadBase  imple
     public String[] getPasivos() { return this.pasivos; }
 
     public void setPasivos(String[] pasivos) { this.pasivos = pasivos; }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
-    }
 
 }

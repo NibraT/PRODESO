@@ -14,7 +14,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class CSelectSQL extends CDataBase implements ITemporizable{
+public class CSelectSQL extends CDataBase implements ITemporizable {
 
     private static FileHandler archivoLog;
     private static final Logger logger = Logger.getLogger(CSelectSQL.class.getName());
@@ -39,24 +39,39 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String sql = atributo.equalsIgnoreCase("Patente") ? "SELECT " + atributo + " FROM " + ETablas.VEHICULO +
-                " where disponible = " + disponible : "SELECT distinct " + atributo + " FROM " + ETablas.VEHICULO +
-                " where disponible = " + disponible;
-        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
+        String sql = atributo.equalsIgnoreCase("Patente") ? "SELECT Patente FROM " + ETablas.VEHICULO +
+                " where disponible = '" + disponible + "' order by Patente asc" : "SELECT " +
+                atributo + " FROM " + ETablas.VEHICULO + " where disponible = '" + disponible + "' order by Patente asc";
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
         return registros;
     }
 
-    public String[] selectRecursoEmpleado(int disponible, int tipoEmpleado) {
+    public String[] selectRecursoEmpleado(String atributo, int disponible, int tipoEmpleado) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
         testPerformance.startPerformanceTest();
-        String atributo = "Dni";
-        String sql = disponible == 1 ? "SELECT " + atributo + " FROM " + ETablas.EMPLEADO +
-                " where disponible = " + disponible + " and tipoEmpleado = " + tipoEmpleado : "SELECT " + atributo +
-                " FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " + tipoEmpleado;
-        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
+        String sql = " ";
+        if (disponible == 1) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where disponible = " +
+                    disponible + " and tipoEmpleado = " + tipoEmpleado + " order by Dni asc";
+        }
+        else if (disponible == 0) {
+            sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where disponible = " +
+                    disponible + " and tipoEmpleado = " + tipoEmpleado + " order by Dni asc";
+        }
+        else {
+            if ((horaMax() > 6) && (horaMax() < 15)) {
+                sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " +
+                        tipoEmpleado + " and turno = '6-15' order by Dni asc";
+            }
+            else if ((horaMax() >= 15) && (horaMax() < 24)) {
+                sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where fechaBaja is null and tipoEmpleado = " +
+                        tipoEmpleado + " and turno = '15-24' order by Dni asc";
+            }
+        }
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
         return registros;
     }
@@ -68,25 +83,32 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
         testPerformance.startPerformanceTest();
         String sql = " ";
         if (atributo.equalsIgnoreCase("Dni")) {
-            sql = "SELECT " + atributo + " FROM " + ETablas.EMPLEADO + " where fechaBaja is null";
+            sql = (identificacion.equals(" ")) ?
+                    "SELECT " + atributo + " FROM " + ETablas.EMPLEADO +
+                    " where fechaBaja is null order by " + atributo + " asc" :
+                    "SELECT Numero FROM " + ETablas.VIAJE + " where dni = '" + identificacion +
+                            "' and cancelado is null and Numero not in (Select idViaje From " +
+                            ETablas.RENDICION + ") order by Numero asc";
         }
         else if (atributo.equalsIgnoreCase("identificacion")) {
-            sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where fechaBaja is null";
+            sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where fechaBaja is null order by " +
+                    atributo + " asc";
         }
         else if (atributo.equalsIgnoreCase("Patente")){
-            sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where fechaBaja is null";
+            sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where fechaBaja is null order by " +
+                    atributo + " asc";
         }
         else if (atributo.equalsIgnoreCase("Numero")) {
-            sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE +
-                    " where identificacion = '" + identificacion + "' and cancelado is null order by " +
-                    atributo + " desc";
+            sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where identificacion = '" + identificacion +
+                    "' and cancelado is null and " + atributo + " not in (Select idViaje From " + ETablas.RENDICION +
+                    ") order by " + atributo + " asc";
         }
-        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo(), " ");
+        String[] registros = getRegistrosTabla(sql, atributo, testPerformance, getNombreMetodo());
         logger.exiting(getClass().getName(), getNombreMetodo());
         return registros;
     }
 
-    public String selectRecurso(String recurso, String identificacion, String atributo, int numero) {
+    public String selectRecurso(String recurso, String identificacion, String atributo, String negacion, int numero) {
         setNombreMetodo(new Object(){}.getClass().getEnclosingMethod().getName());
         logger.entering(getClass().getName(), getNombreMetodo());
         CTestPerformance testPerformance = CTestPerformance.getInstance();
@@ -99,7 +121,19 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
             sql = "SELECT " + atributo + " FROM " + ETablas.CLIENTE + " where identificacion = '" + identificacion + "'";
         }
         else if (recurso.equalsIgnoreCase("viaje")) {
-            sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where Numero = " + numero;
+            if ((numero > 3) && (! identificacion.isEmpty())) {
+                sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where identificacion = '" + identificacion +
+                        "' and cancelado is " + negacion + " null and Numero not in (Select idViaje From " +
+                        ETablas.RENDICION + ") order by Numero asc";
+            }
+            else if ((numero > 0) && (! identificacion.isEmpty())) {
+                sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where dni = '" + identificacion +
+                        "' and cancelado is " + negacion + " null and Numero not in (Select idViaje From " +
+                        ETablas.RENDICION + ") order by Numero asc";
+            }
+            else if (identificacion.isEmpty()) {
+                sql = "SELECT " + atributo + " FROM " + ETablas.VIAJE + " where Numero = " + numero;
+            }
         }
         else if (recurso.equalsIgnoreCase("auto")){
             sql = "SELECT " + atributo + " FROM " + ETablas.VEHICULO + " where patente = '" + identificacion + "'";
@@ -242,24 +276,15 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     }
 
     private String[] getRegistrosTabla(String sql, String atributo,
-                                       CTestPerformance testPerformance, String nombreMetodo, String primerElemento) {
+                                       CTestPerformance testPerformance, String nombreMetodo) {
         ArrayList<String> result = new ArrayList<String>();
         try (ResultSet rs = getResultSet(sql)) {
-            if (primerElemento.equals(" ")) {
-                result.add(primerElemento);
+                result.add(" ");
                 while (rs.next()) {
                     result.add(rs.getString(atributo));
                 }
                 String[] resultString = new String[result.size()];
                 return result.toArray(resultString);
-            }
-            else {
-                while (rs.next()) {
-                    result.add(rs.getString(atributo));
-                }
-                String[] resultString = new String[result.size()];
-                return result.toArray(resultString);
-            }
         }
         catch (SQLException e) {
             logger.addHandler(getArchivoLog());
@@ -295,13 +320,11 @@ public class CSelectSQL extends CDataBase implements ITemporizable{
     private ResultSet getResultSet(String sql) throws SQLException {
         Connection conn = super.connect();
         Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        return rs;
+        return stmt.executeQuery(sql);
     }
 
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
+    private int horaMax() {
+        return Integer.parseInt(setHoraString(Calendar.getInstance()).substring(0,2));
     }
 
     @Override

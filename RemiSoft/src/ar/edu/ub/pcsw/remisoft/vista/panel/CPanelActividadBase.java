@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public abstract class CPanelActividadBase extends JPanel implements IJButtonSalir, IJComboBoxFactory,
@@ -17,6 +18,7 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
 
     private CButtonSelectorPanel salirButton;
     private GridBagConstraints gbc;
+    private int anchoTextField;
     private JButton guardarButton;
     private JButton habilitarButton;
     private JComboBox<String> recepcionistasLista;
@@ -65,13 +67,14 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getSalirButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource().equals(getSalirButton())) {
+                if (e.getSource().equals(CPanelActividadBase.this.getSalirButton())) {
                     // método default de IJButtonSalir
-                    accionarSalirButton(e);
+                    CPanelActividadBase.this.accionarSalirButton(e);
                 }
             }
         });
         this.setMensajeErrorActividad("Ingresar campo/s incompleto/s");
+        this.setAnchoTextField(30);
     }
 
     public CPanelActividadBase(String uno) {
@@ -127,13 +130,29 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
         this.getFechaTextField().setInputVerifier(validadorInput(ERegexValidadorInput.FECHA.getTexto(),
                 getFechaTextField().getToolTipText(), getFechaLabel().getText()));
         // método default de IJComboBoxFactory
-        this.setRecepcionistasLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado(3, 2), 333, 20,
+        this.setRecepcionistasLista(this.crearComboBox(getListadoEmpleados(3, 2), 333, 20,
                 Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getRecepcionistaLabel().getText(), this));
         this.getRecepcionistasLista().setEnabled(false);
         // método default de IValidadorInput
         this.validadorInput(getRecepcionistasLista(), getRecepcionistasLista().getToolTipText(),
                 getRecepcionistaLabel().getText());
-   }
+    }
+
+    protected String[] getListadoEmpleados(int disponible, int tipoEmpleado) {
+        CSelectSQL selectSQL = new CSelectSQL();
+        String[] lista1 = selectSQL.selectRecursoEmpleado("Dni", disponible, tipoEmpleado);
+        String[] lista2 = selectSQL.selectRecursoEmpleado("apellido", disponible, tipoEmpleado);
+        String[] lista3 = selectSQL.selectRecursoEmpleado("nombre", disponible, tipoEmpleado);
+        ArrayList<String> lista4 = new ArrayList<>();
+        lista4.ensureCapacity(50);
+        lista4.add(" ");
+        int limite = lista1.length;
+        for (int i = 1; i < limite; i++) {
+            lista4.add(lista1[i] + " - " + lista2[i] + " " + lista3[i]);
+        }
+        String[] listaEmpleados = new String[lista4.size()];
+        return lista4.toArray(listaEmpleados);
+    }
 
     public CButtonSelectorPanel getSalirButton() { return this.salirButton; }
 
@@ -142,6 +161,10 @@ public abstract class CPanelActividadBase extends JPanel implements IJButtonSali
     public GridBagConstraints getGbc() { return this.gbc; }
 
     public void setGbc(GridBagConstraints gbc) { this.gbc = gbc; }
+
+    public int getAnchoTextField() { return this.anchoTextField; }
+
+    public void setAnchoTextField(int anchoTextField) { this.anchoTextField = anchoTextField; }
 
     public JButton getGuardarButton() { return this.guardarButton; }
 

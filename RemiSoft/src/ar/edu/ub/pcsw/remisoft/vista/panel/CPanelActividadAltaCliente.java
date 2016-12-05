@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
 import ar.edu.ub.pcsw.remisoft.modelo.clientes.CCliente;
 import ar.edu.ub.pcsw.remisoft.vista.button.ETextoButton;
@@ -9,7 +10,6 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Calendar;
 
 public class CPanelActividadAltaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
         IJTextFieldFactory, IValidadorInput, KeyListener {
@@ -39,9 +39,8 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
         this.setIdentificacionLabel(new JLabel("DNI / CUIL / CUIT"));
         this.getIdentificacionLabel().setForeground(Color.RED);
         this.setCuentaAdicionalLabel(new JLabel("Cuenta(s) Adicional(es)"));
-        int ancho = 30;
         // método default de IJTextFieldFactory
-        this.setNombreYApellidoORazonSocialTextField(this.setTextField(ancho,
+        this.setNombreYApellidoORazonSocialTextField(this.setTextField(getAnchoTextField(),
                 EToolTipTextTexto.NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), this));
         this.getNombreYApellidoORazonSocialTextField().setEditable(false);
         // método default de IValidadorInput
@@ -49,14 +48,14 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
                         NOMBREYAPELLIDOORAZONSOCIAL.getTexto(), getNombreYApellidoORazonSocialTextField().
                 getToolTipText(), getNombreYApellidoORazonSocialLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setIdentificacionTextField(this.setTextField(ancho, EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
+        this.setIdentificacionTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.IDENTIFICACION.getTexto(), this));
         this.getIdentificacionTextField().setEditable(false);
         // método default de IValidadorInput
         this.getIdentificacionTextField().setInputVerifier(validadorInput(ERegexValidadorInput.
                         IDENTIFICACION.getTexto(), getIdentificacionTextField().getToolTipText(),
                 getIdentificacionLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setCuentaAdicionalTextField(this.setTextField(ancho, "0", EToolTipTextTexto.CUENTAADICIONAL.getTexto(),
+        this.setCuentaAdicionalTextField(this.setTextField(getAnchoTextField(), "0", EToolTipTextTexto.CUENTAADICIONAL.getTexto(),
                 this));
         this.getCuentaAdicionalTextField().setEditable(false);
         // método default de IValidadorInput
@@ -158,6 +157,7 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
                 // método default de ITemporizable
                 cliente.setFechaDeAlta(setFechaString());
                 new CInsertSQL().insertarCliente(cliente);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -223,11 +223,6 @@ public class CPanelActividadAltaCliente extends CPanelActividadBase implements A
     @Override
     public void focusLost(FocusEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }

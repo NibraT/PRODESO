@@ -1,9 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
-import ar.edu.ub.pcsw.remisoft.controlador.main.CInsertSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
-import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
+import ar.edu.ub.pcsw.remisoft.controlador.main.*;
 import ar.edu.ub.pcsw.remisoft.modelo.empleados.CEmpleado;
 import ar.edu.ub.pcsw.remisoft.modelo.interfaces.ITemporizable;
 import ar.edu.ub.pcsw.remisoft.modelo.rendiciones.CRendicion;
@@ -15,7 +12,6 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Calendar;
 import java.util.Random;
 
 import static java.lang.Integer.parseInt;
@@ -23,6 +19,8 @@ import static java.lang.Integer.parseInt;
 public class CPanelActividadRendirViaje extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, ITemporizable, IValidadorInput, KeyListener {
 
+    private JComboBox<String> choferesLista;
+    private JLabel choferLabel;
     private JLabel costoEfectivoLabel;
     private JLabel costoTestigoLabel;
     private JLabel rendicionLabel;
@@ -39,9 +37,9 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
 
     private void inicializar() {
         this.getNorteLabel().setText(ETextoButton.RENDIRVIAJE.getTexto().toUpperCase());
-        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 85));
+        this.getNorteLabel().setPreferredSize(new Dimension(this.getWidth(), 65));
         this.add(getNorteLabel(), BorderLayout.NORTH);
-        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 85));
+        this.getSurLabel().setPreferredSize(new Dimension(this.getWidth(), 55));
         this.add(getSurLabel(), BorderLayout.SOUTH);
         this.getGbc().anchor = GridBagConstraints.LINE_START;
         this.getGbc().insets = new Insets (10, 0, 10, 0);
@@ -49,31 +47,39 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getFechaLabel().setText("Fecha de la rendición");
         this.getFechaLabel().setPreferredSize(new Dimension(175, 15));
         this.setRendicionLabel(new JLabel("Rendición número"));
+        this.setChoferLabel(new JLabel("Chofer"));
+        this.getChoferLabel().setForeground(Color.RED);
         this.setViajeLabel(new JLabel("Viaje número"));
         this.getViajeLabel().setForeground(Color.RED);
         this.setCostoEfectivoLabel(new JLabel("Costo efectivo"));
         this.getCostoEfectivoLabel().setForeground(Color.RED);
         this.setCostoTestigoLabel(new JLabel("Costo testigo"));
-        int ancho = 30;
         this.getFechaTextField().setToolTipText(getFechaLabel().getText());
         // método default de IJTextFieldFactory
-        this.setRendicionTextField(this.setTextField(ancho, "Número de la rendición", this));
+        this.setRendicionTextField(this.setTextField(getAnchoTextField(), "Número de la rendición", this));
         this.getRendicionTextField().setEditable(false);
         this.getRendicionTextField().addFocusListener(this);
         // método default de IJTextFieldFactory
-        this.setViajeTextField(this.setTextField(ancho, EToolTipTextTexto.NUMEROVIAJE.getTexto(), this));
+        this.setViajeTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.NUMEROVIAJE.getTexto(), this));
         this.getViajeTextField().setEditable(false);
-        // método default de IValidadorInput
+        //método default de IValidadorInput
         this.getViajeTextField().setInputVerifier(validadorInput(ERegexValidadorInput.NUMEROVIAJE.getTexto(),
                 getViajeTextField().getToolTipText(), getViajeLabel().getText()));
+        // método default de IJComboBoxFactory
+        this.setChoferesLista(this.crearComboBox(new CSelectSQL().selectRecursoEmpleado("Dni", 0, 1), 333, 20,
+                Color.WHITE, EToolTipTextTexto.SELECCIONAR.getTexto() + getChoferLabel().getText(), this));
+        this.getChoferesLista().setEnabled(false);
+        this.getChoferesLista().addFocusListener(this);
+        // método default de IValidadorInput
+        this.validadorInput(getChoferesLista(), getChoferesLista().getToolTipText(), getChoferLabel().getText());
         // método default de IJTextFieldFactory
-        this.setCostoEfectivoTextField(this.setTextField(ancho, EToolTipTextTexto.PRECIO.getTexto(), this));
+        this.setCostoEfectivoTextField(this.setTextField(getAnchoTextField(), EToolTipTextTexto.PRECIO.getTexto(), this));
         this.getCostoEfectivoTextField().setEditable(false);
         // método default de IValidadorInput
         this.getCostoEfectivoTextField().setInputVerifier(validadorInput(ERegexValidadorInput.PRECIO.getTexto(),
                 getCostoEfectivoTextField().getToolTipText(), getCostoEfectivoLabel().getText()));
         // método default de IJTextFieldFactory
-        this.setCostoTestigoTextField(this.setTextField(ancho, "Costo testigo", this));
+        this.setCostoTestigoTextField(this.setTextField(getAnchoTextField(), "Costo testigo", this));
         this.getCostoTestigoTextField().setEditable(false);
         this.getCostoTestigoTextField().addFocusListener(this);
         this.getGuardarButton().setText("Aceptar");
@@ -86,6 +92,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getPanelInput().add(this.getFechaLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRendicionLabel(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getChoferLabel(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getViajeLabel(), this.getGbc());
         this.getGbc().gridy++;
@@ -103,6 +111,8 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
         this.getPanelInput().add(this.getFechaTextField(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getRendicionTextField(), this.getGbc());
+        this.getGbc().gridy++;
+        this.getPanelInput().add(this.getChoferesLista(), this.getGbc());
         this.getGbc().gridy++;
         this.getPanelInput().add(this.getViajeTextField(), this.getGbc());
         this.getGbc().gridy++;
@@ -128,7 +138,7 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(getHabilitarButton())) {
-            getViajeTextField().setEditable(true);
+            getChoferesLista().setEnabled(true);
             getCostoEfectivoTextField().setEditable(true);
             getRecepcionistasLista().setEnabled(true);
         }
@@ -136,9 +146,9 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             getGuardarButton().setEnabled(true);
         }
         else if (e.getSource().equals(getGuardarButton())) {
-            if ((getViajeTextField().getText().isEmpty()) ||
-                    (getViajeTextField().getText() == null) ||
-                    (getViajeTextField().getText().equals(" ")) ||
+            if ((getChoferesLista().getSelectedItem().toString().isEmpty()) ||
+                    (getChoferesLista().getSelectedItem().toString() == null) ||
+                    (getChoferesLista().getSelectedItem().toString().equals(" ")) ||
                     (getCostoEfectivoTextField().getText().isEmpty()) ||
                     (getCostoEfectivoTextField().getText() == null) ||
                     (getCostoEfectivoTextField().getText().equals(" ")) ||
@@ -158,15 +168,16 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
                 rendicion.setViajeNumero(getViajeTextField().getText());
                 rendicion.setCostoEfectivo(getCostoEfectivoTextField().getText());
                 rendicion.setCostoTestigo(getCostoTestigoTextField().getText());
-                rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString());
+                rendicion.getRecepcionista().setDni(getRecepcionistasLista().getSelectedItem().toString().substring(0,7));
                 new CInsertSQL().insertarViajeRendicion(rendicion);
                 CUpdateSQL update = new CUpdateSQL();
                 update.updateTabla(ETablas.VEHICULO, "disponible", "Patente",
-                        new CSelectSQL().selectRecurso("viaje", null, "patente",
+                        new CSelectSQL().selectRecurso("viaje", "", "patente", "",
                                 parseInt(getViajeTextField().getText())), 1);
                 update.updateTabla(ETablas.EMPLEADO, "disponible", "Dni",
-                        new CSelectSQL().selectRecurso("viaje", null, "dni",
+                        new CSelectSQL().selectRecurso("viaje", "", "dni", "",
                                 parseInt(getViajeTextField().getText())), 1);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -196,6 +207,20 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
             }
         }
     }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        this.getViajeTextField().setText(new CSelectSQL().selectRecurso("viaje",
+                getChoferesLista().getSelectedItem().toString(), "Numero", "", 2));
+    }
+
+    public JComboBox<String> getChoferesLista() { return this.choferesLista; }
+
+    public void setChoferesLista(JComboBox<String> choferesLista) { this.choferesLista = choferesLista; }
+
+    public JLabel getChoferLabel() { return this.choferLabel; }
+
+    public void setChoferLabel(JLabel choferLabel) { this.choferLabel = choferLabel; }
 
     public JLabel getCostoEfectivoLabel() { return this.costoEfectivoLabel; }
 
@@ -234,11 +259,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     public void setViajeTextField(JTextField viajeTextField) { this.viajeTextField = viajeTextField; }
 
     @Override
-    public void focusLost(FocusEvent e) {
-
-    }
-
-    @Override
     public void keyReleased(KeyEvent e) {
 
     }
@@ -251,11 +271,6 @@ public class CPanelActividadRendirViaje extends CPanelActividadBase implements A
     @Override
     public void keyPressed(KeyEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package ar.edu.ub.pcsw.remisoft.vista.panel;
 
+import ar.edu.ub.pcsw.remisoft.controlador.main.CDataBase;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CSelectSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.CUpdateSQL;
 import ar.edu.ub.pcsw.remisoft.controlador.main.ETablas;
@@ -11,7 +12,6 @@ import ar.edu.ub.pcsw.remisoft.vista.interfaces.IValidadorInput;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Calendar;
 
 public class CPanelActividadBajaCliente extends CPanelActividadBase implements ActionListener, FocusListener,
         IJComboBoxFactory, IJTextFieldFactory, IValidadorInput, KeyListener {
@@ -52,7 +52,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
         this.validadorInput(getIdentificacionesLista(), getIdentificacionesLista().getToolTipText(),
                 getIdentificacionLabel().getText());
         // método default de IJTextFieldFactory
-        this.setNombreYApellidoORazonSocialTextField(this.setTextField(30,
+        this.setNombreYApellidoORazonSocialTextField(this.setTextField(getAnchoTextField(),
                 getNombreYApellidoORazonSocialLabel().getText() + " del cliente a dar de baja", this));
         this.getNombreYApellidoORazonSocialTextField().setEditable(false);
         // método default de IJComboBoxFactory
@@ -126,6 +126,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
             else {
                 new CUpdateSQL().updateTabla(ETablas.CLIENTE, "fechaBaja", "Identificacion",
                         getIdentificacionesLista().getSelectedItem().toString(), 0);
+                CDataBase.hacerBackUpBaseDatos();
             }
         }
     }
@@ -133,7 +134,7 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
     @Override
     public void focusLost(FocusEvent e) {
         this.getNombreYApellidoORazonSocialTextField().setText(new CSelectSQL().selectRecurso("cliente",
-                getIdentificacionesLista().getSelectedItem().toString(), "nombreORazonSocial", 3));
+                getIdentificacionesLista().getSelectedItem().toString(), "nombreORazonSocial", "",3));
     }
 
     public JComboBox<String> getCausasLista() { return this.causasLista; }
@@ -179,11 +180,6 @@ public class CPanelActividadBajaCliente extends CPanelActividadBase implements A
     @Override
     public void keyPressed(KeyEvent e) {
 
-    }
-
-    @Override
-    public Calendar calcularTiempo() {
-        return null;
     }
 
 }
